@@ -11,129 +11,199 @@
 <title>AnestLog — Registro Quirúrgico</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0a0e14;--surface:#111820;--surface2:#18232f;--border:#1e2d3d;--accent:#00d4aa;--accent2:#0094ff;--text:#e8f0f8;--text-dim:#7a9ab5;--text-faint:#3d5a72;--danger:#ff6b6b;--gold:#f4c542;--purple:#b48aff;}
+:root{
+  --bg:#0a0e14;--surface:#111820;--surface2:#18232f;--border:#1e2d3d;
+  --accent:#00d4aa;--accent2:#0094ff;--text:#e8f0f8;--text-dim:#7a9ab5;
+  --text-faint:#3d5a72;--danger:#ff6b6b;--gold:#f4c542;--purple:#b48aff;
+}
 *{box-sizing:border-box;margin:0;padding:0;}
+html{-webkit-text-size-adjust:100%;}
 body{font-family:'DM Mono',monospace;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
 body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,212,170,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,170,0.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
-header{position:sticky;top:0;z-index:100;background:rgba(10,14,20,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:60px;gap:1rem;}
-.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;letter-spacing:-0.02em;white-space:nowrap;}
-.logo span{color:var(--accent);}
-.hstats{display:flex;gap:1.5rem;font-size:0.68rem;color:var(--text-dim);letter-spacing:0.05em;text-transform:uppercase;}
-.hstat strong{display:block;font-size:1rem;color:var(--text);font-family:'Syne',sans-serif;letter-spacing:-0.02em;}
-@media(max-width:600px){.hstats{display:none;}}
-nav{position:sticky;top:60px;z-index:90;background:var(--surface);border-bottom:1px solid var(--border);display:flex;overflow-x:auto;}
-nav button{background:none;border:none;color:var(--text-dim);font-family:'DM Mono',monospace;font-size:0.72rem;letter-spacing:0.07em;text-transform:uppercase;padding:0 1.2rem;height:44px;cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap;}
-nav button:hover{color:var(--text);}
-nav button.active{color:var(--accent);border-bottom-color:var(--accent);}
-main{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:1.5rem;}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:100;background:rgba(10,14,20,0.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(–border);padding:0 1rem;display:flex;align-items:center;justify-content:space-between;height:56px;gap:1rem;}
+.logo{font-family:‘Syne’,sans-serif;font-weight:800;font-size:1.2rem;letter-spacing:-0.02em;white-space:nowrap;}
+.logo span{color:var(–accent);}
+.hstats{display:flex;gap:1rem;font-size:0.65rem;color:var(–text-dim);letter-spacing:0.04em;text-transform:uppercase;}
+.hstat strong{display:block;font-size:0.95rem;color:var(–text);font-family:‘Syne’,sans-serif;}
+@media(max-width:500px){.hstats{display:none;}}
+
+/* NAV */
+nav{position:sticky;top:56px;z-index:90;background:var(–surface);border-bottom:1px solid var(–border);display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+nav::-webkit-scrollbar{display:none;}
+nav button{background:none;border:none;color:var(–text-dim);font-family:‘DM Mono’,monospace;font-size:0.7rem;letter-spacing:0.06em;text-transform:uppercase;padding:0 1rem;height:42px;cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap;-webkit-tap-highlight-color:transparent;}
+nav button.active{color:var(–accent);border-bottom-color:var(–accent);}
+
+/* MAIN */
+main{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:1rem;}
 .view{display:none;}.view.active{display:block;}
-.stitle{font-family:'DM Serif Display',serif;font-size:1.8rem;margin-bottom:0.25rem;}
-.ssub{font-size:0.75rem;color:var(--text-dim);letter-spacing:0.04em;margin-bottom:1.5rem;}
-.fc{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.5rem;margin-bottom:1.2rem;}
-.fct{font-family:'Syne',sans-serif;font-size:0.68rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:1.2rem;padding-bottom:0.6rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0.4rem;}
-.fct.purple{color:var(--purple);}.fct.blue{color:var(--accent2);}.fct.gold{color:var(--gold);}
-.fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0.85rem;}
-.fg+.fg{margin-top:0.85rem;}
-.fgg{display:flex;flex-direction:column;gap:0.35rem;}
-.fgg.full{grid-column:1/-1;}.fgg.s2{grid-column:span 2;}
-label{font-size:0.65rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-dim);font-weight:500;}
-input,select,textarea{background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:0.82rem;padding:0.55rem 0.75rem;outline:none;transition:border-color 0.2s,box-shadow 0.2s;width:100%;}
-input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(0,212,170,0.1);}
-select option{background:var(--surface);}
-textarea{resize:vertical;min-height:70px;}
-input[type=range]{padding:0;cursor:pointer;accent-color:var(--accent);}
-.chips{display:flex;flex-wrap:wrap;gap:0.35rem;margin-top:0.35rem;}
-.chip{background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:0.25rem 0.7rem;font-size:0.7rem;cursor:pointer;transition:all 0.15s;color:var(--text-dim);user-select:none;}
-.chip:hover{border-color:var(--accent2);color:var(--accent2);}
-.chip.s{background:rgba(0,212,170,0.1);border-color:var(--accent);color:var(--accent);}
-.chip.sp{background:rgba(180,138,255,0.1);border-color:var(--purple);color:var(--purple);}
-.chip.sb{background:rgba(0,148,255,0.1);border-color:var(--accent2);color:var(--accent2);}
-.trow{display:flex;align-items:center;justify-content:space-between;padding:0.55rem 0;border-bottom:1px solid var(--border);}
+.stitle{font-family:‘DM Serif Display’,serif;font-size:1.6rem;margin-bottom:0.2rem;}
+.ssub{font-size:0.72rem;color:var(–text-dim);margin-bottom:1.2rem;}
+
+/* FORM CARDS */
+.fc{background:var(–surface);border:1px solid var(–border);border-radius:10px;padding:1.2rem;margin-bottom:1rem;}
+.fct{font-family:‘Syne’,sans-serif;font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(–accent);margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:1px solid var(–border);}
+.fct.purple{color:var(–purple);}
+.fct.blue{color:var(–accent2);}
+.fct.gold{color:var(–gold);}
+.fct.red{color:var(–danger);}
+
+/* GRID */
+.fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:0.75rem;}
+.fg+.fg,.fg+.fgg{margin-top:0.75rem;}
+.fgg{display:flex;flex-direction:column;gap:0.3rem;}
+.fgg.full{grid-column:1/-1;}
+.fgg.s2{grid-column:span 2;}
+@media(max-width:500px){.fg{grid-template-columns:1fr 1fr;}.fgg.s2{grid-column:1/-1;}}
+
+/* INPUTS */
+label{font-size:0.62rem;letter-spacing:0.07em;text-transform:uppercase;color:var(–text-dim);font-weight:500;display:block;margin-bottom:0.2rem;}
+input,select,textarea{
+background:var(–bg);border:1px solid var(–border);border-radius:6px;
+color:var(–text);font-family:‘DM Mono’,monospace;font-size:0.82rem;
+padding:0.5rem 0.7rem;outline:none;width:100%;
+-webkit-appearance:none;appearance:none;
+transition:border-color 0.2s;
+}
+input:focus,select:focus,textarea:focus{border-color:var(–accent);}
+select{background-image:url(“data:image/svg+xml,%3Csvg xmlns=‘http://www.w3.org/2000/svg’ width=‘12’ height=‘8’ viewBox=‘0 0 12 8’%3E%3Cpath d=‘M1 1l5 5 5-5’ stroke=’%237a9ab5’ stroke-width=‘1.5’ fill=‘none’ stroke-linecap=‘round’/%3E%3C/svg%3E”);background-repeat:no-repeat;background-position:right 0.7rem center;padding-right:2rem;}
+select option{background:var(–surface2);color:var(–text);}
+textarea{resize:vertical;min-height:65px;}
+input[type=range]{padding:0;accent-color:var(–accent);cursor:pointer;background:none;border:none;}
+input[readonly]{background:var(–surface2);cursor:default;}
+
+/* CHIPS — KEY FIX: no onclick in HTML, use JS delegation */
+.chips{display:flex;flex-wrap:wrap;gap:0.3rem;margin-top:0.3rem;}
+.chip{
+background:var(–surface2);border:1px solid var(–border);border-radius:14px;
+padding:0.22rem 0.65rem;font-size:0.68rem;cursor:pointer;
+color:var(–text-dim);user-select:none;-webkit-user-select:none;
+-webkit-tap-highlight-color:transparent;
+transition:all 0.15s;touch-action:manipulation;
+}
+.chip.on{background:rgba(0,212,170,0.12);border-color:var(–accent);color:var(–accent);}
+.chip.on-purple{background:rgba(180,138,255,0.12);border-color:var(–purple);color:var(–purple);}
+.chip.on-blue{background:rgba(0,148,255,0.12);border-color:var(–accent2);color:var(–accent2);}
+
+/* TOGGLE */
+.trow{display:flex;align-items:center;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid var(–border);}
 .trow:last-child{border-bottom:none;}
-.tlabel{font-size:0.8rem;color:var(--text);}
-.tgl{width:38px;height:20px;background:var(--border);border-radius:10px;cursor:pointer;position:relative;transition:background 0.2s;flex-shrink:0;}
-.tgl.on{background:var(--accent);}
-.tgl::after{content:'';width:14px;height:14px;background:white;border-radius:50%;position:absolute;top:3px;left:3px;transition:transform 0.2s;}
-.tgl.on::after{transform:translateX(18px);}
-.stars{display:flex;gap:3px;}
-.star{cursor:pointer;color:var(--text-faint);font-size:1.1rem;transition:color 0.15s;}
-.star.lit{color:var(--gold);}
-.btn-p{background:var(--accent);color:#0a0e14;border:none;border-radius:7px;font-family:'Syne',sans-serif;font-weight:700;font-size:0.82rem;letter-spacing:0.05em;padding:0.8rem 1.8rem;cursor:pointer;transition:all 0.2s;text-transform:uppercase;}
-.btn-p:hover{background:#00f0c0;transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,212,170,0.25);}
-.btn-s{background:transparent;color:var(--text-dim);border:1px solid var(--border);border-radius:7px;font-family:'Syne',sans-serif;font-weight:600;font-size:0.78rem;letter-spacing:0.05em;padding:0.7rem 1.4rem;cursor:pointer;transition:all 0.2s;text-transform:uppercase;}
-.btn-s:hover{border-color:var(--text-dim);color:var(--text);}
-.btn-d{background:transparent;color:var(--danger);border:1px solid rgba(255,107,107,0.25);border-radius:6px;font-family:'Syne',sans-serif;font-size:0.7rem;padding:0.4rem 0.8rem;cursor:pointer;transition:all 0.2s;}
-.btn-d:hover{background:rgba(255,107,107,0.08);}
-.btn-e{background:var(--surface2);border:1px solid var(--border);color:var(--text-dim);border-radius:6px;padding:0.55rem 1.1rem;font-family:'DM Mono',monospace;font-size:0.72rem;cursor:pointer;transition:all 0.2s;display:inline-flex;align-items:center;gap:0.35rem;}
-.btn-e:hover{border-color:var(--accent2);color:var(--accent2);}
-.factions{display:flex;gap:0.75rem;justify-content:flex-end;margin-top:1.2rem;padding-top:1.2rem;border-top:1px solid var(--border);flex-wrap:wrap;}
-.sdiv{font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-faint);margin:1rem 0 0.6rem;border-bottom:1px solid var(--border);padding-bottom:0.4rem;}
-.rc{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:1.1rem 1.3rem;margin-bottom:0.6rem;display:grid;grid-template-columns:48px 1fr auto;gap:0.85rem;align-items:start;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;}
-.rc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);opacity:0;transition:opacity 0.2s;}
-.rc:hover{border-color:rgba(0,212,170,0.25);transform:translateX(2px);}
-.rc:hover::before{opacity:1;}
-.rnum{font-family:'DM Serif Display',serif;font-size:1.6rem;color:var(--text-faint);line-height:1;}
-.rmain h3{font-family:'Syne',sans-serif;font-size:0.88rem;font-weight:700;margin-bottom:0.25rem;}
-.rmeta{display:flex;gap:0.75rem;flex-wrap:wrap;font-size:0.7rem;color:var(--text-dim);}
-.rbadges{display:flex;flex-direction:column;align-items:flex-end;gap:0.35rem;}
-.badge{font-size:0.62rem;letter-spacing:0.06em;text-transform:uppercase;padding:0.18rem 0.55rem;border-radius:16px;font-weight:600;}
-.bg{background:rgba(0,212,170,0.1);color:var(--accent);border:1px solid rgba(0,212,170,0.2);}
-.bb{background:rgba(0,148,255,0.1);color:var(--accent2);border:1px solid rgba(0,148,255,0.2);}
-.br{background:rgba(255,107,107,0.1);color:var(--danger);border:1px solid rgba(255,107,107,0.2);}
-.bgo{background:rgba(244,197,66,0.1);color:var(--gold);border:1px solid rgba(244,197,66,0.2);}
-.bp{background:rgba(180,138,255,0.1);color:var(--purple);border:1px solid rgba(180,138,255,0.2);}
-.asa{display:inline-flex;width:26px;height:26px;align-items:center;justify-content:center;border-radius:50%;font-family:'Syne',sans-serif;font-weight:700;font-size:0.75rem;}
-.a1{background:rgba(0,212,170,0.15);color:var(--accent);}.a2{background:rgba(0,148,255,0.15);color:var(--accent2);}.a3{background:rgba(244,197,66,0.15);color:var(--gold);}.a4{background:rgba(255,107,107,0.15);color:var(--danger);}
-.sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0.85rem;margin-bottom:1.5rem;}
-.sc{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:1.1rem;position:relative;overflow:hidden;}
-.sc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;}
-.sc.gn::after{background:var(--accent);}.sc.bl::after{background:var(--accent2);}.sc.gd::after{background:var(--gold);}.sc.rd::after{background:var(--danger);}.sc.pu::after{background:var(--purple);}
-.slabel{font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);margin-bottom:0.4rem;}
-.sval{font-family:'DM Serif Display',serif;font-size:2rem;line-height:1;}
-.ssub2{font-size:0.68rem;color:var(--text-faint);margin-top:0.25rem;}
-.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1.5rem;}
-@media(max-width:680px){.cgrid{grid-template-columns:1fr;}}
-.cc{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:1.3rem;}
-.ct{font-size:0.67rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);margin-bottom:0.9rem;}
-.bc{display:flex;flex-direction:column;gap:0.5rem;}
-.brow{display:grid;grid-template-columns:130px 1fr 36px;align-items:center;gap:0.65rem;}
-.blabel{font-size:0.68rem;color:var(--text-dim);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.btrack{height:7px;background:var(--border);border-radius:4px;overflow:hidden;}
-.bfill{height:100%;border-radius:4px;background:var(--accent);transition:width 0.6s ease;}
-.bval{font-size:0.68rem;color:var(--text-dim);text-align:right;}
-.pie-c{display:flex;align-items:center;gap:1.2rem;}
-.pie-l{display:flex;flex-direction:column;gap:0.4rem;}
-.li{display:flex;align-items:center;gap:0.4rem;font-size:0.68rem;color:var(--text-dim);}
+.tlabel{font-size:0.78rem;color:var(–text);}
+.tgl{width:36px;height:20px;background:var(–border);border-radius:10px;cursor:pointer;position:relative;transition:background 0.2s;flex-shrink:0;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+.tgl.on{background:var(–accent);}
+.tgl::after{content:’’;width:14px;height:14px;background:white;border-radius:50%;position:absolute;top:3px;left:3px;transition:transform 0.2s;}
+.tgl.on::after{transform:translateX(16px);}
+
+/* STARS */
+.stars{display:flex;gap:4px;margin-top:0.3rem;}
+.star{cursor:pointer;color:var(–text-faint);font-size:1.2rem;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+.star.lit{color:var(–gold);}
+
+/* BUTTONS */
+.btn-p{background:var(–accent);color:#0a0e14;border:none;border-radius:7px;font-family:‘Syne’,sans-serif;font-weight:700;font-size:0.82rem;padding:0.75rem 1.6rem;cursor:pointer;text-transform:uppercase;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+.btn-s{background:transparent;color:var(–text-dim);border:1px solid var(–border);border-radius:7px;font-family:‘Syne’,sans-serif;font-weight:600;font-size:0.78rem;padding:0.65rem 1.3rem;cursor:pointer;text-transform:uppercase;}
+.btn-d{background:transparent;color:var(–danger);border:1px solid rgba(255,107,107,0.25);border-radius:6px;font-size:0.68rem;padding:0.35rem 0.75rem;cursor:pointer;font-family:‘DM Mono’,monospace;}
+.btn-e{background:var(–surface2);border:1px solid var(–border);color:var(–text-dim);border-radius:6px;padding:0.5rem 1rem;font-family:‘DM Mono’,monospace;font-size:0.72rem;cursor:pointer;display:inline-flex;align-items:center;gap:0.3rem;}
+.factions{display:flex;gap:0.75rem;justify-content:flex-end;margin-top:1rem;padding-top:1rem;border-top:1px solid var(–border);flex-wrap:wrap;}
+
+/* SECTION DIVIDER */
+.sdiv{font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(–text-faint);margin:0.85rem 0 0.5rem;border-bottom:1px solid var(–border);padding-bottom:0.35rem;}
+
+/* CALC BOX */
+.calc-box{background:rgba(0,212,170,0.05);border:1px solid rgba(0,212,170,0.2);border-radius:8px;padding:0.85rem;margin-top:0.85rem;}
+.calc-box.danger{background:rgba(255,107,107,0.05);border-color:rgba(255,107,107,0.2);}
+.calc-title{font-family:‘Syne’,sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(–accent);margin-bottom:0.5rem;}
+.calc-title.danger{color:var(–danger);}
+.calc-row{font-size:0.75rem;color:var(–text-dim);padding:0.2rem 0;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,0.04);}
+.calc-row:last-child{border-bottom:none;}
+.calc-val{font-family:‘Syne’,sans-serif;font-weight:700;color:var(–accent);}
+.calc-val.warn{color:var(–gold);}
+.calc-val.danger{color:var(–danger);}
+
+/* RECORDS */
+.rc{background:var(–surface);border:1px solid var(–border);border-radius:9px;padding:1rem 1.2rem;margin-bottom:0.5rem;display:grid;grid-template-columns:40px 1fr auto;gap:0.75rem;align-items:start;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+.rnum{font-family:‘DM Serif Display’,serif;font-size:1.5rem;color:var(–text-faint);line-height:1;}
+.rmain h3{font-family:‘Syne’,sans-serif;font-size:0.85rem;font-weight:700;margin-bottom:0.2rem;}
+.rmeta{display:flex;gap:0.6rem;flex-wrap:wrap;font-size:0.68rem;color:var(–text-dim);}
+.rbadges{display:flex;flex-direction:column;align-items:flex-end;gap:0.3rem;}
+.badge{font-size:0.6rem;letter-spacing:0.05em;text-transform:uppercase;padding:0.15rem 0.5rem;border-radius:12px;font-weight:600;}
+.bg{background:rgba(0,212,170,0.1);color:var(–accent);border:1px solid rgba(0,212,170,0.2);}
+.bb{background:rgba(0,148,255,0.1);color:var(–accent2);border:1px solid rgba(0,148,255,0.2);}
+.br{background:rgba(255,107,107,0.1);color:var(–danger);border:1px solid rgba(255,107,107,0.2);}
+.bgo{background:rgba(244,197,66,0.1);color:var(–gold);border:1px solid rgba(244,197,66,0.2);}
+.bp{background:rgba(180,138,255,0.1);color:var(–purple);border:1px solid rgba(180,138,255,0.2);}
+.asa-badge{display:inline-flex;width:24px;height:24px;align-items:center;justify-content:center;border-radius:50%;font-family:‘Syne’,sans-serif;font-weight:700;font-size:0.72rem;}
+.a1{background:rgba(0,212,170,0.15);color:var(–accent);}
+.a2{background:rgba(0,148,255,0.15);color:var(–accent2);}
+.a3{background:rgba(244,197,66,0.15);color:var(–gold);}
+.a4{background:rgba(255,107,107,0.15);color:var(–danger);}
+
+/* STATS */
+.sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:0.75rem;margin-bottom:1.2rem;}
+.sc{background:var(–surface);border:1px solid var(–border);border-radius:9px;padding:1rem;position:relative;overflow:hidden;}
+.sc::after{content:’’;position:absolute;bottom:0;left:0;right:0;height:2px;}
+.sc.gn::after{background:var(–accent);}
+.sc.bl::after{background:var(–accent2);}
+.sc.gd::after{background:var(–gold);}
+.sc.rd::after{background:var(–danger);}
+.sc.pu::after{background:var(–purple);}
+.slabel{font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:var(–text-dim);margin-bottom:0.35rem;}
+.sval{font-family:‘DM Serif Display’,serif;font-size:1.9rem;line-height:1;}
+.ssub2{font-size:0.65rem;color:var(–text-faint);margin-top:0.2rem;}
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.2rem;}
+@media(max-width:600px){.cgrid{grid-template-columns:1fr;}}
+.cc{background:var(–surface);border:1px solid var(–border);border-radius:9px;padding:1.1rem;}
+.ct{font-size:0.65rem;letter-spacing:0.08em;text-transform:uppercase;color:var(–text-dim);margin-bottom:0.75rem;}
+.bc{display:flex;flex-direction:column;gap:0.45rem;}
+.brow{display:grid;grid-template-columns:110px 1fr 32px;align-items:center;gap:0.5rem;}
+.blabel{font-size:0.65rem;color:var(–text-dim);text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.btrack{height:6px;background:var(–border);border-radius:3px;overflow:hidden;}
+.bfill{height:100%;border-radius:3px;background:var(–accent);}
+.bval{font-size:0.65rem;color:var(–text-dim);text-align:right;}
+.pie-c{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;}
+.pie-l{display:flex;flex-direction:column;gap:0.35rem;}
+.li{display:flex;align-items:center;gap:0.35rem;font-size:0.65rem;color:var(–text-dim);}
 .ld{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
-.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.72);backdrop-filter:blur(4px);z-index:200;align-items:center;justify-content:center;padding:1.5rem;}
+
+/* MODAL */
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;align-items:flex-end;justify-content:center;padding:0;}
 .mo.open{display:flex;}
-.mbox{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.8rem;width:100%;max-width:720px;max-height:85vh;overflow-y:auto;position:relative;}
-.mbox h2{font-family:'DM Serif Display',serif;font-size:1.4rem;margin-bottom:1.2rem;}
-.mclose{position:absolute;top:1rem;right:1rem;background:none;border:none;color:var(--text-dim);font-size:1.2rem;cursor:pointer;width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:5px;transition:background 0.15s;}
-.mclose:hover{background:var(--surface2);color:var(--text);}
-.dsec{font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin:1.2rem 0 0.6rem;font-family:'Syne',sans-serif;font-weight:700;padding-bottom:0.3rem;border-bottom:1px solid var(--border);}
-.dgrid{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;}
-.di label{display:block;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-faint);margin-bottom:0.15rem;}
-.di p{font-size:0.8rem;color:var(--text);}
+.mbox{background:var(–surface);border-radius:16px 16px 0 0;padding:1.5rem;width:100%;max-height:88vh;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.mbox h2{font-family:‘DM Serif Display’,serif;font-size:1.3rem;margin-bottom:1rem;}
+.mclose{position:absolute;top:1rem;right:1rem;background:var(–surface2);border:none;color:var(–text-dim);font-size:1rem;cursor:pointer;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;}
+.dsec{font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(–accent);margin:1rem 0 0.5rem;font-family:‘Syne’,sans-serif;font-weight:700;padding-bottom:0.3rem;border-bottom:1px solid var(–border);}
+.dgrid{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;}
+@media(max-width:500px){.dgrid{grid-template-columns:1fr;}}
+.di label{font-size:0.58rem;letter-spacing:0.08em;text-transform:uppercase;color:var(–text-faint);display:block;margin-bottom:0.1rem;}
+.di p{font-size:0.78rem;color:var(–text);}
 .di.full{grid-column:1/-1;}
-.sbar{position:relative;margin-bottom:1rem;}
-.sbar input{padding-left:2.2rem;background:var(--surface);}
-.sbar::before{content:'⌕';position:absolute;left:0.75rem;top:50%;transform:translateY(-50%);color:var(--text-faint);font-size:1rem;pointer-events:none;}
-.frow{display:flex;gap:0.6rem;margin-bottom:1.2rem;flex-wrap:wrap;align-items:center;}
-.frow select{width:auto;min-width:130px;font-size:0.75rem;}
-.rcnt{font-size:0.7rem;color:var(--text-faint);margin-left:auto;}
-.empty{text-align:center;padding:3.5rem 2rem;color:var(--text-faint);}
-.empty-i{font-size:2.5rem;margin-bottom:0.75rem;}
-.empty h3{font-family:'DM Serif Display',serif;font-size:1.2rem;color:var(--text-dim);margin-bottom:0.4rem;}
-.empty p{font-size:0.78rem;}
-.bp2{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.4rem;margin-bottom:1.2rem;}
-.bp2 h3{font-family:'Syne',sans-serif;font-size:0.8rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text);margin-bottom:1rem;}
-.binfo{font-size:0.72rem;color:var(--text-dim);margin-top:0.5rem;line-height:1.8;}
-.binfo strong{color:var(--accent);}
-.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--accent);color:#0a0e14;padding:0.75rem 1.3rem;border-radius:7px;font-family:'Syne',sans-serif;font-weight:700;font-size:0.78rem;z-index:300;transform:translateY(80px);opacity:0;transition:all 0.3s;}
-.toast.show{transform:translateY(0);opacity:1;}
-@media(max-width:600px){main{padding:1rem;}.fg{grid-template-columns:1fr;}.dgrid{grid-template-columns:1fr;}.rc{grid-template-columns:36px 1fr auto;}.brow{grid-template-columns:90px 1fr 28px;}}
+
+/* SEARCH/FILTER */
+.sbar{position:relative;margin-bottom:0.85rem;}
+.sbar input{padding-left:2rem;background:var(–surface);}
+.sbar::before{content:‘⌕’;position:absolute;left:0.65rem;top:50%;transform:translateY(-50%);color:var(–text-faint);pointer-events:none;}
+.frow{display:flex;gap:0.5rem;margin-bottom:1rem;flex-wrap:wrap;align-items:center;}
+.frow select{width:auto;min-width:120px;font-size:0.72rem;}
+.rcnt{font-size:0.68rem;color:var(–text-faint);margin-left:auto;}
+
+/* EMPTY */
+.empty{text-align:center;padding:3rem 1rem;color:var(–text-faint);}
+.empty-i{font-size:2.5rem;margin-bottom:0.6rem;}
+.empty h3{font-family:‘DM Serif Display’,serif;font-size:1.1rem;color:var(–text-dim);margin-bottom:0.35rem;}
+
+/* BACKUP */
+.bp2{background:var(–surface);border:1px solid var(–border);border-radius:9px;padding:1.2rem;margin-bottom:1rem;}
+.bp2 h3{font-family:‘Syne’,sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(–text);margin-bottom:0.75rem;}
+.binfo{font-size:0.7rem;color:var(–text-dim);line-height:1.7;margin-top:0.5rem;}
+.binfo strong{color:var(–accent);}
+
+/* TOAST */
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(–accent);color:#0a0e14;padding:0.7rem 1.4rem;border-radius:20px;font-family:‘Syne’,sans-serif;font-weight:700;font-size:0.78rem;z-index:300;opacity:0;transition:all 0.3s;white-space:nowrap;}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+.toast.err{background:var(–danger);color:#fff;}
 </style>
+
 </head>
 <body>
 
@@ -141,9 +211,9 @@ input[type=range]{padding:0;cursor:pointer;accent-color:var(--accent);}
   <div class="logo">Anest<span>Log</span></div>
   <div class="hstats">
     <div class="hstat"><strong id="hdr-total">0</strong>casos</div>
-    <div class="hstat"><strong id="hdr-month">0</strong>este mes</div>
-    <div class="hstat"><strong id="hdr-regional">0</strong>con regional</div>
-    <div class="hstat"><strong id="hdr-comp">0%</strong>complicaciones</div>
+    <div class="hstat"><strong id="hdr-month">0</strong>mes</div>
+    <div class="hstat"><strong id="hdr-reg">0</strong>regional</div>
+    <div class="hstat"><strong id="hdr-comp">0%</strong>complic.</div>
   </div>
 </header>
 
@@ -155,598 +225,672 @@ input[type=range]{padding:0;cursor:pointer;accent-color:var(--accent);}
 </nav>
 
 <main>
-<!-- ══ FORM ══ -->
+
+<!-- ═══════════ FORM ═══════════ -->
+
 <div id="view-form" class="view active">
-  <div class="stitle">Registrar Caso</div>
-  <div class="ssub">Campos marcados con * son obligatorios</div>
+<div class="stitle">Registrar Caso</div>
+<div class="ssub">Campos con * obligatorios</div>
 
-  <!-- PACIENTE -->
+<!-- PACIENTE -->
 
-  <div class="fc">
-    <div class="fct">⊙ Datos del Paciente</div>
-    <div class="fg">
-      <div class="fgg"><label>Fecha *</label><input type="date" id="f-date"></div>
-      <div class="fgg s2"><label>Nombre completo del paciente *</label><input type="text" id="f-name" placeholder="Nombre y apellidos"></div>
-      <div class="fgg"><label>ID / Código *</label><input type="text" id="f-pid" placeholder="PT-2025-001"></div>
-      <div class="fgg"><label>Edad *</label><input type="number" id="f-age" min="0" max="120" placeholder="35"></div>
-      <div class="fgg"><label>Sexo</label>
-        <select id="f-sex"><option value="">—</option><option>Masculino</option><option>Femenino</option></select>
+<div class="fc">
+  <div class="fct">⊙ Datos del Paciente</div>
+  <div class="fg">
+    <div class="fgg"><label>Fecha *</label><input type="date" id="f-date"></div>
+    <div class="fgg s2"><label>Nombre completo *</label><input type="text" id="f-name" placeholder="Nombre y apellidos"></div>
+    <div class="fgg"><label>ID / Código *</label><input type="text" id="f-pid" placeholder="PT-2025-001"></div>
+    <div class="fgg"><label>Edad (años) *</label><input type="number" id="f-age" min="0" max="120" placeholder="35"></div>
+    <div class="fgg"><label>Sexo</label>
+      <select id="f-sex"><option value="">—</option><option>Masculino</option><option>Femenino</option></select>
+    </div>
+    <div class="fgg"><label>Peso (kg)</label><input type="number" id="f-weight" step="0.1" placeholder="70" oninput="calcHb()"></div>
+    <div class="fgg"><label>Talla (cm)</label><input type="number" id="f-height" placeholder="165"></div>
+    <div class="fgg"><label>ASA *</label>
+      <select id="f-asa">
+        <option value="">—</option><option value="1">ASA I — Sano</option><option value="2">ASA II — Enf. leve</option>
+        <option value="3">ASA III — Enf. severa</option><option value="4">ASA IV — Riesgo vital</option>
+        <option value="5">ASA V — Moribundo</option><option value="E">ASA E — Emergencia</option>
+      </select>
+    </div>
+    <div class="fgg"><label>Mallampati</label>
+      <select id="f-mallampati"><option value="">—</option><option>I</option><option>II</option><option>III</option><option>IV</option></select>
+    </div>
+  </div>
+  <div class="fg" style="margin-top:0.75rem">
+    <div class="fgg full"><label>Comorbilidades</label>
+      <div class="chips" data-group="comorbid">
+        <span class="chip">HTA</span><span class="chip">DM</span><span class="chip">Cardiopatía</span>
+        <span class="chip">EPOC</span><span class="chip">Obesidad</span><span class="chip">Apnea sueño</span>
+        <span class="chip">Asma</span><span class="chip">IRC</span><span class="chip">Hepatopatía</span>
+        <span class="chip">Coagulopatía</span><span class="chip">Alergia Látex</span><span class="chip">Tabaquismo</span>
+        <span class="chip">Hipotiroidismo</span><span class="chip">Hipertiroidismo</span>
       </div>
-      <div class="fgg"><label>Peso (kg)</label><input type="number" id="f-weight" step="0.1" placeholder="70"></div>
-      <div class="fgg"><label>Talla (cm)</label><input type="number" id="f-height" placeholder="165"></div>
-      <div class="fgg"><label>ASA *</label>
-        <select id="f-asa">
-          <option value="">—</option><option value="1">ASA I — Sano</option><option value="2">ASA II — Enf. leve</option>
-          <option value="3">ASA III — Enf. severa</option><option value="4">ASA IV — Riesgo vital</option>
-          <option value="5">ASA V — Moribundo</option><option value="E">ASA E — Emergencia</option>
+    </div>
+    <div class="fgg full"><label>Otras comorbilidades</label><input type="text" id="f-comorbid-other" placeholder="Especificar..."></div>
+  </div>
+</div>
+
+<!-- PROCEDIMIENTO -->
+
+<div class="fc">
+  <div class="fct">⚕ Procedimiento Quirúrgico</div>
+  <div class="fg">
+    <div class="fgg s2"><label>Procedimiento / Cirugía *</label>
+      <input type="text" id="f-procedure" placeholder="Ej: Abdominoplastia + liposucción 360°" oninput="checkContorno()">
+    </div>
+    <div class="fgg"><label>Especialidad *</label>
+      <select id="f-specialty">
+        <option value="">—</option><option>Cirugía Plástica Estética</option><option>Cirugía Plástica Reconstructiva</option>
+        <option>Ortopedia y Traumatología</option><option>Cirugía General</option><option>Ginecología</option>
+        <option>Urología</option><option>Neurocirugía</option><option>ORL</option>
+        <option>Cirugía Vascular</option><option>Cirugía Torácica</option><option>Otra</option>
+      </select>
+    </div>
+    <div class="fgg"><label>Urgencia</label>
+      <select id="f-urgency"><option>Electivo</option><option>Urgente</option><option>Emergencia</option></select>
+    </div>
+    <div class="fgg"><label>Posición</label>
+      <select id="f-position">
+        <option value="">—</option><option>Supino</option><option>Prono</option><option>Lateral derecho</option>
+        <option>Lateral izquierdo</option><option>Litotomía</option><option>Trendelenburg</option><option>Sentado</option>
+      </select>
+    </div>
+    <div class="fgg"><label>Duración (min)</label><input type="number" id="f-duration" placeholder="120"></div>
+    <div class="fgg"><label>Hospital / Centro</label><input type="text" id="f-hospital" placeholder="Nombre del centro"></div>
+    <div class="fgg"><label>Cirujano</label><input type="text" id="f-surgeon" placeholder="Nombre"></div>
+  </div>
+</div>
+
+<!-- CONTORNO CORPORAL — auto-shown -->
+
+<div class="fc" id="fc-contorno" style="display:none;border-color:rgba(244,197,66,0.3)">
+  <div class="fct gold">◈ Contorno Corporal — Liposucción / Lipoescultura / Lipoabdominoplastia</div>
+
+  <div class="sdiv">Hematología preoperatoria</div>
+  <div class="fg">
+    <div class="fgg"><label>Hb preop (g/dL) *</label><input type="number" id="f-hb-pre" step="0.1" placeholder="13.5" oninput="calcHb()"></div>
+    <div class="fgg"><label>Hto preop (%)</label><input type="number" id="f-hto-pre" step="0.1" placeholder="40" oninput="calcHb()"></div>
+    <div class="fgg"><label>Hb mínima aceptable</label>
+      <select id="f-hb-min" onchange="calcHb()">
+        <option value="10">10.0 g/dL (estético)</option>
+        <option value="8" selected>8.0 g/dL (estándar)</option>
+        <option value="7">7.0 g/dL (sano joven)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="sdiv">Tumescencia</div>
+  <div class="fg">
+    <div class="fgg"><label>Volumen tumescente total (mL)</label><input type="number" id="f-tumes-vol" placeholder="3000" oninput="calcLipo()"></div>
+    <div class="fgg"><label>Fórmula tumescente</label>
+      <select id="f-tumes-formula">
+        <option value="">—</option>
+        <option value="klein">Klein (Lido 0.05% + Epi 1:1.000.000)</option>
+        <option value="diluida">Diluida (Lido 0.025% + Epi 1:2.000.000)</option>
+        <option value="supra">Supratumescente</option>
+        <option value="custom">Personalizada</option>
+      </select>
+    </div>
+    <div class="fgg"><label>Lidocaína tumescente (mg/mL)</label><input type="number" id="f-tumes-lido-conc" step="0.01" placeholder="0.5" oninput="calcLipo()"></div>
+    <div class="fgg"><label>Epinefrina (mcg/mL)</label><input type="number" id="f-tumes-epi" step="0.1" placeholder="1.0"></div>
+    <div class="fgg"><label>Dosis total lidocaína (mg)</label><input type="number" id="f-tumes-lido-total" readonly placeholder="Auto"></div>
+    <div class="fgg"><label>Dosis lidocaína (mg/kg)</label><input type="number" id="f-tumes-lido-mgkg" readonly placeholder="Auto"></div>
+  </div>
+  <div class="fg" style="margin-top:0.75rem">
+    <div class="fgg full"><label>Áreas tratadas</label>
+      <div class="chips" data-group="tumes-areas">
+        <span class="chip">Abdomen</span><span class="chip">Flancos</span><span class="chip">Espalda alta</span>
+        <span class="chip">Espalda baja</span><span class="chip">Brazos</span><span class="chip">Muslos internos</span>
+        <span class="chip">Muslos externos</span><span class="chip">Rodillas</span><span class="chip">Glúteos</span>
+        <span class="chip">Papada</span><span class="chip">Mamas</span><span class="chip">360°</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sdiv">Aspirado</div>
+  <div class="fg">
+    <div class="fgg"><label>Volumen aspirado total (mL)</label><input type="number" id="f-aspirado" placeholder="2500" oninput="calcLipo()"></div>
+    <div class="fgg"><label>% sangre en aspirado</label>
+      <select id="f-aspirado-pct" onchange="calcLipo()">
+        <option value="1">~1% (tumescente óptima)</option>
+        <option value="2" selected>~2% (tumescente típica)</option>
+        <option value="4">~4% (húmedo)</option>
+        <option value="8">~8% (seco)</option>
+      </select>
+    </div>
+    <div class="fgg"><label>Sangre en aspirado (mL)</label><input type="number" id="f-blood-asp" readonly placeholder="Auto" style="color:var(--danger)"></div>
+    <div class="fgg"><label>Grasa pura extraída (mL)</label><input type="number" id="f-fat-asp" readonly placeholder="Auto" style="color:var(--gold)"></div>
+  </div>
+
+  <!-- CALC DISPLAY -->
+
+  <div id="lipo-calc" style="display:none;margin-top:0.85rem">
+    <div class="calc-box">
+      <div class="calc-title">◎ Cálculos de Seguridad</div>
+      <div id="lipo-calc-rows"></div>
+    </div>
+    <div class="calc-box" id="lipo-alert-box" style="display:none">
+      <div class="calc-title danger" id="lipo-alert-title"></div>
+      <div id="lipo-alert-rows"></div>
+    </div>
+  </div>
+
+  <div class="sdiv">Seguimiento Hematológico Postoperatorio</div>
+  <div class="fg">
+    <div class="fgg"><label>Hb 24h POP (g/dL)</label><input type="number" id="f-hb-24h" step="0.1" placeholder="11.0" oninput="calcHb24()"></div>
+    <div class="fgg"><label>Hto 24h POP (%)</label><input type="number" id="f-hto-24h" step="0.1" placeholder="33.0"></div>
+    <div class="fgg"><label>Caída Hb (g/dL)</label><input type="number" id="f-hb-drop" readonly placeholder="Auto" style="color:var(--danger)"></div>
+    <div class="fgg"><label>Interpretación</label><input type="text" id="f-hb-interp" readonly placeholder="Auto"></div>
+    <div class="fgg"><label>Hb 48h POP (g/dL)</label><input type="number" id="f-hb-48h" step="0.1" placeholder="Opcional"></div>
+    <div class="fgg"><label>¿Requirió transfusión?</label>
+      <select id="f-did-transfuse">
+        <option value="">—</option><option>No</option>
+        <option>Sí — intraoperatoria</option><option>Sí — postoperatoria</option>
+      </select>
+    </div>
+    <div class="fgg full"><label>Notas hematológicas</label><textarea id="f-hb-notes" placeholder="Hierro IV, EPO, medidas de ahorro de sangre..."></textarea></div>
+  </div>
+</div>
+
+<!-- ANESTESIA GENERAL / TCI -->
+
+<div class="fc">
+  <div class="fct">◈ Técnica Anestésica</div>
+  <div class="fg">
+    <div class="fgg full"><label>Tipo de anestesia *</label>
+      <div class="chips" data-group="atype">
+        <span class="chip">AG Balanceada Convencional</span>
+        <span class="chip">AG Balanceada + TCI Remifentanilo</span>
+        <span class="chip">CIVA</span>
+        <span class="chip">TIVA — TCI Propofol</span>
+        <span class="chip">TIVA — TCI Propofol + TCI Remifentanilo</span>
+        <span class="chip">TIVA sin TCI</span>
+        <span class="chip">Neuroaxial sola</span>
+        <span class="chip">Regional sola</span>
+        <span class="chip">Sedación consciente</span>
+        <span class="chip">Sedación profunda</span>
+        <span class="chip">Local + Sedación</span>
+        <span class="chip">Combinada AG + Regional</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sdiv">Inducción</div>
+  <div class="fg">
+    <div class="fgg"><label>Agente inductor</label>
+      <select id="f-inductor">
+        <option value="">—</option><option>Propofol</option><option>Etomidato</option>
+        <option>Ketamina</option><option>Midazolam</option><option>Tiopental</option><option>Sin inductor</option>
+      </select>
+    </div>
+    <div class="fgg"><label>Dosis inductor</label><input type="text" id="f-inductor-dose" placeholder="Ej: 2 mg/kg"></div>
+    <div class="fgg"><label>Relajante muscular</label>
+      <select id="f-nmb">
+        <option value="">—</option><option>Succinilcolina</option><option>Rocuronio</option>
+        <option>Vecuronio</option><option>Cisatracurio</option><option>Sin relajante</option>
+      </select>
+    </div>
+    <div class="fgg"><label>Dosis relajante</label><input type="text" id="f-nmb-dose" placeholder="Ej: 0.6 mg/kg"></div>
+  </div>
+
+  <div class="sdiv">Mantenimiento — Agente Hipnótico</div>
+  <div class="fg">
+    <div class="fgg"><label>Agente / técnica</label>
+      <select id="f-maintenance" onchange="toggleTCI()">
+        <option value="">—</option>
+        <option>Sevoflurano</option><option>Desflurano</option><option>Isoflurano</option>
+        <option value="tci-propofol">Propofol TCI</option>
+        <option value="tiva-propofol">Propofol TIVA (sin TCI)</option>
+        <option>Dexmedetomidina</option><option>Combinación</option>
+      </select>
+    </div>
+    <div class="fgg" id="grp-inhala"><label>Concentración / dosis</label><input type="text" id="f-maint-dose" placeholder="Ej: 2% Sevo / 3 mcg/mL"></div>
+    <!-- TCI Propofol fields -->
+    <div class="fgg" id="grp-tci-prop" style="display:none">
+      <label>Modelo TCI Propofol</label>
+      <select id="f-tci-prop-model">
+        <option value="">—</option>
+        <option>Marsh</option><option>Schnider</option><option>Eleveld</option>
+      </select>
+    </div>
+    <div class="fgg" id="grp-tci-prop-ce" style="display:none">
+      <label>Concentración efecto Propofol (mcg/mL)</label>
+      <input type="number" id="f-tci-prop-ce" step="0.1" placeholder="3.0 – 4.0 mcg/mL">
+    </div>
+  </div>
+
+  <div class="sdiv">Mantenimiento — Opioide</div>
+  <div class="fg">
+    <div class="fgg"><label>Opioide intraop.</label>
+      <select id="f-opioid" onchange="toggleOpioidTCI()">
+        <option value="">—</option>
+        <option>Fentanilo (bolo)</option>
+        <option value="remi-tci">Remifentanilo TCI</option>
+        <option value="remi-infusion">Remifentanilo infusión mcg/kg/min</option>
+        <option>Sufentanilo</option><option>Morfina</option><option>Hidromorfona</option>
+        <option>Tramadol</option><option>Ninguno</option>
+      </select>
+    </div>
+    <div class="fgg" id="grp-opioid-dose"><label>Dosis opioide</label><input type="text" id="f-opioid-dose" placeholder="Ej: 3 mcg/kg inicial"></div>
+    <!-- Remi TCI -->
+    <div class="fgg" id="grp-remi-tci-model" style="display:none">
+      <label>Modelo TCI Remifentanilo</label>
+      <select id="f-remi-tci-model">
+        <option value="">—</option>
+        <option>Minto</option><option>Eleveld</option>
+      </select>
+    </div>
+    <div class="fgg" id="grp-remi-tci-ce" style="display:none">
+      <label>Concentración efecto Remi (ng/mL)</label>
+      <input type="number" id="f-remi-tci-ce" step="0.1" placeholder="2.0 – 6.0 ng/mL">
+    </div>
+    <!-- Remi infusion -->
+    <div class="fgg" id="grp-remi-inf" style="display:none">
+      <label>Dosis Remifentanilo (mcg/kg/min)</label>
+      <input type="number" id="f-remi-inf-dose" step="0.01" placeholder="0.05 – 0.4">
+    </div>
+  </div>
+
+  <!-- Dexmedetomidina TCI -->
+
+  <div class="fg" id="grp-dex" style="display:none">
+    <div class="sdiv" style="grid-column:1/-1">Dexmedetomidina</div>
+    <div class="fgg"><label>Modelo TCI Dexmedetomidina</label>
+      <select id="f-dex-model">
+        <option value="">—</option>
+        <option>Hannivoort</option><option>Dyck</option><option>Eleveld</option>
+      </select>
+    </div>
+    <div class="fgg"><label>Concentración efecto Dex (ng/mL)</label>
+      <input type="number" id="f-dex-ce" step="0.1" placeholder="0.4 – 0.7 ng/mL">
+    </div>
+    <div class="fgg"><label>Dosis Dex (mcg/kg/h)</label>
+      <input type="number" id="f-dex-dose" step="0.1" placeholder="0.2 – 0.7">
+    </div>
+  </div>
+
+  <div class="sdiv">Analgesia Multimodal Intraoperatoria</div>
+  <div class="fg">
+    <div class="fgg full">
+      <div class="chips" data-group="multimodal">
+        <span class="chip">Ketorolaco</span><span class="chip">Paracetamol IV</span>
+        <span class="chip">Dexametasona</span><span class="chip">Ketamina subanest.</span>
+        <span class="chip">Sulfato Mg</span><span class="chip">Lidocaína IV</span>
+        <span class="chip">Gabapentin</span><span class="chip">Pregabalina</span>
+        <span class="chip">Celecoxib</span><span class="chip">Metadona</span>
+        <span class="chip">Tramadol IV</span><span class="chip">Morfina</span>
+        <span class="chip">Hidromorfona</span><span class="chip">Dexmedetomidina</span>
+      </div>
+    </div>
+    <div class="fgg full"><label>Notas anestesia / dosis específicas</label>
+      <textarea id="f-ga-notes" placeholder="Dosis, detalles de técnica TCI, cálculos..."></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- VÍA AÉREA -->
+
+<div class="fc">
+  <div class="fct blue">◉ Vía Aérea</div>
+  <div class="fg">
+    <div class="fgg s2"><label>Dispositivo</label>
+      <select id="f-airway">
+        <option value="">—</option>
+        <option>TET oral (laringoscopio DL)</option><option>TET oral (videolaringoscopio)</option>
+        <option>TET nasal</option><option>Fibroscopio flexible</option>
+        <option>Máscara laríngea clásica</option><option>Máscara laríngea proseal/supreme</option>
+        <option>Máscara facial</option><option>No aplica (regional / local)</option>
+      </select>
+    </div>
+    <div class="fgg"><label>Número tubo / ML</label><input type="text" id="f-tube" placeholder="Ej: TET 7.0 / ML #3"></div>
+    <div class="fgg"><label>Cormack-Lehane</label>
+      <select id="f-cormack"><option value="">—</option><option>I</option><option>II</option><option>III</option><option>IV</option></select>
+    </div>
+    <div class="fgg"><label>Intentos intubación</label>
+      <select id="f-intubation">
+        <option value="">—</option><option value="1">1er intento ✓</option>
+        <option value="2">2do intento</option><option value="3">3er intento</option><option value="dificil">VAD</option>
+      </select>
+    </div>
+    <div class="fgg"><label>Ayuno (horas)</label><input type="number" id="f-fasting" min="0" max="72" placeholder="8"></div>
+  </div>
+  <div style="margin-top:0.75rem">
+    <div class="trow"><span class="tlabel">¿Vía aérea difícil anticipada?</span><div class="tgl" id="tgl-vad" data-tgl="1"></div></div>
+    <div class="trow"><span class="tlabel">¿Estómago lleno / RSI?</span><div class="tgl" id="tgl-rsi" data-tgl="1"></div></div>
+  </div>
+</div>
+
+<!-- MONITOREO -->
+
+<div class="fc">
+  <div class="fct blue">⊕ Monitoreo y Accesos</div>
+  <div class="fg">
+    <div class="fgg full"><label>Monitoreo</label>
+      <div class="chips" data-group="monitoring">
+        <span class="chip on">ASA básico</span>
+        <span class="chip">Línea arterial (IBP)</span><span class="chip">CVC</span>
+        <span class="chip">TOF / NMT</span><span class="chip">BIS</span>
+        <span class="chip">PSI (SedLine)</span><span class="chip">ETE</span>
+        <span class="chip">Gasto cardíaco</span><span class="chip">NIRS cerebral</span>
+        <span class="chip">Temperatura</span>
+      </div>
+    </div>
+    <div class="fgg full"><label>Accesos vasculares</label>
+      <div class="chips" data-group="access">
+        <span class="chip">PIV ×1</span><span class="chip">PIV ×2</span>
+        <span class="chip">CVC yugular</span><span class="chip">CVC subclavio</span>
+        <span class="chip">Línea arterial radial</span><span class="chip">Línea arterial femoral</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ANESTESIA REGIONAL -->
+
+<div class="fc">
+  <div class="fct purple">◎ Anestesia / Analgesia Regional — Guiada por Ecografía</div>
+
+  <!-- NEUROAXIAL -->
+
+  <div class="sdiv">Bloqueo Neuroaxial</div>
+  <div class="trow" style="margin-bottom:0.75rem">
+    <span class="tlabel">¿Se realizó bloqueo neuroaxial?</span>
+    <div class="tgl" id="tgl-nax" data-tgl="1" data-target="sec-nax"></div>
+  </div>
+  <div id="sec-nax" style="display:none">
+    <div class="fg">
+      <div class="fgg"><label>Tipo neuroaxial</label>
+        <select id="f-nax-type">
+          <option value="">—</option>
+          <option>Bloqueo subaracnoideo (spinal)</option><option>Epidural</option>
+          <option>Combinado espinal-epidural (CSE)</option>
         </select>
       </div>
-      <div class="fgg"><label>Mallampati</label>
-        <select id="f-mallampati"><option value="">—</option><option>I</option><option>II</option><option>III</option><option>IV</option></select>
-      </div>
-    </div>
-    <div class="fg" style="margin-top:0.85rem">
-      <div class="fgg full"><label>Comorbilidades</label>
-        <div class="chips" id="ch-comorbid">
-          <div class="chip" onclick="tc(this)">HTA</div><div class="chip" onclick="tc(this)">DM</div>
-          <div class="chip" onclick="tc(this)">Cardiopatía</div><div class="chip" onclick="tc(this)">EPOC</div>
-          <div class="chip" onclick="tc(this)">Obesidad</div><div class="chip" onclick="tc(this)">Apnea sueño</div>
-          <div class="chip" onclick="tc(this)">Asma</div><div class="chip" onclick="tc(this)">IRC</div>
-          <div class="chip" onclick="tc(this)">Hepatopatía</div><div class="chip" onclick="tc(this)">Coagulopatía</div>
-          <div class="chip" onclick="tc(this)">Alergia Látex</div><div class="chip" onclick="tc(this)">Tabaquismo</div>
-          <div class="chip" onclick="tc(this)">Hipotiroidismo</div><div class="chip" onclick="tc(this)">Hipertiroidismo</div>
-        </div>
-      </div>
-      <div class="fgg full"><label>Otras comorbilidades</label><input type="text" id="f-comorbid-other" placeholder="Especificar..."></div>
-    </div>
-  </div>
-
-  <!-- PROCEDIMIENTO -->
-
-  <div class="fc">
-    <div class="fct">⚕ Procedimiento Quirúrgico</div>
-    <div class="fg">
-      <div class="fgg s2"><label>Procedimiento / Cirugía *</label><input type="text" id="f-procedure" placeholder="Ej: Abdominoplastia + liposucción 360°" oninput="checkContorno()"></div>
-      <div class="fgg"><label>Especialidad *</label>
-        <select id="f-specialty">
-          <option value="">—</option><option>Cirugía Plástica Estética</option><option>Cirugía Plástica Reconstructiva</option>
-          <option>Ortopedia y Traumatología</option><option>Cirugía General</option><option>Ginecología</option>
-          <option>Urología</option><option>Neurocirugía</option><option>ORL</option>
-          <option>Cirugía Vascular</option><option>Cirugía Torácica</option><option>Otra</option>
+      <div class="fgg"><label>Nivel de punción</label>
+        <select id="f-nax-level">
+          <option value="">—</option><option>L1-L2</option><option>L2-L3</option>
+          <option>L3-L4</option><option>L4-L5</option><option>T10-T11</option><option>T12-L1</option>
         </select>
       </div>
-      <div class="fgg"><label>Urgencia</label>
-        <select id="f-urgency"><option>Electivo</option><option>Urgente</option><option>Emergencia</option></select>
-      </div>
-      <div class="fgg"><label>Posición</label>
-        <select id="f-position">
-          <option value="">—</option><option>Supino</option><option>Prono</option><option>Lateral derecho</option>
-          <option>Lateral izquierdo</option><option>Litotomía</option><option>Trendelenburg</option><option>Sentado</option>
+      <div class="fgg"><label>Anestésico local</label>
+        <select id="f-nax-la">
+          <option value="">—</option>
+          <option>Bupivacaína hiperbárica 0.5%</option><option>Bupivacaína isobárica 0.5%</option>
+          <option>Levobupivacaína 0.5%</option><option>Ropivacaína 0.5%</option>
+          <option>Ropivacaína 0.75%</option><option>Lidocaína hiperbárica 5%</option>
         </select>
       </div>
-      <div class="fgg"><label>Duración (min)</label><input type="number" id="f-duration" placeholder="120"></div>
-      <div class="fgg"><label>Hospital / Centro</label><input type="text" id="f-hospital" placeholder="Nombre del centro"></div>
-      <div class="fgg"><label>Cirujano</label><input type="text" id="f-surgeon" placeholder="Nombre"></div>
-    </div>
-  </div>
-
-  <!-- CIRUGÍA DE CONTORNO CORPORAL -->
-
-  <div class="fc" id="fc-contorno" style="display:none;border-color:rgba(244,197,66,0.3)">
-    <div class="fct gold">◈ Contorno Corporal — Liposucción / Lipoescultura / Lipoabdominoplastia</div>
-
-```
-<div class="sdiv">Tumescencia</div>
-<div class="fg">
-  <div class="fgg"><label>Volumen tumescente total (mL)</label><input type="number" id="f-tumes-vol" placeholder="3000" oninput="calcLipo()"></div>
-  <div class="fgg"><label>Fórmula tumescente</label>
-    <select id="f-tumes-formula" onchange="calcLipo()">
-      <option value="">Seleccionar</option>
-      <option value="klein">Klein (Lidocaína 0.05% + Epi 1:1.000.000)</option>
-      <option value="diluida">Diluida (Lidocaína 0.025% + Epi 1:2.000.000)</option>
-      <option value="supra">Supratumescente</option>
-      <option value="custom">Personalizada</option>
-    </select>
-  </div>
-  <div class="fgg"><label>Lidocaína tumescente (mg/mL)</label><input type="number" id="f-tumes-lido-conc" step="0.01" placeholder="0.5" oninput="calcLipo()"></div>
-  <div class="fgg"><label>Dosis total lidocaína (mg) <span id="calc-lido-total" style="color:var(--accent);font-weight:700"></span></label>
-    <input type="number" id="f-tumes-lido-total" placeholder="Auto-calculado" readonly style="background:var(--surface2);color:var(--accent)">
-  </div>
-  <div class="fgg"><label>Dosis mg/kg lidocaína <span id="calc-lido-mgkg" style="color:var(--gold);font-weight:700"></span></label>
-    <input type="number" id="f-tumes-lido-mgkg" placeholder="Auto-calculado" readonly style="background:var(--surface2);color:var(--gold)">
-  </div>
-  <div class="fgg"><label>Epinefrina (mcg/mL)</label><input type="number" id="f-tumes-epi" step="0.1" placeholder="1.0"></div>
-  <div class="fgg full"><label>Áreas tratadas con tumescencia</label>
-    <div class="chips" id="ch-tumes-areas">
-      <div class="chip" onclick="tc(this)">Abdomen</div>
-      <div class="chip" onclick="tc(this)">Flancos</div>
-      <div class="chip" onclick="tc(this)">Espalda alta</div>
-      <div class="chip" onclick="tc(this)">Espalda baja</div>
-      <div class="chip" onclick="tc(this)">Brazos</div>
-      <div class="chip" onclick="tc(this)">Muslos internos</div>
-      <div class="chip" onclick="tc(this)">Muslos externos</div>
-      <div class="chip" onclick="tc(this)">Rodillas</div>
-      <div class="chip" onclick="tc(this)">Glúteos</div>
-      <div class="chip" onclick="tc(this)">Papada / Cuello</div>
-      <div class="chip" onclick="tc(this)">Mamas</div>
-      <div class="chip" onclick="tc(this)">360°</div>
-    </div>
-  </div>
-</div>
-
-<div class="sdiv">Aspirado y Cálculo de Pérdidas</div>
-<div class="fg">
-  <div class="fgg"><label>Volumen aspirado total (mL)</label><input type="number" id="f-aspirado-total" placeholder="2500" oninput="calcLipo()"></div>
-  <div class="fgg"><label>% Sangre en aspirado estimado</label>
-    <select id="f-aspirado-pct" onchange="calcLipo()">
-      <option value="1">~1% (tumescente, hemostasia excelente)</option>
-      <option value="2" selected>~2% (típico tumescente)</option>
-      <option value="4">~4% (húmedo)</option>
-      <option value="8">~8% (seco)</option>
-      <option value="custom">Especificar manualmente</option>
-    </select>
-  </div>
-  <div class="fgg"><label>Sangre en aspirado estimada (mL)</label>
-    <input type="number" id="f-blood-aspirado" placeholder="Auto-calculado" readonly style="background:var(--surface2);color:var(--danger)">
-  </div>
-  <div class="fgg"><label>Tejido adiposo puro aspirado (mL)</label>
-    <input type="number" id="f-fat-aspirado" placeholder="Auto-calculado" readonly style="background:var(--surface2);color:var(--gold)">
-  </div>
-</div>
-
-<div class="sdiv">Hematología y Pérdidas Permisibles</div>
-<div class="fg">
-  <div class="fgg"><label>Hb preoperatoria (g/dL)</label><input type="number" id="f-hb-pre" step="0.1" placeholder="13.5" oninput="calcHb()"></div>
-  <div class="fgg"><label>Hto preoperatorio (%)</label><input type="number" id="f-hto-pre" step="0.1" placeholder="40" oninput="calcHb()"></div>
-  <div class="fgg"><label>Hb mínima aceptable (g/dL)</label>
-    <select id="f-hb-min" onchange="calcHb()">
-      <option value="7">7.0 (paciente sano)</option>
-      <option value="8" selected>8.0 (estándar)</option>
-      <option value="9">9.0 (cardiopatía / mayor riesgo)</option>
-      <option value="10">10.0 (riesgo cardiovascular alto)</option>
-    </select>
-  </div>
-  <div class="fgg">
-    <label>VCE estimado (mL) <span style="font-size:0.6rem;color:var(--text-faint)">(basado en peso)</span></label>
-    <input type="number" id="f-vce" placeholder="Auto-calculado" readonly style="background:var(--surface2);color:var(--accent2)">
-  </div>
-  <div class="fgg">
-    <label>Pérdida permisible estimada (mL)</label>
-    <input type="number" id="f-perdida-perm" placeholder="Auto-calculado" readonly style="background:var(--surface2);color:var(--accent)">
-  </div>
-  <div class="fgg">
-    <label>¿Requiere transfusión?</label>
-    <input type="text" id="f-transfusion-risk" placeholder="Auto-calculado" readonly style="background:var(--surface2)">
-  </div>
-</div>
-
-<!-- CALCULATOR DISPLAY -->
-<div id="lipo-calc-display" style="display:none;margin-top:1rem;background:rgba(0,212,170,0.05);border:1px solid rgba(0,212,170,0.15);border-radius:8px;padding:1rem">
-  <div style="font-family:'Syne',sans-serif;font-size:0.68rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:0.75rem">◎ Resumen de Cálculos</div>
-  <div id="lipo-calc-text" style="font-size:0.78rem;color:var(--text-dim);line-height:2"></div>
-</div>
-
-<div class="sdiv">Seguimiento Hematológico Postoperatorio</div>
-<div class="fg">
-  <div class="fgg"><label>Hb 24h POP (g/dL)</label><input type="number" id="f-hb-24h" step="0.1" placeholder="11.0" oninput="calcHb24()"></div>
-  <div class="fgg"><label>Hto 24h POP (%)</label><input type="number" id="f-hto-24h" step="0.1" placeholder="33.0"></div>
-  <div class="fgg"><label>Caída Hb (g/dL)</label><input type="number" id="f-hb-drop" readonly placeholder="Auto-calculado" style="background:var(--surface2);color:var(--danger)"></div>
-  <div class="fgg"><label>Interpretación 24h POP</label><input type="text" id="f-hb-interpret" readonly placeholder="Auto-calculado" style="background:var(--surface2)"></div>
-  <div class="fgg"><label>Hb 48h POP (g/dL)</label><input type="number" id="f-hb-48h" step="0.1" placeholder="Opcional"></div>
-  <div class="fgg"><label>¿Se requirió transfusión?</label>
-    <select id="f-did-transfuse"><option value="">—</option><option value="No">No</option><option value="Sí">Sí — intraoperatoria</option><option value="Sí POP">Sí — postoperatoria</option></select>
-  </div>
-  <div class="fgg full"><label>Notas hematológicas / manejo</label><textarea id="f-hb-notes" placeholder="Tratamiento con hierro IV, EPO, medidas de ahorro de sangre, etc."></textarea></div>
-</div>
-```
-
-  </div>
-
-  <!-- ANESTESIA GENERAL / TIVA / TCI -->
-
-  <div class="fc">
-    <div class="fct">◈ Anestesia General / TIVA / TCI</div>
-    <div class="fg">
-      <div class="fgg full"><label>Tipo principal de anestesia *</label>
-        <div class="chips" id="ch-atype">
-          <div class="chip" onclick="tc(this,'s')">AG Balanceada Convencional</div>
-          <div class="chip" onclick="tc(this,'s')">AG Balanceada + TCI Remifentanilo</div>
-          <div class="chip" onclick="tc(this,'s')">CIVA (Coctel IV Analgesia)</div>
-          <div class="chip" onclick="tc(this,'s')">TIVA — TCI Propofol</div>
-          <div class="chip" onclick="tc(this,'s')">TIVA — TCI Propofol + TCI Remifentanilo</div>
-          <div class="chip" onclick="tc(this,'s')">TIVA sin TCI</div>
-          <div class="chip" onclick="tc(this,'s')">Neuroaxial sola</div>
-          <div class="chip" onclick="tc(this,'s')">Regional sola</div>
-          <div class="chip" onclick="tc(this,'s')">Sedación consciente</div>
-          <div class="chip" onclick="tc(this,'s')">Sedación profunda</div>
-          <div class="chip" onclick="tc(this,'s')">Local + Sedación</div>
-          <div class="chip" onclick="tc(this,'s')">Combinada AG + Regional</div>
-        </div>
-      </div>
-    </div>
-    <div class="sdiv">Inducción</div>
-    <div class="fg">
-      <div class="fgg"><label>Agente inductor</label>
-        <select id="f-inductor"><option value="">—</option><option>Propofol</option><option>Etomidato</option>
-        <option>Ketamina</option><option>Midazolam</option><option>Tiopental</option><option>Sin inductor</option></select>
-      </div>
-      <div class="fgg"><label>Dosis inductor</label><input type="text" id="f-inductor-dose" placeholder="Ej: 2 mg/kg"></div>
-      <div class="fgg"><label>Relajante muscular</label>
-        <select id="f-nmb"><option value="">—</option><option>Succinilcolina</option><option>Rocuronio</option>
-        <option>Vecuronio</option><option>Cisatracurio</option><option>Sin relajante</option></select>
-      </div>
-      <div class="fgg"><label>Dosis relajante</label><input type="text" id="f-nmb-dose" placeholder="Ej: 0.6 mg/kg"></div>
-    </div>
-    <div class="sdiv">Mantenimiento</div>
-    <div class="fg">
-      <div class="fgg"><label>Agente de mantenimiento</label>
-        <select id="f-maintenance"><option value="">—</option><option>Sevoflurano</option><option>Desflurano</option>
-        <option>Isoflurano</option><option>Propofol TIVA</option><option>Propofol TCI</option>
-        <option>Dexmedetomidina</option><option>Combinación</option></select>
-      </div>
-      <div class="fgg"><label>Concentración / Dosis</label><input type="text" id="f-maint-dose" placeholder="Ej: 2% Sevo / 3 mcg/mL TCI"></div>
-      <div class="fgg"><label>Opioide intraoperatorio</label>
-        <select id="f-opioid"><option value="">—</option><option>Fentanilo</option><option>Remifentanilo infusión</option>
-        <option>Sufentanilo</option><option>Morfina</option><option>Hidromorfona</option><option>Tramadol</option><option>Ninguno</option></select>
-      </div>
-      <div class="fgg"><label>Dosis opioide</label><input type="text" id="f-opioid-dose" placeholder="Ej: 3 mcg/kg/h"></div>
-    </div>
-    <div class="sdiv">Analgesia Multimodal Intraoperatoria</div>
-    <div class="fg">
-      <div class="fgg full">
-        <div class="chips">
-          <div class="chip" onclick="tc(this)">Ketorolaco</div><div class="chip" onclick="tc(this)">Paracetamol IV</div>
-          <div class="chip" onclick="tc(this)">Dexametasona</div><div class="chip" onclick="tc(this)">Ketamina subanest.</div>
-          <div class="chip" onclick="tc(this)">Sulfato Mg</div><div class="chip" onclick="tc(this)">Lidocaína IV</div>
-          <div class="chip" onclick="tc(this)">Gabapentin</div><div class="chip" onclick="tc(this)">Pregabalina</div>
-          <div class="chip" onclick="tc(this)">Celecoxib</div><div class="chip" onclick="tc(this)">Metadona</div>
-        </div>
-      </div>
-      <div class="fgg full"><label>Notas anestesia general / TCI</label><textarea id="f-ga-notes" placeholder="Detalles de técnica, dosis TCI, cálculos, etc."></textarea></div>
-    </div>
-  </div>
-
-  <!-- VÍA AÉREA -->
-
-  <div class="fc">
-    <div class="fct blue">◉ Vía Aérea</div>
-    <div class="fg">
-      <div class="fgg s2"><label>Dispositivo vía aérea</label>
-        <select id="f-airway">
-          <option value="">—</option><option>TET oral (laringoscopio DL)</option>
-          <option>TET oral (videolaringoscopio)</option><option>TET nasal</option>
-          <option>Fibroscopio flexible</option><option>Máscara laríngea clásica</option>
-          <option>Máscara laríngea proseal/supreme</option><option>Máscara facial</option>
-          <option>No aplica (regional / local)</option>
+      <div class="fgg"><label>Dosis AL (mg)</label><input type="number" id="f-nax-la-dose" placeholder="15"></div>
+      <div class="fgg"><label>Opioide intratecal</label>
+        <select id="f-nax-opioid">
+          <option value="">Ninguno</option><option>Morfina preservante-free</option>
+          <option>Fentanilo</option><option>Sufentanilo</option><option>Hidromorfona</option>
         </select>
       </div>
-      <div class="fgg"><label>Número tubo / ML</label><input type="text" id="f-tube" placeholder="Ej: TET 7.0 / ML #3"></div>
-      <div class="fgg"><label>Cormack-Lehane</label>
-        <select id="f-cormack"><option value="">—</option><option>I</option><option>II</option><option>III</option><option>IV</option></select>
+      <div class="fgg"><label>Dosis opioide intratecal (mcg)</label><input type="number" id="f-nax-opioid-dose" placeholder="100"></div>
+      <div class="fgg"><label>Nivel sensitivo alcanzado</label>
+        <select id="f-nax-reached">
+          <option value="">—</option><option>T2</option><option>T4</option><option>T6</option>
+          <option>T8</option><option>T10</option><option>T12</option><option>L1</option>
+        </select>
       </div>
-      <div class="fgg"><label>Intentos intubación</label>
-        <select id="f-intubation"><option value="">—</option><option value="1">1er intento ✓</option>
-        <option value="2">2do intento</option><option value="3">3er intento</option><option value="dificil">VAD</option></select>
+      <div class="fgg"><label>Duración bloqueo (min)</label><input type="number" id="f-nax-duration" placeholder="180"></div>
+      <div class="fgg"><label>Intentos punción</label>
+        <select id="f-nax-attempts"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4+</option></select>
       </div>
-      <div class="fgg"><label>Ayuno (horas)</label><input type="number" id="f-fasting" min="0" max="72" placeholder="8"></div>
-    </div>
-    <div style="margin-top:0.85rem">
-      <div class="trow"><span class="tlabel">¿Vía aérea difícil anticipada?</span><div class="tgl" id="tgl-vad" onclick="this.classList.toggle('on')"></div></div>
-      <div class="trow"><span class="tlabel">¿Estómago lleno / RSI?</span><div class="tgl" id="tgl-rsi" onclick="this.classList.toggle('on')"></div></div>
+      <div class="fgg full"><label>Notas neuroaxial</label><textarea id="f-nax-notes" placeholder="Parestesias, hipotensión, bloqueo alto..."></textarea></div>
     </div>
   </div>
 
-  <!-- ANESTESIA REGIONAL -->
+  <!-- SINGLE SHOT -->
 
-  <div class="fc">
-    <div class="fct purple">◎ Anestesia / Analgesia Regional — Guiada por Ecografía</div>
-
-```
-<!-- NEUROAXIAL -->
-<div class="sdiv">Bloqueo Neuroaxial</div>
-<div class="trow" style="margin-bottom:0.85rem">
-  <span class="tlabel">¿Se realizó bloqueo neuroaxial?</span>
-  <div class="tgl" id="tgl-nax" onclick="this.classList.toggle('on');tglSec('sec-nax',this)"></div>
-</div>
-<div id="sec-nax" style="display:none">
-  <div class="fg">
-    <div class="fgg"><label>Tipo neuroaxial</label>
-      <select id="f-nax-type"><option value="">—</option>
-      <option>Bloqueo subaracnoideo (spinal)</option><option>Epidural</option>
-      <option>Combinado espinal-epidural (CSE)</option></select>
-    </div>
-    <div class="fgg"><label>Nivel de punción</label>
-      <select id="f-nax-level"><option value="">—</option><option>L1-L2</option><option>L2-L3</option>
-      <option>L3-L4</option><option>L4-L5</option><option>T10-T11</option><option>T12-L1</option></select>
-    </div>
-    <div class="fgg"><label>Anestésico local</label>
-      <select id="f-nax-la"><option value="">—</option>
-      <option>Bupivacaína hiperbárica 0.5%</option><option>Bupivacaína isobárica 0.5%</option>
-      <option>Levobupivacaína 0.5%</option><option>Ropivacaína 0.5%</option>
-      <option>Ropivacaína 0.75%</option><option>Lidocaína hiperbárica 5%</option></select>
-    </div>
-    <div class="fgg"><label>Dosis AL (mg)</label><input type="number" id="f-nax-la-dose" placeholder="15"></div>
-    <div class="fgg"><label>Opioide intratecal</label>
-      <select id="f-nax-opioid"><option value="">Ninguno</option><option>Morfina preservante-free</option>
-      <option>Fentanilo</option><option>Sufentanilo</option><option>Hidromorfona</option></select>
-    </div>
-    <div class="fgg"><label>Dosis opioide intratecal (mcg)</label><input type="number" id="f-nax-opioid-dose" placeholder="100"></div>
-    <div class="fgg"><label>Nivel sensitivo alcanzado</label>
-      <select id="f-nax-reached"><option value="">—</option><option>T2</option><option>T4</option>
-      <option>T6</option><option>T8</option><option>T10</option><option>T12</option><option>L1</option></select>
-    </div>
-    <div class="fgg"><label>Duración bloqueo (min)</label><input type="number" id="f-nax-duration" placeholder="180"></div>
-    <div class="fgg"><label>Intentos punción</label>
-      <select id="f-nax-attempts"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4+</option></select>
-    </div>
-    <div class="fgg full"><label>Notas neuroaxial</label><textarea id="f-nax-notes" placeholder="Parestesias, hipotensión, bloqueo alto, etc."></textarea></div>
+  <div class="sdiv">Bloqueo de Nervio Periférico — Single Shot</div>
+  <div class="trow" style="margin-bottom:0.75rem">
+    <span class="tlabel">¿Se realizó bloqueo periférico single shot?</span>
+    <div class="tgl" id="tgl-ss" data-tgl="1" data-target="sec-ss"></div>
   </div>
-</div>
-
-<!-- SINGLE SHOT -->
-<div class="sdiv">Bloqueo de Nervio Periférico — Single Shot</div>
-<div class="trow" style="margin-bottom:0.85rem">
-  <span class="tlabel">¿Se realizó bloqueo periférico single shot?</span>
-  <div class="tgl" id="tgl-ss" onclick="this.classList.toggle('on');tglSec('sec-ss',this)"></div>
-</div>
-<div id="sec-ss" style="display:none">
-  <div class="fg">
-    <div class="fgg full"><label>Tipo / Nombre del bloqueo</label>
-      <div class="chips" id="ch-ss">
-        <div class="chip" onclick="tc(this,'sp')">Interescalénico</div>
-        <div class="chip" onclick="tc(this,'sp')">Supraclavicular</div>
-        <div class="chip" onclick="tc(this,'sp')">Infraclavicular</div>
-        <div class="chip" onclick="tc(this,'sp')">Axilar</div>
-        <div class="chip" onclick="tc(this,'sp')">Femoral</div>
-        <div class="chip" onclick="tc(this,'sp')">Ciático poplíteo</div>
-        <div class="chip" onclick="tc(this,'sp')">Ciático subglúteo</div>
-        <div class="chip" onclick="tc(this,'sp')">Aductor canal</div>
-        <div class="chip" onclick="tc(this,'sp')">IPACK</div>
-        <div class="chip" onclick="tc(this,'sp')">PECS I</div>
-        <div class="chip" onclick="tc(this,'sp')">PECS II</div>
-        <div class="chip" onclick="tc(this,'sp')">Serrato anterior</div>
-        <div class="chip" onclick="tc(this,'sp')">Paravertebral</div>
-        <div class="chip" onclick="tc(this,'sp')">ESP (erector espinae)</div>
-        <div class="chip" onclick="tc(this,'sp')">TAP block</div>
-        <div class="chip" onclick="tc(this,'sp')">Cuadrado lumbar (QLB)</div>
-        <div class="chip" onclick="tc(this,'sp')">FICB ilioinguinal</div>
-        <div class="chip" onclick="tc(this,'sp')">Nervio pudendo</div>
-        <div class="chip" onclick="tc(this,'sp')">Occipital mayor</div>
-        <div class="chip" onclick="tc(this,'sp')">Safeno</div>
-        <div class="chip" onclick="tc(this,'sp')">Otro</div>
-      </div>
-    </div>
-    <div class="fgg"><label>Lado</label>
-      <select id="f-ss-side"><option value="">—</option><option>Derecho</option><option>Izquierdo</option><option>Bilateral</option></select>
-    </div>
-    <div class="fgg"><label>Anestésico local</label>
-      <select id="f-ss-la"><option value="">—</option>
-      <option>Bupivacaína 0.25%</option><option>Bupivacaína 0.5%</option>
-      <option>Levobupivacaína 0.25%</option><option>Levobupivacaína 0.5%</option>
-      <option>Ropivacaína 0.2%</option><option>Ropivacaína 0.375%</option>
-      <option>Ropivacaína 0.5%</option><option>Ropivacaína 0.75%</option>
-      <option>Lidocaína 1%</option><option>Lidocaína 2%</option>
-      <option>Mezcla bupi + lido</option></select>
-    </div>
-    <div class="fgg"><label>Volumen AL (mL)</label><input type="number" id="f-ss-volume" placeholder="20"></div>
-    <div class="fgg full"><label>Coadyuvantes</label>
-      <div class="chips" id="ch-ss-adj">
-        <div class="chip" onclick="tc(this,'sb')">Dexametasona perineural</div>
-        <div class="chip" onclick="tc(this,'sb')">Dexametasona IV</div>
-        <div class="chip" onclick="tc(this,'sb')">Dexmedetomidina perineural</div>
-        <div class="chip" onclick="tc(this,'sb')">Epinefrina</div>
-        <div class="chip" onclick="tc(this,'sb')">Buprenorfina</div>
-        <div class="chip" onclick="tc(this,'sb')">Clonidina</div>
-        <div class="chip" onclick="tc(this,'sb')">Ninguno</div>
-      </div>
-    </div>
-    <div class="fgg"><label>Dosis coadyuvante</label><input type="text" id="f-ss-adj-dose" placeholder="Ej: Dexa 4mg / Dex 0.5mcg/kg"></div>
-    <div class="fgg"><label>Duración analgesia esperada (h)</label><input type="number" id="f-ss-duration" placeholder="18"></div>
-    <div class="fgg full"><label>Notas bloqueo single shot</label><textarea id="f-ss-notes" placeholder="Técnica, número de pases, dispersión del AL, complicaciones..."></textarea></div>
-  </div>
-</div>
-
-<!-- CATÉTER -->
-<div class="sdiv">Analgesia Continua — Catéter de Nervio Periférico</div>
-<div class="trow" style="margin-bottom:0.85rem">
-  <span class="tlabel">¿Se colocó catéter de nervio periférico?</span>
-  <div class="tgl" id="tgl-cath" onclick="this.classList.toggle('on');tglSec('sec-cath',this)"></div>
-</div>
-<div id="sec-cath" style="display:none">
-  <div class="fg">
-    <div class="fgg full"><label>Sitio del catéter</label>
-      <div class="chips" id="ch-cath">
-        <div class="chip" onclick="tc(this,'sp')">Interescalénico</div>
-        <div class="chip" onclick="tc(this,'sp')">Infraclavicular</div>
-        <div class="chip" onclick="tc(this,'sp')">Ciático</div>
-        <div class="chip" onclick="tc(this,'sp')">Femoral</div>
-        <div class="chip" onclick="tc(this,'sp')">Aductor canal</div>
-        <div class="chip" onclick="tc(this,'sp')">Paravertebral</div>
-        <div class="chip" onclick="tc(this,'sp')">ESP continuo</div>
-        <div class="chip" onclick="tc(this,'sp')">Cuadrado lumbar</div>
-        <div class="chip" onclick="tc(this,'sp')">TAP continuo</div>
-        <div class="chip" onclick="tc(this,'sp')">Epidural torácica</div>
-        <div class="chip" onclick="tc(this,'sp')">Epidural lumbar</div>
-        <div class="chip" onclick="tc(this,'sp')">Otro</div>
-      </div>
-    </div>
-    <div class="fgg"><label>Lado</label>
-      <select id="f-cath-side"><option value="">—</option><option>Derecho</option><option>Izquierdo</option><option>Bilateral</option></select>
-    </div>
-    <div class="fgg"><label>AL de infusión</label>
-      <select id="f-cath-la"><option value="">—</option><option>Ropivacaína 0.2%</option>
-      <option>Ropivacaína 0.1%</option><option>Bupivacaína 0.125%</option>
-      <option>Levobupivacaína 0.125%</option></select>
-    </div>
-    <div class="fgg"><label>Tasa infusión (mL/h)</label><input type="number" id="f-cath-rate" placeholder="5"></div>
-    <div class="fgg"><label>Dosis bolo / PCA</label><input type="text" id="f-cath-bolus" placeholder="Ej: 5mL c/60min"></div>
-    <div class="fgg"><label>Coadyuvantes infusión</label>
-      <div class="chips" id="ch-cath-adj">
-        <div class="chip" onclick="tc(this,'sb')">Dexmedetomidina</div>
-        <div class="chip" onclick="tc(this,'sb')">Clonidina</div>
-        <div class="chip" onclick="tc(this,'sb')">Ninguno</div>
-      </div>
-    </div>
-    <div class="fgg full"><label>Notas catéter</label><textarea id="f-cath-notes" placeholder="Avance del catéter (cm), fijación, complicaciones, apertura de espacio..."></textarea></div>
-  </div>
-</div>
-
-<!-- ELASTÓMERA -->
-<div class="sdiv">Bomba Elastomérica — Analgesia Ambulatoria</div>
-<div class="trow" style="margin-bottom:0.85rem">
-  <span class="tlabel">¿Se utilizó bomba elastomérica?</span>
-  <div class="tgl" id="tgl-elasto" onclick="this.classList.toggle('on');tglSec('sec-elasto',this)"></div>
-</div>
-<div id="sec-elasto" style="display:none">
-  <div class="fg">
-    <div class="fgg"><label>Tipo de bomba</label>
-      <select id="f-elasto-type"><option value="">—</option>
-      <option>Elastomérica 100 mL</option><option>Elastomérica 250 mL</option>
-      <option>Elastomérica 500 mL</option><option>Bomba electrónica ambulatoria</option></select>
-    </div>
-    <div class="fgg"><label>Fármaco</label>
-      <select id="f-elasto-drug"><option value="">—</option>
-      <option>Ropivacaína 0.2%</option><option>Ropivacaína 0.1%</option>
-      <option>Bupivacaína 0.125%</option><option>Levobupivacaína 0.125%</option></select>
-    </div>
-    <div class="fgg"><label>Volumen total (mL)</label><input type="number" id="f-elasto-vol" placeholder="250"></div>
-    <div class="fgg"><label>Tasa de flujo (mL/h)</label><input type="number" id="f-elasto-rate" placeholder="5"></div>
-    <div class="fgg"><label>Duración programada (h)</label><input type="number" id="f-elasto-dur" placeholder="48"></div>
-    <div class="fgg"><label>Sitio de infusión</label><input type="text" id="f-elasto-site" placeholder="Ej: catéter femoral, herida quirúrgica"></div>
-    <div class="fgg full"><label>Notas bomba</label><textarea id="f-elasto-notes" placeholder="Instrucciones al paciente, manejo ambulatorio, cuidados..."></textarea></div>
-  </div>
-</div>
-```
-
-  </div>
-
-  <!-- MONITOREO -->
-
-  <div class="fc">
-    <div class="fct blue">⊕ Monitoreo y Accesos Vasculares</div>
+  <div id="sec-ss" style="display:none">
     <div class="fg">
-      <div class="fgg full"><label>Monitoreo</label>
-        <div class="chips">
-          <div class="chip s" onclick="tc(this)">ASA básico</div>
-          <div class="chip" onclick="tc(this)">Línea arterial (IBP)</div>
-          <div class="chip" onclick="tc(this)">CVC</div>
-          <div class="chip" onclick="tc(this)">TOF / NMT</div>
-          <div class="chip" onclick="tc(this)">BIS</div>
-          <div class="chip" onclick="tc(this)">PSI (SedLine)</div>
-          <div class="chip" onclick="tc(this)">ETE</div>
-          <div class="chip" onclick="tc(this)">Gasto cardíaco</div>
-          <div class="chip" onclick="tc(this)">NIRS cerebral</div>
-          <div class="chip" onclick="tc(this)">Temperatura</div>
+      <div class="fgg full"><label>Tipo de bloqueo(s) realizado(s)</label>
+        <div class="chips" data-group="ss-blocks" data-color="on-purple">
+          <span class="chip">Interescalénico</span><span class="chip">Supraclavicular</span>
+          <span class="chip">Infraclavicular</span><span class="chip">Axilar</span>
+          <span class="chip">Femoral</span><span class="chip">Ciático poplíteo</span>
+          <span class="chip">Ciático subglúteo</span><span class="chip">Aductor canal</span>
+          <span class="chip">IPACK</span><span class="chip">PECS I</span><span class="chip">PECS II</span>
+          <span class="chip">Serrato anterior</span><span class="chip">Paravertebral</span>
+          <span class="chip">ESP (erector espinae)</span><span class="chip">TAP block</span>
+          <span class="chip">Cuadrado lumbar (QLB)</span><span class="chip">FICB ilioinguinal</span>
+          <span class="chip">Nervio pudendo</span><span class="chip">Occipital mayor</span>
+          <span class="chip">Safeno</span><span class="chip">Otro</span>
         </div>
       </div>
-      <div class="fgg full"><label>Accesos vasculares</label>
-        <div class="chips">
-          <div class="chip" onclick="tc(this)">PIV ×1</div><div class="chip" onclick="tc(this)">PIV ×2</div>
-          <div class="chip" onclick="tc(this)">CVC yugular</div><div class="chip" onclick="tc(this)">CVC subclavio</div>
-          <div class="chip" onclick="tc(this)">Línea arterial radial</div><div class="chip" onclick="tc(this)">Línea arterial femoral</div>
+      <div class="fgg"><label>Lado</label>
+        <select id="f-ss-side"><option value="">—</option><option>Derecho</option><option>Izquierdo</option><option>Bilateral</option></select>
+      </div>
+      <div class="fgg"><label>Anestésico local</label>
+        <select id="f-ss-la">
+          <option value="">—</option>
+          <option>Bupivacaína 0.25%</option><option>Bupivacaína 0.5%</option>
+          <option>Levobupivacaína 0.25%</option><option>Levobupivacaína 0.5%</option>
+          <option>Ropivacaína 0.2%</option><option>Ropivacaína 0.375%</option>
+          <option>Ropivacaína 0.5%</option><option>Ropivacaína 0.75%</option>
+          <option>Lidocaína 1%</option><option>Lidocaína 2%</option>
+          <option>Mezcla bupi + lido</option>
+        </select>
+      </div>
+      <div class="fgg"><label>Volumen AL (mL)</label><input type="number" id="f-ss-volume" placeholder="20"></div>
+      <div class="fgg full"><label>Coadyuvantes</label>
+        <div class="chips" data-group="ss-adj" data-color="on-blue">
+          <span class="chip">Dexametasona perineural</span><span class="chip">Dexametasona IV</span>
+          <span class="chip">Dexmedetomidina perineural</span><span class="chip">Epinefrina</span>
+          <span class="chip">Buprenorfina</span><span class="chip">Clonidina</span><span class="chip">Ninguno</span>
         </div>
       </div>
+      <div class="fgg"><label>Dosis coadyuvante</label><input type="text" id="f-ss-adj-dose" placeholder="Ej: Dexa 4mg / Dex 0.5mcg/kg"></div>
+      <div class="fgg"><label>Duración analgesia esperada (h)</label><input type="number" id="f-ss-duration" placeholder="18"></div>
+      <div class="fgg full"><label>Notas bloqueo single shot</label><textarea id="f-ss-notes" placeholder="Técnica, pases, dispersión del AL..."></textarea></div>
     </div>
   </div>
 
-  <!-- INTRAOPERATORIO -->
+  <!-- CATÉTER -->
 
-  <div class="fc">
-    <div class="fct gold">◷ Intraoperatorio</div>
+  <div class="sdiv">Analgesia Continua — Catéter de Nervio Periférico</div>
+  <div class="trow" style="margin-bottom:0.75rem">
+    <span class="tlabel">¿Se colocó catéter de nervio periférico?</span>
+    <div class="tgl" id="tgl-cath" data-tgl="1" data-target="sec-cath"></div>
+  </div>
+  <div id="sec-cath" style="display:none">
     <div class="fg">
-      <div class="fgg"><label>Sangrado estimado (mL)</label><input type="number" id="f-bleeding" placeholder="100"></div>
-      <div class="fgg"><label>Diuresis (mL)</label><input type="number" id="f-diuresis" placeholder="200"></div>
-      <div class="fgg"><label>Cristaloides (mL)</label><input type="number" id="f-crystalloids" placeholder="1000"></div>
-      <div class="fgg"><label>Coloides / Hemoderivados</label><input type="text" id="f-colloids" placeholder="2 CH, 1 PFC"></div>
-      <div class="fgg full"><label>Eventos / Incidencias</label>
-        <div class="chips" id="ch-events">
-          <div class="chip" onclick="tc(this)">Sin incidencias</div>
-          <div class="chip" onclick="tc(this)">Laringoespasmo</div><div class="chip" onclick="tc(this)">Broncoespasmo</div>
-          <div class="chip" onclick="tc(this)">Hipotensión severa</div><div class="chip" onclick="tc(this)">Hipertensión severa</div>
-          <div class="chip" onclick="tc(this)">Bradicardia</div><div class="chip" onclick="tc(this)">Taquicardia</div>
-          <div class="chip" onclick="tc(this)">Arritmia</div><div class="chip" onclick="tc(this)">Hipoxemia</div>
-          <div class="chip" onclick="tc(this)">Sangrado masivo</div><div class="chip" onclick="tc(this)">Reacción alérgica</div>
-          <div class="chip" onclick="tc(this)">Hipotermia</div><div class="chip" onclick="tc(this)">HT maligna</div>
-          <div class="chip" onclick="tc(this)">Conversión a AG</div>
+      <div class="fgg full"><label>Sitio del catéter</label>
+        <div class="chips" data-group="cath-site" data-color="on-purple">
+          <span class="chip">Interescalénico</span><span class="chip">Infraclavicular</span>
+          <span class="chip">Ciático</span><span class="chip">Femoral</span>
+          <span class="chip">Aductor canal</span><span class="chip">Paravertebral</span>
+          <span class="chip">ESP continuo</span><span class="chip">Cuadrado lumbar</span>
+          <span class="chip">TAP continuo</span><span class="chip">Epidural torácica</span>
+          <span class="chip">Epidural lumbar</span><span class="chip">Otro</span>
         </div>
       </div>
-      <div class="fgg full"><label>Descripción eventos / Manejo</label><textarea id="f-events-notes" placeholder="Detalles de incidentes y manejo..."></textarea></div>
+      <div class="fgg"><label>Lado</label>
+        <select id="f-cath-side"><option value="">—</option><option>Derecho</option><option>Izquierdo</option><option>Bilateral</option></select>
+      </div>
+      <div class="fgg"><label>AL de infusión</label>
+        <select id="f-cath-la">
+          <option value="">—</option><option>Ropivacaína 0.2%</option><option>Ropivacaína 0.1%</option>
+          <option>Bupivacaína 0.125%</option><option>Levobupivacaína 0.125%</option>
+        </select>
+      </div>
+      <div class="fgg"><label>Tasa infusión (mL/h)</label><input type="number" id="f-cath-rate" placeholder="5"></div>
+      <div class="fgg"><label>Dosis bolo / PCA</label><input type="text" id="f-cath-bolus" placeholder="Ej: 5mL c/60min"></div>
+      <div class="fgg"><label>Coadyuvantes infusión</label>
+        <div class="chips" data-group="cath-adj" data-color="on-blue">
+          <span class="chip">Dexmedetomidina</span><span class="chip">Clonidina</span><span class="chip">Ninguno</span>
+        </div>
+      </div>
+      <div class="fgg full"><label>Notas catéter</label><textarea id="f-cath-notes" placeholder="Avance (cm), fijación, complicaciones..."></textarea></div>
     </div>
   </div>
 
-  <!-- POSTOPERATORIO -->
+  <!-- ELASTÓMERA -->
 
-  <div class="fc">
-    <div class="fct">☽ Postoperatorio</div>
+  <div class="sdiv">Bomba Elastomérica — Analgesia Ambulatoria</div>
+  <div class="trow" style="margin-bottom:0.75rem">
+    <span class="tlabel">¿Se utilizó bomba elastomérica?</span>
+    <div class="tgl" id="tgl-elasto" data-tgl="1" data-target="sec-elasto"></div>
+  </div>
+  <div id="sec-elasto" style="display:none">
     <div class="fg">
-      <div class="fgg"><label>Destino postop</label>
-        <select id="f-destination"><option value="">—</option>
-        <option>URPA / Recuperación</option><option>UCI</option>
-        <option>Hospitalización</option><option>Ambulatorio</option></select>
+      <div class="fgg"><label>Tipo de bomba</label>
+        <select id="f-elasto-type">
+          <option value="">—</option><option>Elastomérica 100 mL</option>
+          <option>Elastomérica 250 mL</option><option>Elastomérica 500 mL</option>
+          <option>Bomba electrónica ambulatoria</option>
+        </select>
       </div>
-      <div class="fgg"><label>Tiempo en URPA (min)</label><input type="number" id="f-pacu-time" placeholder="60"></div>
-      <div class="fgg"><label>NVPO</label>
-        <select id="f-ponv"><option value="">—</option><option value="0">Ninguno</option>
-        <option value="1">Leves</option><option value="2">Moderados</option><option value="3">Severos</option></select>
+      <div class="fgg"><label>Fármaco</label>
+        <select id="f-elasto-drug">
+          <option value="">—</option><option>Ropivacaína 0.2%</option><option>Ropivacaína 0.1%</option>
+          <option>Bupivacaína 0.125%</option><option>Levobupivacaína 0.125%</option>
+        </select>
       </div>
-      <div class="fgg">
-        <label>Dolor EVA al egreso URPA: <span id="pain-disp">0</span>/10</label>
-        <input type="range" id="f-pain" min="0" max="10" value="0" oninput="document.getElementById('pain-disp').textContent=this.value">
-      </div>
-      <div class="fgg full"><label>Analgesia postoperatoria</label>
-        <div class="chips">
-          <div class="chip" onclick="tc(this)">AINEs VO</div><div class="chip" onclick="tc(this)">Paracetamol VO</div>
-          <div class="chip" onclick="tc(this)">Opioides VO</div><div class="chip" onclick="tc(this)">PCA IV</div>
-          <div class="chip" onclick="tc(this)">Epidural continua</div><div class="chip" onclick="tc(this)">Catéter nervio periférico</div>
-          <div class="chip" onclick="tc(this)">Bomba elastomérica</div><div class="chip" onclick="tc(this)">Infiltración herida</div>
-        </div>
-      </div>
-      <div class="fgg full"><label>Notas postoperatorias</label><textarea id="f-postop-notes" placeholder="Incidencias en URPA, evolución..."></textarea></div>
+      <div class="fgg"><label>Volumen total (mL)</label><input type="number" id="f-elasto-vol" placeholder="250"></div>
+      <div class="fgg"><label>Tasa de flujo (mL/h)</label><input type="number" id="f-elasto-rate" placeholder="5"></div>
+      <div class="fgg"><label>Duración programada (h)</label><input type="number" id="f-elasto-dur" placeholder="48"></div>
+      <div class="fgg"><label>Sitio de infusión</label><input type="text" id="f-elasto-site" placeholder="Ej: catéter femoral, herida"></div>
+      <div class="fgg full"><label>Notas bomba</label><textarea id="f-elasto-notes" placeholder="Instrucciones al paciente, manejo ambulatorio..."></textarea></div>
     </div>
   </div>
+</div>
 
-  <!-- EVALUACIÓN -->
+<!-- INTRAOPERATORIO -->
 
-  <div class="fc">
-    <div class="fct">★ Evaluación del Caso</div>
-    <div class="fg">
-      <div class="fgg">
-        <label>Dificultad técnica</label>
-        <div class="stars" id="stars-diff">
-          <span class="star" onclick="setStar(1)">★</span><span class="star" onclick="setStar(2)">★</span>
-          <span class="star" onclick="setStar(3)">★</span><span class="star" onclick="setStar(4)">★</span>
-          <span class="star" onclick="setStar(5)">★</span>
-        </div>
+<div class="fc">
+  <div class="fct gold">◷ Intraoperatorio</div>
+  <div class="fg">
+    <div class="fgg"><label>Sangrado estimado (mL)</label><input type="number" id="f-bleeding" placeholder="100"></div>
+    <div class="fgg"><label>Diuresis (mL)</label><input type="number" id="f-diuresis" placeholder="200"></div>
+    <div class="fgg"><label>Cristaloides (mL)</label><input type="number" id="f-crystalloids" placeholder="1000"></div>
+    <div class="fgg"><label>Coloides / Hemoderivados</label><input type="text" id="f-colloids" placeholder="2 CH, 1 PFC"></div>
+  </div>
+  <div class="fg" style="margin-top:0.75rem">
+    <div class="fgg full"><label>Eventos / Incidencias intraoperatorias</label>
+      <div class="chips" data-group="events">
+        <span class="chip">Sin incidencias</span>
+        <span class="chip">Laringoespasmo</span><span class="chip">Broncoespasmo</span>
+        <span class="chip">Hipotensión severa</span><span class="chip">Hipertensión severa</span>
+        <span class="chip">Bradicardia</span><span class="chip">Taquicardia</span>
+        <span class="chip">Arritmia</span><span class="chip">Hipoxemia</span>
+        <span class="chip">Desaturación</span><span class="chip">Sangrado masivo</span>
+        <span class="chip">Reacción alérgica</span><span class="chip">Hipotermia</span>
+        <span class="chip">HT maligna</span><span class="chip">Conversión a AG</span>
+        <span class="chip">Intubación difícil</span><span class="chip">Neumotórax</span>
+        <span class="chip">Paro cardíaco</span>
       </div>
-      <div class="fgg"><label>Resultado anestésico</label>
-        <select id="f-outcome"><option value="">—</option>
+    </div>
+    <div class="fgg full"><label>Descripción eventos / Manejo</label>
+      <textarea id="f-events-notes" placeholder="Detalles de incidentes y manejo..."></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- POSTOPERATORIO -->
+
+<div class="fc">
+  <div class="fct">☽ Postoperatorio</div>
+  <div class="fg">
+    <div class="fgg"><label>Destino postop</label>
+      <select id="f-destination">
+        <option value="">—</option><option>URPA / Recuperación</option><option>UCI</option>
+        <option>Hospitalización</option><option>Ambulatorio</option>
+      </select>
+    </div>
+    <div class="fgg"><label>Tiempo en URPA (min)</label><input type="number" id="f-pacu-time" placeholder="60"></div>
+    <div class="fgg"><label>NVPO</label>
+      <select id="f-ponv">
+        <option value="">—</option><option value="0">0 — Ninguno</option><option value="1">1 — Leves</option>
+        <option value="2">2 — Moderados</option><option value="3">3 — Severos</option>
+      </select>
+    </div>
+    <div class="fgg">
+      <label>Dolor EVA al egreso URPA: <span id="pain-disp" style="color:var(--accent);font-family:'Syne',sans-serif;font-weight:700">0</span>/10</label>
+      <input type="range" id="f-pain" min="0" max="10" value="0" oninput="document.getElementById('pain-disp').textContent=this.value">
+    </div>
+  </div>
+  <div class="fg" style="margin-top:0.75rem">
+    <div class="fgg full"><label>Analgesia postoperatoria prescrita</label>
+      <div class="chips" data-group="postop-analg">
+        <span class="chip">AINEs VO</span><span class="chip">Paracetamol VO</span>
+        <span class="chip">Opioides VO</span><span class="chip">Opioides IV</span>
+        <span class="chip">PCA IV</span><span class="chip">Epidural continua</span>
+        <span class="chip">Catéter nervio periférico</span><span class="chip">Bomba elastomérica</span>
+        <span class="chip">Infiltración herida</span><span class="chip">Ketorolaco IV</span>
+        <span class="chip">Dipirona IV</span><span class="chip">Dexketoprofeno</span>
+        <span class="chip">Tramadol IV</span><span class="chip">Clonixinato lisina</span>
+      </div>
+    </div>
+    <div class="fgg full"><label>Complicaciones postoperatorias</label>
+      <div class="chips" data-group="postop-comp">
+        <span class="chip">Sin complicaciones</span>
+        <span class="chip">NVPO severos</span><span class="chip">Dolor mal controlado</span>
+        <span class="chip">Retención urinaria</span><span class="chip">Hipotensión</span>
+        <span class="chip">Bradicardia</span><span class="chip">Desaturación</span>
+        <span class="chip">Bloqueo motor prolongado</span><span class="chip">Prurito</span>
+        <span class="chip">Fiebre</span><span class="chip">Sangrado</span>
+        <span class="chip">Reingreso UCI</span>
+      </div>
+    </div>
+    <div class="fgg full"><label>Notas postoperatorias</label>
+      <textarea id="f-postop-notes" placeholder="Incidencias en URPA, evolución, observaciones..."></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- EVALUACIÓN -->
+
+<div class="fc">
+  <div class="fct">★ Evaluación del Caso</div>
+  <div class="fg">
+    <div class="fgg">
+      <label>Dificultad técnica</label>
+      <div class="stars" id="stars-diff">
+        <span class="star" data-val="1">★</span><span class="star" data-val="2">★</span>
+        <span class="star" data-val="3">★</span><span class="star" data-val="4">★</span>
+        <span class="star" data-val="5">★</span>
+      </div>
+    </div>
+    <div class="fgg"><label>Resultado anestésico</label>
+      <select id="f-outcome">
+        <option value="">—</option>
         <option value="Excelente">Excelente — sin incidencias</option>
         <option value="Bueno">Bueno — incidencias menores</option>
         <option value="Aceptable">Aceptable — requirió manejo</option>
-        <option value="Complicado">Complicado — eventos adversos</option></select>
-      </div>
-      <div class="fgg full"><label>Aprendizajes / Notas personales</label>
-        <textarea id="f-notes" placeholder="Qué aprendí, qué haría diferente, puntos de interés del caso..."></textarea>
-      </div>
+        <option value="Complicado">Complicado — eventos adversos</option>
+      </select>
     </div>
-  </div>
-
-  <div class="factions">
-    <button class="btn-s" onclick="clearForm()">Limpiar</button>
-    <button class="btn-p" onclick="saveCase()">⊕ Guardar Caso</button>
+    <div class="fgg full"><label>Aprendizajes / Notas personales</label>
+      <textarea id="f-notes" placeholder="Qué aprendí, qué haría diferente, puntos de interés..."></textarea>
+    </div>
   </div>
 </div>
 
-<!-- ══ RECORDS ══ -->
+<div class="factions">
+  <button class="btn-s" onclick="clearForm()">Limpiar</button>
+  <button class="btn-p" onclick="saveCase()">⊕ Guardar Caso</button>
+</div>
+</div>
+
+<!-- ═══════════ RECORDS ═══════════ -->
 
 <div id="view-records" class="view">
   <div class="stitle">Mis Registros</div>
-  <div class="ssub">Historial completo de casos anestésicos</div>
-  <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:1.2rem">
+  <div class="ssub">Historial de casos anestésicos</div>
+  <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1rem">
     <button class="btn-e" onclick="exportCSV()">⬇ CSV</button>
     <button class="btn-e" onclick="exportJSON()">⬇ JSON Backup</button>
   </div>
-  <div class="sbar"><input type="text" id="search-in" placeholder="Buscar por nombre, procedimiento, ID, especialidad..." oninput="renderRecs()"></div>
+  <div class="sbar"><input type="text" id="search-in" placeholder="Buscar por nombre, procedimiento, ID..." oninput="renderRecs()"></div>
   <div class="frow">
     <select id="fil-spec" onchange="renderRecs()">
       <option value="">Todas especialidades</option>
@@ -757,96 +901,61 @@ input[type=range]{padding:0;cursor:pointer;accent-color:var(--accent);}
       <option value="">Todos resultados</option>
       <option>Excelente</option><option>Bueno</option><option>Aceptable</option><option>Complicado</option>
     </select>
-    <select id="fil-asa" onchange="renderRecs()">
-      <option value="">Todo ASA</option>
-      <option value="1">ASA I</option><option value="2">ASA II</option>
-      <option value="3">ASA III</option><option value="4">ASA IV</option>
-    </select>
     <span class="rcnt" id="rcnt">0 casos</span>
   </div>
   <div id="recs-list"></div>
 </div>
 
-<!-- ══ STATS ══ -->
+<!-- ═══════════ STATS ═══════════ -->
 
 <div id="view-stats" class="view">
   <div class="stitle">Estadísticas</div>
-  <div class="ssub">Análisis de tu práctica anestésica</div>
+  <div class="ssub">Análisis de tu práctica</div>
   <div class="sgrid" id="stats-sum"></div>
   <div class="cgrid">
-    <div class="cc"><div class="ct">Casos por Especialidad</div><div class="bc" id="ch-stat-spec"></div></div>
-    <div class="cc"><div class="ct">Distribución ASA</div><div id="ch-stat-asa"></div></div>
-    <div class="cc"><div class="ct">Tipo de Anestesia</div><div class="bc" id="ch-stat-atype"></div></div>
-    <div class="cc"><div class="ct">Bloqueos Regionales más usados</div><div class="bc" id="ch-stat-blocks"></div></div>
-    <div class="cc"><div class="ct">Resultados</div><div class="bc" id="ch-stat-out"></div></div>
-    <div class="cc"><div class="ct">NVPO</div><div class="bc" id="ch-stat-ponv"></div></div>
+    <div class="cc"><div class="ct">Casos por Especialidad</div><div class="bc" id="ch-spec"></div></div>
+    <div class="cc"><div class="ct">Distribución ASA</div><div id="ch-asa"></div></div>
+    <div class="cc"><div class="ct">Tipo de Anestesia</div><div class="bc" id="ch-atype"></div></div>
+    <div class="cc"><div class="ct">Bloqueos Regionales</div><div class="bc" id="ch-blocks"></div></div>
+    <div class="cc"><div class="ct">Resultados</div><div class="bc" id="ch-out"></div></div>
+    <div class="cc"><div class="ct">NVPO</div><div class="bc" id="ch-ponv"></div></div>
   </div>
 </div>
 
-<!-- ══ BACKUP ══ -->
+<!-- ═══════════ BACKUP ═══════════ -->
 
 <div id="view-backup" class="view">
   <div class="stitle">Backup & Acceso</div>
-  <div class="ssub">Protege tus datos — exporta regularmente</div>
-
-  <div class="bp2">
-    <h3>📱 Cómo instalar en tu celular como App</h3>
-    <div class="binfo">
-      <strong>Android (Chrome):</strong> Abre el archivo HTML → menú ⋮ → "Agregar a pantalla de inicio" → queda como ícono de app<br>
-      <strong>iPhone / iPad (Safari):</strong> Abre el archivo en Safari → ícono □↑ compartir → "Agregar a pantalla de inicio"<br><br>
-      <strong>💡 Acceso desde cualquier dispositivo:</strong> Guarda el archivo <code style="color:var(--accent)">anesthesia-log.html</code> en Google Drive o iCloud. Ábrelo desde el navegador del celular y agréga a pantalla de inicio. Todos tus datos quedan en ese dispositivo.
-    </div>
-  </div>
-
+  <div class="ssub">Protege tus datos</div>
   <div class="bp2">
     <h3>💾 Exportar datos</h3>
-    <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:0.75rem">
-      <button class="btn-e" onclick="exportCSV()">⬇ Exportar CSV (Excel / SPSS)</button>
-      <button class="btn-e" onclick="exportJSON()">⬇ Exportar JSON (Backup completo)</button>
+    <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.75rem">
+      <button class="btn-e" onclick="exportCSV()">⬇ CSV (Excel/SPSS)</button>
+      <button class="btn-e" onclick="exportJSON()">⬇ JSON (Backup completo)</button>
     </div>
-    <div class="binfo">
-      <strong>CSV:</strong> Abre en Excel, Google Sheets, o SPSS para análisis estadístico.<br>
-      <strong>JSON:</strong> Backup completo con todos los campos. Guárdalo en la nube cada semana.
-    </div>
+    <div class="binfo"><strong>CSV:</strong> Para Google Sheets, Excel, SPSS.<br><strong>JSON:</strong> Backup completo. Guarda semanalmente en iCloud Drive.</div>
   </div>
-
   <div class="bp2">
-    <h3>📂 Importar / Restaurar backup</h3>
-    <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:0.75rem">
-      <input type="file" id="import-file" accept=".json" style="display:none" onchange="importBackup(event)">
-      <button class="btn-e" onclick="document.getElementById('import-file').click()">📁 Cargar archivo JSON</button>
-    </div>
-    <div class="binfo">
-      Selecciona un archivo JSON exportado previamente para restaurar todos los casos.<br>
-      ⚠ Esto <strong>reemplaza</strong> los datos actuales. Haz un backup antes de importar.
-    </div>
+    <h3>📂 Restaurar backup</h3>
+    <input type="file" id="import-file" accept=".json" style="display:none" onchange="importBackup(event)">
+    <button class="btn-e" onclick="document.getElementById('import-file').click()">📁 Cargar JSON</button>
+    <div class="binfo">Selecciona un backup JSON para restaurar todos tus casos.</div>
   </div>
-
   <div class="bp2">
-    <h3>🔒 Recomendaciones de seguridad</h3>
-    <div class="binfo">
-      • <strong>Exporta JSON cada semana</strong> y guárdalo en Google Drive, iCloud o Dropbox.<br>
-      • <strong>No borres el caché del navegador</strong> sin hacer backup primero — los datos se almacenan en localStorage.<br>
-      • Guarda el archivo <code style="color:var(--accent)">.html</code> junto con tus backups JSON en la misma carpeta de nube.<br>
-      • Los datos son <strong>100% privados</strong> — se almacenan solo en tu dispositivo, nunca se envían a ningún servidor.<br>
-      • <strong>Futuro:</strong> versión con sincronización automática a Google Sheets disponible próximamente.
-    </div>
+    <h3>🔗 URL permanente</h3>
+    <div class="binfo"><strong>andresed06.github.io/anestlog/anesthesia-log.html</strong><br>Guarda esta URL. Siempre abre la app desde Safari.</div>
   </div>
-
   <div class="bp2" style="border-color:rgba(255,107,107,0.2)">
-    <h3 style="color:var(--danger)">⚠ Zona de peligro</h3>
-    <div style="display:flex;gap:0.6rem;margin-bottom:0.6rem">
-      <button class="btn-d" onclick="clearAll()">Borrar TODOS los datos</button>
-    </div>
-    <div class="binfo">Esta acción es irreversible. Exporta un backup antes de proceder.</div>
+    <h3 style="color:var(--danger)">⚠ Borrar todos los datos</h3>
+    <button class="btn-d" onclick="clearAll()">Borrar TODO</button>
+    <div class="binfo">Irreversible. Haz backup antes.</div>
   </div>
 </div>
+
 </main>
 
-<!-- MODAL -->
-
 <div class="mo" id="modal">
-  <div class="mbox">
+  <div class="mbox" style="position:relative">
     <button class="mclose" onclick="closeModal()">✕</button>
     <div id="modal-body"></div>
   </div>
@@ -855,186 +964,678 @@ input[type=range]{padding:0;cursor:pointer;accent-color:var(--accent);}
 <div class="toast" id="toast"></div>
 
 <script>
-let cases=[], starVal=0;
-function load(){try{cases=JSON.parse(localStorage.getItem('alv3')||'[]');}catch(e){cases=[];}}
-function save(){localStorage.setItem('alv3',JSON.stringify(cases));hdr();}
-document.addEventListener('DOMContentLoaded',()=>{load();document.getElementById('f-date').value=new Date().toISOString().split('T')[0];hdr();});
-function switchView(v,btn){
-  document.querySelectorAll('.view').forEach(e=>e.classList.remove('active'));
-  document.querySelectorAll('nav button').forEach(e=>e.classList.remove('active'));
-  document.getElementById('view-'+v).classList.add('active');
-  if(btn)btn.classList.add('active');
-  if(v==='records')renderRecs();
-  if(v==='stats')renderStats();
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+let cases = [], starVal = 0;
+
+function load() {
+  try { cases = JSON.parse(localStorage.getItem('alv4') || '[]'); } catch(e) { cases = []; }
 }
-function tc(el,cls='s'){el.className=el.classList.contains(cls)?'chip':'chip '+cls;}
-function tglSec(id,tgl){document.getElementById(id).style.display=tgl.classList.contains('on')?'block':'none';}
-function gch(id){return Array.from(document.querySelectorAll('#'+id+' .chip.s, #'+id+' .chip.sp, #'+id+' .chip.sb')).map(c=>c.textContent.trim());}
-function setStar(n){starVal=n;document.querySelectorAll('#stars-diff .star').forEach((s,i)=>s.classList.toggle('lit',i<n));}
-function v(id){return document.getElementById(id)?.value||'';}
-function tgl(id){return document.getElementById(id)?.classList.contains('on')||false;}
+function persist() { localStorage.setItem('alv4', JSON.stringify(cases)); hdr(); }
 
-// ── CONTORNO CORPORAL ──
-const CONTORNO_KEYWORDS = ['lipo','abdominoplastia','lipoabdominoplastia','lipoescultura','liposuccion','contorno','bbl','lipotransfer'];
-function checkContorno(){
-  const proc=v('f-procedure').toLowerCase();
-  const isContorno=CONTORNO_KEYWORDS.some(k=>proc.includes(k));
-  document.getElementById('fc-contorno').style.display=isContorno?'block':'none';
+document.addEventListener('DOMContentLoaded', () => {
+  load();
+  document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
+  hdr();
+  initChips();
+  initToggles();
+  initStars();
+});
+
+// ══════════════════════════════════════════
+// CHIPS — event delegation (iOS compatible)
+// ══════════════════════════════════════════
+function initChips() {
+  document.querySelectorAll('.chips').forEach(container => {
+    container.addEventListener('click', function(e) {
+      const chip = e.target.closest('.chip');
+      if (!chip) return;
+      const color = container.dataset.color || 'on';
+      if (chip.classList.contains(color)) {
+        chip.className = 'chip';
+      } else {
+        chip.className = 'chip ' + color;
+      }
+    });
+  });
 }
 
-function calcLipo(){
-  const tumeVol=parseFloat(v('f-tumes-vol'))||0;
-  const lidoConc=parseFloat(v('f-tumes-lido-conc'))||0;
-  const aspirado=parseFloat(v('f-aspirado-total'))||0;
-  const pctSel=v('f-aspirado-pct');
-  const peso=parseFloat(v('f-weight'))||0;
+function getChips(groupName) {
+  const sel = document.querySelectorAll(`.chips[data-group="${groupName}"] .chip.on, .chips[data-group="${groupName}"] .chip.on-purple, .chips[data-group="${groupName}"] .chip.on-blue`);
+  return Array.from(sel).map(c => c.textContent.trim());
+}
 
-  // Lido total
-  const lidoTotal=tumeVol*lidoConc;
-  const lidoMgKg=peso>0?(lidoTotal/peso).toFixed(1):0;
-  const SAFE_LIDO=35; // mg/kg tumescente safe limit
-  const lidoSafe=lidoMgKg<=SAFE_LIDO;
+// ══════════════════════════════════════════
+// TOGGLES — event delegation
+// ══════════════════════════════════════════
+function initToggles() {
+  document.querySelectorAll('.tgl').forEach(tgl => {
+    tgl.addEventListener('click', function() {
+      this.classList.toggle('on');
+      const target = this.dataset.target;
+      if (target) {
+        document.getElementById(target).style.display = this.classList.contains('on') ? 'block' : 'none';
+      }
+    });
+  });
+}
 
-  if(lidoTotal>0){
-    document.getElementById('f-tumes-lido-total').value=lidoTotal.toFixed(0);
-    document.getElementById('f-tumes-lido-mgkg').value=lidoMgKg;
-    document.getElementById('f-tumes-lido-mgkg').style.color=lidoSafe?'var(--accent)':'var(--danger)';
+function getTgl(id) { return document.getElementById(id)?.classList.contains('on') || false; }
+
+// ══════════════════════════════════════════
+// STARS
+// ══════════════════════════════════════════
+function initStars() {
+  document.querySelectorAll('#stars-diff .star').forEach(star => {
+    star.addEventListener('click', function() {
+      starVal = parseInt(this.dataset.val);
+      document.querySelectorAll('#stars-diff .star').forEach((s, i) => {
+        s.classList.toggle('lit', i < starVal);
+      });
+    });
+  });
+}
+
+// ══════════════════════════════════════════
+// NAV
+// ══════════════════════════════════════════
+function switchView(v, btn) {
+  document.querySelectorAll('.view').forEach(e => e.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(e => e.classList.remove('active'));
+  document.getElementById('view-' + v).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (v === 'records') renderRecs();
+  if (v === 'stats') renderStats();
+}
+
+// ══════════════════════════════════════════
+// TCI TOGGLE LOGIC
+// ══════════════════════════════════════════
+function toggleTCI() {
+  const val = document.getElementById('f-maintenance').value;
+  const isTciProp = val === 'tci-propofol';
+  document.getElementById('grp-inhala').style.display = isTciProp ? 'none' : 'flex';
+  document.getElementById('grp-tci-prop').style.display = isTciProp ? 'flex' : 'none';
+  document.getElementById('grp-tci-prop-ce').style.display = isTciProp ? 'flex' : 'none';
+  // Show dex fields if dexmedetomidina selected
+  document.getElementById('grp-dex').style.display =
+    (val === 'Dexmedetomidina' || val === 'Combinación') ? 'grid' : 'none';
+}
+
+function toggleOpioidTCI() {
+  const val = document.getElementById('f-opioid').value;
+  document.getElementById('grp-opioid-dose').style.display =
+    (val === 'remi-tci' || val === 'remi-infusion') ? 'none' : 'flex';
+  document.getElementById('grp-remi-tci-model').style.display = val === 'remi-tci' ? 'flex' : 'none';
+  document.getElementById('grp-remi-tci-ce').style.display = val === 'remi-tci' ? 'flex' : 'none';
+  document.getElementById('grp-remi-inf').style.display = val === 'remi-infusion' ? 'flex' : 'none';
+}
+
+// ══════════════════════════════════════════
+// CONTORNO CORPORAL DETECTION
+// ══════════════════════════════════════════
+const KEYWORDS = ['lipo','abdominoplastia','lipoabdominoplastia','lipoescultura','liposuccion','contorno','bbl'];
+function checkContorno() {
+  const proc = (document.getElementById('f-procedure').value || '').toLowerCase();
+  const show = KEYWORDS.some(k => proc.includes(k));
+  document.getElementById('fc-contorno').style.display = show ? 'block' : 'none';
+}
+
+// ══════════════════════════════════════════
+// LIPO CALCULATIONS
+// ══════════════════════════════════════════
+function calcLipo() {
+  const tumeVol = parseFloat(document.getElementById('f-tumes-vol').value) || 0;
+  const lidoConc = parseFloat(document.getElementById('f-tumes-lido-conc').value) || 0;
+  const aspirado = parseFloat(document.getElementById('f-aspirado').value) || 0;
+  const pct = parseFloat(document.getElementById('f-aspirado-pct').value) || 2;
+  const peso = parseFloat(document.getElementById('f-weight').value) || 0;
+  const hbPre = parseFloat(document.getElementById('f-hb-pre').value) || 0;
+  const htoPre = parseFloat(document.getElementById('f-hto-pre').value) || 0;
+  const hbMin = parseFloat(document.getElementById('f-hb-min').value) || 8;
+
+  // Lido
+  if (tumeVol > 0 && lidoConc > 0) {
+    const lidoTotal = tumeVol * lidoConc;
+    const lidoMgKg = peso > 0 ? (lidoTotal / peso).toFixed(1) : '—';
+    document.getElementById('f-tumes-lido-total').value = lidoTotal.toFixed(0);
+    document.getElementById('f-tumes-lido-mgkg').value = lidoMgKg;
+    document.getElementById('f-tumes-lido-mgkg').style.color =
+      (parseFloat(lidoMgKg) <= 35) ? 'var(--accent)' : 'var(--danger)';
   }
 
   // Aspirado
-  let pct=parseFloat(pctSel)||2;
-  const bloodInAsp=(aspirado*pct/100);
-  const fatAsp=aspirado-bloodInAsp;
-  if(aspirado>0){
-    document.getElementById('f-blood-aspirado').value=bloodInAsp.toFixed(0);
-    document.getElementById('f-fat-aspirado').value=fatAsp.toFixed(0);
+  const bloodInAsp = aspirado * pct / 100;
+  const fatAsp = aspirado - bloodInAsp;
+  if (aspirado > 0) {
+    document.getElementById('f-blood-asp').value = bloodInAsp.toFixed(0);
+    document.getElementById('f-fat-asp').value = fatAsp.toFixed(0);
   }
 
-  // Hb / pérdidas permisibles
+  // Hb / pérdidas
   calcHb();
 
-  // Summary display
-  if(tumeVol>0||aspirado>0){
-    document.getElementById('lipo-calc-display').style.display='block';
-    const hbPre=parseFloat(v('f-hb-pre'))||0;
-    const hbMin=parseFloat(v('f-hb-min'))||8;
-    const vce=peso>0?Math.round(peso*(peso<40?75:peso<60?70:65)):0;
-    const perdPerm=hbPre>0&&vce>0?Math.round(vce*(hbPre-hbMin)/hbPre):0;
-    const reqTransf=bloodInAsp>perdPerm&&perdPerm>0?`⚠ POSIBLE TRANSFUSIÓN (sangre en asp. ${bloodInAsp.toFixed(0)} mL > pérd. perm. ${perdPerm} mL)`:`✓ Sin requerimiento transfusional estimado`;
-    let txt=``;
-    if(tumeVol>0)txt+=`<span>💉 Tumescente: <b style="color:var(--accent)">${tumeVol} mL</b> | Lidocaína: <b style="${lidoSafe?'color:var(--accent)':'color:var(--danger)'}">${lidoTotal.toFixed(0)} mg (${lidoMgKg} mg/kg)</b> ${lidoSafe?'✓ Dosis segura':'⚠ Revisar dosis'}</span><br>`;
-    if(aspirado>0)txt+=`<span>🩺 Aspirado total: <b style="color:var(--text)">${aspirado} mL</b> | Sangre estimada: <b style="color:var(--danger)">${bloodInAsp.toFixed(0)} mL</b> | Grasa pura: <b style="color:var(--gold)">${fatAsp.toFixed(0)} mL</b></span><br>`;
-    if(perdPerm>0)txt+=`<span>🩸 Pérdida permisible: <b style="color:var(--accent)">${perdPerm} mL</b> | ${reqTransf}</span>`;
-    document.getElementById('lipo-calc-text').innerHTML=txt;
-    if(perdPerm>0){
-      document.getElementById('f-perdida-perm').value=perdPerm;
-      document.getElementById('f-transfusion-risk').value=bloodInAsp>perdPerm?'⚠ Evaluar transfusión':'✓ Sin requerimiento';
-      document.getElementById('f-transfusion-risk').style.color=bloodInAsp>perdPerm?'var(--danger)':'var(--accent)';
+  // Summary
+  if (tumeVol > 0 || aspirado > 0 || hbPre > 0) {
+    document.getElementById('lipo-calc').style.display = 'block';
+    const vce = peso > 0 ? Math.round(peso * (peso < 40 ? 75 : peso < 60 ? 70 : 65)) : 0;
+    const perdPermHb10 = (hbPre > 10 && vce > 0) ? Math.round(vce * (hbPre - 10) / hbPre) : 0;
+    const perdPermHb8 = (hbPre > 8 && vce > 0) ? Math.round(vce * (hbPre - 8) / hbPre) : 0;
+    const hbPostEst = (hbPre > 0 && vce > 0 && bloodInAsp > 0) ?
+      (hbPre * (1 - bloodInAsp / vce)).toFixed(1) : '—';
+    const htoPostEst = (htoPre > 0 && vce > 0 && bloodInAsp > 0) ?
+      (htoPre * (1 - bloodInAsp / vce)).toFixed(1) : '—';
+
+    const lidoTotal = tumeVol * lidoConc;
+    const lidoMgKg = peso > 0 ? (lidoTotal / peso).toFixed(1) : 0;
+    const lidoSafe = parseFloat(lidoMgKg) <= 35;
+
+    let rows = '';
+    if (peso > 0) rows += calcRow('VCE estimado', vce + ' mL', '');
+    if (tumeVol > 0 && lidoConc > 0 && peso > 0) {
+      rows += calcRow('Lidocaína total tumescente', lidoTotal.toFixed(0) + ' mg — ' + lidoMgKg + ' mg/kg',
+        lidoSafe ? '' : 'danger');
     }
-    if(peso>0)document.getElementById('f-vce').value=Math.round(peso*(peso<40?75:peso<60?70:65));
+    if (aspirado > 0) {
+      rows += calcRow('Aspirado total', aspirado + ' mL', '');
+      rows += calcRow('Sangre estimada en aspirado', bloodInAsp.toFixed(0) + ' mL (' + pct + '%)', 'warn');
+      rows += calcRow('Grasa pura extraída', fatAsp.toFixed(0) + ' mL', '');
+    }
+    if (hbPre > 0 && vce > 0) {
+      rows += calcRow('Pérdida permisible → Hb 10', perdPermHb10 > 0 ? perdPermHb10 + ' mL' : 'N/A (Hb ≤10)', '');
+      rows += calcRow('Pérdida permisible → Hb 8', perdPermHb8 > 0 ? perdPermHb8 + ' mL' : 'N/A (Hb ≤8)', '');
+      rows += calcRow('Hb estimada post-lipo', hbPostEst + ' g/dL', parseFloat(hbPostEst) < hbMin ? 'danger' : '');
+      rows += calcRow('Hto estimado post-lipo', htoPostEst + '%', '');
+    }
+    document.getElementById('lipo-calc-rows').innerHTML = rows;
+
+    // Alert if needed
+    const alertBox = document.getElementById('lipo-alert-box');
+    const alerts = [];
+    if (!lidoSafe && lidoConc > 0) alerts.push('⚠ Dosis de lidocaína supera 35 mg/kg — revisar seguridad');
+    if (parseFloat(hbPostEst) < hbMin && hbPostEst !== '—') alerts.push('⚠ Hb post-lipo estimada < ' + hbMin + ' g/dL — evaluar transfusión');
+    if (perdPermHb10 > 0 && bloodInAsp > perdPermHb10) alerts.push('⚠ Sangre en aspirado supera pérdida permisible para Hb 10');
+    if (alerts.length > 0) {
+      alertBox.style.display = 'block';
+      document.getElementById('lipo-alert-title').textContent = '⚠ ALERTAS DE SEGURIDAD';
+      document.getElementById('lipo-alert-rows').innerHTML = alerts.map(a =>
+        `<div class="calc-row"><span>${a}</span></div>`).join('');
+    } else {
+      alertBox.style.display = 'none';
+    }
   }
 }
 
-function calcHb(){
-  const hbPre=parseFloat(v('f-hb-pre'))||0;
-  const peso=parseFloat(v('f-weight'))||0;
-  const hbMin=parseFloat(v('f-hb-min'))||8;
-  if(hbPre>0&&peso>0){
-    const vce=Math.round(peso*(peso<40?75:peso<60?70:65));
-    const perdPerm=Math.round(vce*(hbPre-hbMin)/hbPre);
-    document.getElementById('f-vce').value=vce;
-    document.getElementById('f-perdida-perm').value=perdPerm;
+function calcRow(label, val, type) {
+  const cls = type === 'danger' ? 'danger' : type === 'warn' ? 'warn' : '';
+  return `<div class="calc-row"><span>${label}</span><span class="calc-val ${cls}">${val}</span></div>`;
+}
+
+function calcHb() {
+  const hbPre = parseFloat(document.getElementById('f-hb-pre')?.value) || 0;
+  const peso = parseFloat(document.getElementById('f-weight')?.value) || 0;
+  const hbMin = parseFloat(document.getElementById('f-hb-min')?.value) || 8;
+  if (hbPre > 0 && peso > 0) {
+    const vce = Math.round(peso * (peso < 40 ? 75 : peso < 60 ? 70 : 65));
+    const perm = Math.round(vce * (hbPre - hbMin) / hbPre);
+    // Update blood loss field in intraop section if available
   }
 }
 
-function calcHb24(){
-  const hbPre=parseFloat(v('f-hb-pre'))||0;
-  const hb24=parseFloat(v('f-hb-24h'))||0;
-  if(hbPre>0&&hb24>0){
-    const drop=(hbPre-hb24).toFixed(1);
-    document.getElementById('f-hb-drop').value=drop;
-    const hbMin=parseFloat(v('f-hb-min'))||8;
-    let interp='';
-    if(hb24>=10)interp='✓ Aceptable';
-    else if(hb24>=8)interp='⚠ Límite — vigilar';
-    else interp='⚠ Baja — evaluar manejo';
-    document.getElementById('f-hb-interpret').value=interp;
-    document.getElementById('f-hb-interpret').style.color=hb24>=10?'var(--accent)':hb24>=hbMin?'var(--gold)':'var(--danger)';
+function calcHb24() {
+  const hbPre = parseFloat(document.getElementById('f-hb-pre')?.value) || 0;
+  const hb24 = parseFloat(document.getElementById('f-hb-24h')?.value) || 0;
+  const hbMin = parseFloat(document.getElementById('f-hb-min')?.value) || 8;
+  if (hbPre > 0 && hb24 > 0) {
+    const drop = (hbPre - hb24).toFixed(1);
+    document.getElementById('f-hb-drop').value = drop;
+    let interp = hb24 >= 10 ? '✓ Aceptable' : hb24 >= hbMin ? '⚠ Límite — vigilar' : '⚠ Baja — evaluar';
+    document.getElementById('f-hb-interp').value = interp;
+    document.getElementById('f-hb-interp').style.color =
+      hb24 >= 10 ? 'var(--accent)' : hb24 >= hbMin ? 'var(--gold)' : 'var(--danger)';
   }
 }
 
-function saveCase(){
-  const date=v('f-date'),name=document.getElementById('f-name').value.trim(),pid=v('f-pid'),proc=v('f-procedure');
-  if(!date||!name||!pid||!proc){toast('⚠ Complete Fecha, Nombre, ID y Procedimiento',true);return;}
-  const c={id:Date.now(),date,name,pid,
-    age:v('f-age'),sex:v('f-sex'),weight:v('f-weight'),height:v('f-height'),
-    asa:v('f-asa'),mallampati:v('f-mallampati'),
-    comorbidities:gch('ch-comorbid'),comorbiditiesOther:v('f-comorbid-other'),
-    procedure:proc,specialty:v('f-specialty'),urgency:v('f-urgency'),
-    position:v('f-position'),duration:v('f-duration'),hospital:v('f-hospital'),surgeon:v('f-surgeon'),
-    anesthesiaType:gch('ch-atype'),
-    inductor:v('f-inductor'),inductorDose:v('f-inductor-dose'),
-    nmb:v('f-nmb'),nmbDose:v('f-nmb-dose'),
-    maintenance:v('f-maintenance'),maintDose:v('f-maint-dose'),
-    opioid:v('f-opioid'),opioidDose:v('f-opioid-dose'),gaNotes:v('f-ga-notes'),
-    airway:v('f-airway'),tube:v('f-tube'),cormack:v('f-cormack'),
-    intubation:v('f-intubation'),fasting:v('f-fasting'),vad:tgl('tgl-vad'),rsi:tgl('tgl-rsi'),
-    hasNax:tgl('tgl-nax'),naxType:v('f-nax-type'),naxLevel:v('f-nax-level'),
-    naxLA:v('f-nax-la'),naxLADose:v('f-nax-la-dose'),naxOpioid:v('f-nax-opioid'),naxOpioidDose:v('f-nax-opioid-dose'),
-    naxReached:v('f-nax-reached'),naxDuration:v('f-nax-duration'),naxAttempts:v('f-nax-attempts'),naxNotes:v('f-nax-notes'),
-    hasSS:tgl('tgl-ss'),ssBlocks:gch('ch-ss'),ssSide:v('f-ss-side'),
-    ssLA:v('f-ss-la'),ssVolume:v('f-ss-volume'),ssAdj:gch('ch-ss-adj'),ssAdjDose:v('f-ss-adj-dose'),
-    ssDuration:v('f-ss-duration'),ssNotes:v('f-ss-notes'),
-    hasCath:tgl('tgl-cath'),cathSite:gch('ch-cath'),cathSide:v('f-cath-side'),
-    cathLA:v('f-cath-la'),cathRate:v('f-cath-rate'),cathBolus:v('f-cath-bolus'),
-    cathAdj:gch('ch-cath-adj'),cathNotes:v('f-cath-notes'),
-    hasElasto:tgl('tgl-elasto'),elastoType:v('f-elasto-type'),elastoDrug:v('f-elasto-drug'),
-    elastoVol:v('f-elasto-vol'),elastoRate:v('f-elasto-rate'),elastoDur:v('f-elasto-dur'),
-    elastoSite:v('f-elasto-site'),elastoNotes:v('f-elasto-notes'),
-    bleeding:v('f-bleeding'),diuresis:v('f-diuresis'),crystalloids:v('f-crystalloids'),colloids:v('f-colloids'),
-    events:gch('ch-events'),eventsNotes:v('f-events-notes'),
-    destination:v('f-destination'),pacuTime:v('f-pacu-time'),ponv:v('f-ponv'),painScore:v('f-pain'),
-    postopNotes:v('f-postop-notes'),
-    difficulty:starVal,outcome:v('f-outcome'),notes:v('f-notes'),
-    // Contorno corporal
-    isContorno:document.getElementById('fc-contorno').style.display!=='none',
-    tumesVol:v('f-tumes-vol'),tumesFormula:v('f-tumes-formula'),tumesLidoConc:v('f-tumes-lido-conc'),
-    tumesLidoTotal:v('f-tumes-lido-total'),tumesLidoMgKg:v('f-tumes-lido-mgkg'),tumesEpi:v('f-tumes-epi'),
-    tumesAreas:gch('ch-tumes-areas'),
-    aspiradoTotal:v('f-aspirado-total'),aspiradoPct:v('f-aspirado-pct'),bloodAsp:v('f-blood-aspirado'),fatAsp:v('f-fat-aspirado'),
-    hbPre:v('f-hb-pre'),htoPre:v('f-hto-pre'),hbMin:v('f-hb-min'),vce:v('f-vce'),
-    perdidaPerm:v('f-perdida-perm'),transfusionRisk:v('f-transfusion-risk'),
-    hb24h:v('f-hb-24h'),hto24h:v('f-hto-24h'),hbDrop:v('f-hb-drop'),hbInterpret:v('f-hb-interpret'),
-    hb48h:v('f-hb-48h'),didTransfuse:v('f-did-transfuse'),hbNotes:v('f-hb-notes')
+// ══════════════════════════════════════════
+// GET VALUE HELPERS
+// ══════════════════════════════════════════
+function v(id) { return document.getElementById(id)?.value || ''; }
+
+// ══════════════════════════════════════════
+// SAVE CASE
+// ══════════════════════════════════════════
+function saveCase() {
+  const date = v('f-date'), name = document.getElementById('f-name').value.trim();
+  const pid = v('f-pid'), proc = v('f-procedure');
+  if (!date || !name || !pid || !proc) {
+    toast('⚠ Complete Fecha, Nombre, ID y Procedimiento', true); return;
+  }
+  const c = {
+    id: Date.now(), date, name, pid,
+    age: v('f-age'), sex: v('f-sex'), weight: v('f-weight'), height: v('f-height'),
+    asa: v('f-asa'), mallampati: v('f-mallampati'),
+    comorbidities: getChips('comorbid'), comorbiditiesOther: v('f-comorbid-other'),
+    procedure: proc, specialty: v('f-specialty'), urgency: v('f-urgency'),
+    position: v('f-position'), duration: v('f-duration'), hospital: v('f-hospital'), surgeon: v('f-surgeon'),
+    anesthesiaType: getChips('atype'),
+    inductor: v('f-inductor'), inductorDose: v('f-inductor-dose'),
+    nmb: v('f-nmb'), nmbDose: v('f-nmb-dose'),
+    maintenance: v('f-maintenance'), maintDose: v('f-maint-dose'),
+    tciPropModel: v('f-tci-prop-model'), tciPropCe: v('f-tci-prop-ce'),
+    opioid: v('f-opioid'), opioidDose: v('f-opioid-dose'),
+    remiTciModel: v('f-remi-tci-model'), remiTciCe: v('f-remi-tci-ce'),
+    remiInfDose: v('f-remi-inf-dose'),
+    dexModel: v('f-dex-model'), dexCe: v('f-dex-ce'), dexDose: v('f-dex-dose'),
+    multimodal: getChips('multimodal'), gaNotes: v('f-ga-notes'),
+    airway: v('f-airway'), tube: v('f-tube'), cormack: v('f-cormack'),
+    intubation: v('f-intubation'), fasting: v('f-fasting'),
+    vad: getTgl('tgl-vad'), rsi: getTgl('tgl-rsi'),
+    monitoring: getChips('monitoring'), access: getChips('access'),
+    hasNax: getTgl('tgl-nax'), naxType: v('f-nax-type'), naxLevel: v('f-nax-level'),
+    naxLA: v('f-nax-la'), naxLADose: v('f-nax-la-dose'),
+    naxOpioid: v('f-nax-opioid'), naxOpioidDose: v('f-nax-opioid-dose'),
+    naxReached: v('f-nax-reached'), naxDuration: v('f-nax-duration'),
+    naxAttempts: v('f-nax-attempts'), naxNotes: v('f-nax-notes'),
+    hasSS: getTgl('tgl-ss'), ssBlocks: getChips('ss-blocks'), ssSide: v('f-ss-side'),
+    ssLA: v('f-ss-la'), ssVolume: v('f-ss-volume'),
+    ssAdj: getChips('ss-adj'), ssAdjDose: v('f-ss-adj-dose'),
+    ssDuration: v('f-ss-duration'), ssNotes: v('f-ss-notes'),
+    hasCath: getTgl('tgl-cath'), cathSite: getChips('cath-site'), cathSide: v('f-cath-side'),
+    cathLA: v('f-cath-la'), cathRate: v('f-cath-rate'), cathBolus: v('f-cath-bolus'),
+    cathAdj: getChips('cath-adj'), cathNotes: v('f-cath-notes'),
+    hasElasto: getTgl('tgl-elasto'), elastoType: v('f-elasto-type'), elastoDrug: v('f-elasto-drug'),
+    elastoVol: v('f-elasto-vol'), elastoRate: v('f-elasto-rate'),
+    elastoDur: v('f-elasto-dur'), elastoSite: v('f-elasto-site'), elastoNotes: v('f-elasto-notes'),
+    bleeding: v('f-bleeding'), diuresis: v('f-diuresis'),
+    crystalloids: v('f-crystalloids'), colloids: v('f-colloids'),
+    events: getChips('events'), eventsNotes: v('f-events-notes'),
+    destination: v('f-destination'), pacuTime: v('f-pacu-time'),
+    ponv: v('f-ponv'), painScore: v('f-pain'),
+    postopAnalg: getChips('postop-analg'), postopComp: getChips('postop-comp'),
+    postopNotes: v('f-postop-notes'),
+    difficulty: starVal, outcome: v('f-outcome'), notes: v('f-notes'),
+    isContorno: document.getElementById('fc-contorno').style.display !== 'none',
+    tumesVol: v('f-tumes-vol'), tumesFormula: v('f-tumes-formula'),
+    tumesLidoConc: v('f-tumes-lido-conc'), tumesLidoTotal: v('f-tumes-lido-total'),
+    tumesLidoMgKg: v('f-tumes-lido-mgkg'), tumesEpi: v('f-tumes-epi'),
+    tumesAreas: getChips('tumes-areas'),
+    aspirado: v('f-aspirado'), aspiradoPct: v('f-aspirado-pct'),
+    bloodAsp: v('f-blood-asp'), fatAsp: v('f-fat-asp'),
+    hbPre: v('f-hb-pre'), htoPre: v('f-hto-pre'), hbMin: v('f-hb-min'),
+    hb24h: v('f-hb-24h'), hto24h: v('f-hto-24h'),
+    hbDrop: v('f-hb-drop'), hbInterp: v('f-hb-interp'),
+    hb48h: v('f-hb-48h'), didTransfuse: v('f-did-transfuse'), hbNotes: v('f-hb-notes')
   };
-  cases.unshift(c);save();toast('✓ Caso guardado');clearForm();
+  cases.unshift(c);
+  persist();
+  toast('✓ Caso guardado');
+  clearForm();
 }
 
-function clearForm(){
-  document.querySelectorAll('#view-form input:not([type=range]):not([type=file]),#view-form select,#view-form textarea').forEach(e=>e.value='');
-  document.querySelectorAll('#view-form input[type=range]').forEach(e=>e.value=0);
-  document.getElementById('pain-disp').textContent='0';
-  document.querySelectorAll('#view-form .chip').forEach(c=>c.className='chip');
-  document.querySelectorAll('#view-form .tgl.on').forEach(t=>t.classList.remove('on'));
-  document.querySelectorAll('#view-form [id^="sec-"]').forEach(s=>s.style.display='none');
-  document.querySelectorAll('#view-form .star.lit').forEach(s=>s.classList.remove('lit'));
-  starVal=0;
-  document.getElementById('f-date').value=new Date().toISOString().split('T')[0];
-  document.getElementById('fc-contorno').style.display='none';
-  document.getElementById('lipo-calc-display').style.display='none';
-}
-
-function renderRecs(){
-  load();
-  const q=(document.getElementById('search-in').value||'').toLowerCase();
-  const fs=document.getElementById('fil-spec').value;
-  const fo=document.getElementById('fil-out').value;
-  const fa=document.getElementById('fil-asa').value;
-  const fil=cases.filter(c=>{
-    const str=(c.procedure+c.pid+(c.name||'')+(c.specialty||'')).toLowerCase();
-    return(!q||str.includes(q))&&(!fs||c.specialty===fs)&&(!fo||c.outcome===fo)&&(!fa||c.asa===fa);
+// ══════════════════════════════════════════
+// CLEAR FORM
+// ══════════════════════════════════════════
+function clearForm() {
+  document.querySelectorAll('#view-form input:not([type=range]):not([type=file]),#view-form select,#view-form textarea')
+    .forEach(e => e.value = '');
+  document.querySelectorAll('#view-form input[type=range]').forEach(e => e.value = 0);
+  document.getElementById('pain-disp').textContent = '0';
+  document.querySelectorAll('#view-form .chip').forEach(c => c.className = 'chip');
+  // Re-select ASA basic monitoring default
+  document.querySelector('.chips[data-group="monitoring"] .chip')?.classList.add('on');
+  document.querySelectorAll('#view-form .tgl.on').forEach(t => {
+    t.classList.remove('on');
+    const target = t.dataset.target;
+    if (target) document.getElementById(target).style.display = 'none';
   });
-  document.getElementById('rcnt').textContent=fil.length+' caso'+(fil.length!==1?'s':'');
-  const el=document.getElementById('recs-list');
-  if(!fil.length){el.innerHTML=`<div class="empty"><div class="empty-i">◎</div><h3>${cases.length?'Sin resultados':'Sin registros aún'}</h3><p>${cases.length?'Ajusta los filtros':'Registra tu primer caso'}</p></div>`;return;}
-  const oc
+  document.querySelectorAll('#view-form .star.lit').forEach(s => s.classList.remove('lit'));
+  starVal = 0;
+  document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
+  document.getElementById('fc-contorno').style.display = 'none';
+  document.getElementById('lipo-calc').style.display = 'none';
+  // Reset TCI groups
+  document.getElementById('grp-tci-prop').style.display = 'none';
+  document.getElementById('grp-tci-prop-ce').style.display = 'none';
+  document.getElementById('grp-remi-tci-model').style.display = 'none';
+  document.getElementById('grp-remi-tci-ce').style.display = 'none';
+  document.getElementById('grp-remi-inf').style.display = 'none';
+  document.getElementById('grp-dex').style.display = 'none';
+  document.getElementById('grp-inhala').style.display = 'flex';
+  document.getElementById('grp-opioid-dose').style.display = 'flex';
+}
+
+// ══════════════════════════════════════════
+// RENDER RECORDS
+// ══════════════════════════════════════════
+function renderRecs() {
+  load();
+  const q = (document.getElementById('search-in').value || '').toLowerCase();
+  const fs = document.getElementById('fil-spec').value;
+  const fo = document.getElementById('fil-out').value;
+  const fil = cases.filter(c => {
+    const s = (c.procedure + c.pid + (c.name||'') + (c.specialty||'')).toLowerCase();
+    return (!q || s.includes(q)) && (!fs || c.specialty === fs) && (!fo || c.outcome === fo);
+  });
+  document.getElementById('rcnt').textContent = fil.length + ' caso' + (fil.length !== 1 ? 's' : '');
+  const el = document.getElementById('recs-list');
+  if (!fil.length) {
+    el.innerHTML = `<div class="empty"><div class="empty-i">◎</div><h3>${cases.length ? 'Sin resultados' : 'Sin registros aún'}</h3><p>${cases.length ? 'Ajusta los filtros' : 'Registra tu primer caso'}</p></div>`;
+    return;
+  }
+  const oclr = {Excelente:'bg',Bueno:'bb',Aceptable:'bgo',Complicado:'br'};
+  el.innerHTML = fil.map((c, i) => {
+    const ds = c.date ? new Date(c.date+'T12:00:00').toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'numeric'}) : '—';
+    const oc = oclr[c.outcome] || 'bb';
+    const reg = (c.hasSS||c.hasCath||c.hasNax) ? `<span class="badge bp">Regional</span>` : '';
+    const ela = c.hasElasto ? `<span class="badge bb">Elastómera</span>` : '';
+    const lipo = c.isContorno ? `<span class="badge bgo">Lipo</span>` : '';
+    return `<div class="rc" onclick="showDetail(${c.id})">
+      <div class="rnum">${String(fil.length-i).padStart(2,'0')}</div>
+      <div class="rmain"><h3>${c.procedure||'—'}</h3>
+        <div class="rmeta"><span>👤${c.name||'—'}</span><span>📅${ds}</span><span>🏥${c.specialty||'—'}</span>${c.age?`<span>${c.age}a</span>`:''}</div>
+      </div>
+      <div class="rbadges">${c.asa?`<span class="asa-badge a${c.asa}">${c.asa}</span>`:''} ${c.outcome?`<span class="badge ${oc}">${c.outcome}</span>`:''} ${reg}${ela}${lipo}
+        <button class="btn-d" onclick="event.stopPropagation();delCase(${c.id})">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function delCase(id) {
+  if (!confirm('¿Eliminar este caso?')) return;
+  cases = cases.filter(c => c.id !== id);
+  persist(); renderRecs(); toast('Caso eliminado');
+}
+
+// ══════════════════════════════════════════
+// DETAIL MODAL
+// ══════════════════════════════════════════
+function showDetail(id) {
+  const c = cases.find(x => x.id === id); if (!c) return;
+  const ds = c.date ? new Date(c.date+'T12:00:00').toLocaleDateString('es-ES',{day:'2-digit',month:'long',year:'numeric'}) : '—';
+  const imc = c.weight && c.height ? (c.weight/((c.height/100)**2)).toFixed(1) : '—';
+  const starsH = [1,2,3,4,5].map(i=>`<span style="color:${i<=c.difficulty?'var(--gold)':'var(--text-faint)'};font-size:1rem">★</span>`).join('');
+  const r = (l,v) => v ? `<div class="di"><label>${l}</label><p>${v}</p></div>` : '';
+  const rf = (l,v) => v ? `<div class="di full"><label>${l}</label><p>${v}</p></div>` : '';
+  const oclr = {Excelente:'bg',Bueno:'bb',Aceptable:'bgo',Complicado:'br'};
+
+  let opioidStr = c.opioid || '';
+  if (c.opioid === 'remi-tci') opioidStr = `Remifentanilo TCI — Modelo: ${c.remiTciModel||'—'} — Ce: ${c.remiTciCe||'—'} ng/mL`;
+  if (c.opioid === 'remi-infusion') opioidStr = `Remifentanilo infusión — ${c.remiInfDose||'—'} mcg/kg/min`;
+
+  let maintStr = c.maintenance || '';
+  if (c.maintenance === 'tci-propofol') maintStr = `Propofol TCI — Modelo: ${c.tciPropModel||'—'} — Ce: ${c.tciPropCe||'—'} mcg/mL`;
+
+  let reg = '';
+  if (c.hasNax) reg += `<div class="dsec" style="color:var(--purple)">NEUROAXIAL</div><div class="dgrid">
+    ${r('Tipo',c.naxType)}${r('Nivel',c.naxLevel)}
+    ${r('AL / Dosis',c.naxLA+(c.naxLADose?' — '+c.naxLADose+' mg':''))}
+    ${r('Opioide intratecal',c.naxOpioid+(c.naxOpioidDose?' — '+c.naxOpioidDose+' mcg':''))}
+    ${r('Nivel alcanzado',c.naxReached)}${r('Duración',c.naxDuration?c.naxDuration+' min':'')}
+    ${r('Intentos',c.naxAttempts)}${rf('Notas neuroaxial',c.naxNotes)}</div>`;
+  if (c.hasSS) reg += `<div class="dsec" style="color:var(--purple)">BLOQUEO PERIFÉRICO SINGLE SHOT</div><div class="dgrid">
+    ${r('Bloqueos',(c.ssBlocks||[]).join(', '))}${r('Lado',c.ssSide)}
+    ${r('AL / Volumen',c.ssLA+(c.ssVolume?' — '+c.ssVolume+' mL':''))}
+    ${r('Coadyuvantes',(c.ssAdj||[]).join(', '))}${r('Dosis coadyuvante',c.ssAdjDose)}
+    ${r('Duración esperada',c.ssDuration?c.ssDuration+' h':'')}${rf('Notas',c.ssNotes)}</div>`;
+  if (c.hasCath) reg += `<div class="dsec" style="color:var(--purple)">CATÉTER NERVIO PERIFÉRICO</div><div class="dgrid">
+    ${r('Sitio',(c.cathSite||[]).join(', '))}${r('Lado',c.cathSide)}
+    ${r('AL infusión',c.cathLA)}${r('Tasa',c.cathRate?c.cathRate+' mL/h':'')}
+    ${r('Bolo/PCA',c.cathBolus)}${r('Coadyuvantes',(c.cathAdj||[]).join(', '))}
+    ${rf('Notas catéter',c.cathNotes)}</div>`;
+  if (c.hasElasto) reg += `<div class="dsec" style="color:var(--accent2)">BOMBA ELASTOMÉRICA</div><div class="dgrid">
+    ${r('Tipo',c.elastoType)}${r('Fármaco',c.elastoDrug)}
+    ${r('Volumen',c.elastoVol?c.elastoVol+' mL':'')}${r('Tasa',c.elastoRate?c.elastoRate+' mL/h':'')}
+    ${r('Duración',c.elastoDur?c.elastoDur+' h':'')}${r('Sitio',c.elastoSite)}
+    ${rf('Notas',c.elastoNotes)}</div>`;
+
+  let lipo = '';
+  if (c.isContorno) lipo = `
+    <div class="dsec" style="color:var(--gold)">CONTORNO CORPORAL</div>
+    <div class="dgrid">
+      ${r('Tumescente total',c.tumesVol?c.tumesVol+' mL':'')}${r('Fórmula',c.tumesFormula)}
+      ${r('Lidocaína',c.tumesLidoTotal?c.tumesLidoTotal+' mg ('+c.tumesLidoMgKg+' mg/kg)':'')}
+      ${r('Áreas',(c.tumesAreas||[]).join(', '))}
+      ${r('Aspirado total',c.aspirado?c.aspirado+' mL':'')}
+      ${r('Sangre en aspirado',c.bloodAsp?c.bloodAsp+' mL ('+c.aspiradoPct+'%)':'')}
+      ${r('Grasa pura extraída',c.fatAsp?c.fatAsp+' mL':'')}
+      ${r('Hb preop / Hto',c.hbPre?(c.hbPre+' g/dL / '+(c.htoPre||'—')+'%'):'—')}
+    </div>
+    <div class="dsec" style="color:var(--gold)">HEMATOLOGÍA POSTOPERATORIA</div>
+    <div class="dgrid">
+      ${r('Hb 24h POP',c.hb24h?c.hb24h+' g/dL':'')}${r('Hto 24h POP',c.hto24h?c.hto24h+'%':'')}
+      ${r('Caída Hb',c.hbDrop?c.hbDrop+' g/dL':'')}${r('Interpretación',c.hbInterp)}
+      ${r('Hb 48h POP',c.hb48h?c.hb48h+' g/dL':'')}${r('Transfusión',c.didTransfuse)}
+      ${rf('Notas hematológicas',c.hbNotes)}
+    </div>`;
+
+  document.getElementById('modal-body').innerHTML = `
+    <h2>${c.procedure||'Caso'}</h2>
+    <div style="display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:1rem">
+      ${c.specialty?`<span class="badge bb">${c.specialty}</span>`:''}
+      ${c.asa?`<span class="badge bg">ASA ${c.asa}</span>`:''}
+      ${c.urgency?`<span class="badge bgo">${c.urgency}</span>`:''}
+      ${c.outcome?`<span class="badge ${oclr[c.outcome]||'bb'}">${c.outcome}</span>`:''}
+      ${c.hasNax||c.hasSS||c.hasCath?`<span class="badge bp">Regional</span>`:''}
+      ${c.hasElasto?`<span class="badge bb">Elastómera</span>`:''}
+      ${c.isContorno?`<span class="badge bgo">Lipo</span>`:''}
+    </div>
+    <div class="dsec">PACIENTE</div>
+    <div class="dgrid">
+      ${r('Nombre',c.name)}${r('Fecha',ds)}${r('ID',c.pid)}
+      ${r('Edad / Sexo',c.age?c.age+' años / '+(c.sex||'—'):'')}
+      ${r('Peso / Talla / IMC',(c.weight||'—')+' kg / '+(c.height||'—')+' cm / IMC '+imc)}
+      ${r('ASA / Mallampati',(c.asa?'ASA '+c.asa:'—')+(c.mallampati?' / Mallampati '+c.mallampati:''))}
+      ${r('Hospital',c.hospital)}${r('Cirujano',c.surgeon)}
+      ${rf('Comorbilidades',[...(c.comorbidities||[]),c.comorbiditiesOther].filter(Boolean).join(', '))}
+    </div>
+    <div class="dsec">ANESTESIA</div>
+    <div class="dgrid">
+      ${r('Tipo',(c.anesthesiaType||[]).join(', '))}
+      ${r('Inductor',c.inductor+(c.inductorDose?' — '+c.inductorDose:''))}
+      ${r('Relajante',c.nmb+(c.nmbDose?' — '+c.nmbDose:''))}
+      ${r('Mantenimiento',maintStr)}
+      ${r('Opioide',opioidStr)}
+      ${c.dexCe||c.dexDose?r('Dexmedetomidina','Modelo: '+(c.dexModel||'—')+' — Ce: '+(c.dexCe||'—')+' ng/mL — '+(c.dexDose||'—')+' mcg/kg/h'):''}
+      ${r('Multimodal',(c.multimodal||[]).join(', '))}
+      ${r('Vía aérea',c.airway+(c.tube?' / '+c.tube:''))}
+      ${r('Cormack / Intentos',(c.cormack||'—')+' / '+(c.intubation||'—'))}
+      ${r('Monitoreo',(c.monitoring||[]).join(', '))}
+      ${rf('Notas GA',c.gaNotes)}
+    </div>
+    ${reg}
+    ${lipo}
+    <div class="dsec">INTRAOPERATORIO</div>
+    <div class="dgrid">
+      ${r('Duración',c.duration?c.duration+' min':'')}
+      ${r('Sangrado / Diuresis',(c.bleeding||'—')+' mL / '+(c.diuresis||'—')+' mL')}
+      ${r('Cristaloides',c.crystalloids?c.crystalloids+' mL':'')}
+      ${r('Coloides',c.colloids)}
+      ${rf('Eventos',(c.events||[]).join(', '))}
+      ${rf('Descripción',c.eventsNotes)}
+    </div>
+    <div class="dsec">POSTOPERATORIO</div>
+    <div class="dgrid">
+      ${r('Destino',c.destination)}${r('Tiempo URPA',c.pacuTime?c.pacuTime+' min':'')}
+      ${r('EVA',c.painScore+'/10')}${r('NVPO',['—','Leves','Moderados','Severos'][c.ponv]||'—')}
+      ${r('Analgesia postop',(c.postopAnalg||[]).join(', '))}
+      ${r('Complicaciones postop',(c.postopComp||[]).join(', '))}
+      ${rf('Notas',c.postopNotes)}
+    </div>
+    <div class="dsec">EVALUACIÓN</div>
+    <div class="dgrid">
+      <div class="di"><label>Dificultad</label><p>${starsH}</p></div>
+      ${r('Resultado',c.outcome)}
+      ${rf('Notas personales',c.notes?'"'+c.notes+'"':'')}
+    </div>`;
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
+document.getElementById('modal').addEventListener('click', function(e) { if(e.target===this) closeModal(); });
+
+// ══════════════════════════════════════════
+// STATS
+// ══════════════════════════════════════════
+function renderStats() {
+  load();
+  const n = cases.length;
+  if (!n) {
+    document.getElementById('stats-sum').innerHTML = `<div class="empty" style="grid-column:1/-1"><div class="empty-i">◎</div><h3>Sin datos</h3><p>Registra casos para ver estadísticas</p></div>`;
+    return;
+  }
+  const m = new Date().toISOString().slice(0,7);
+  const mc = cases.filter(c => c.date?.startsWith(m)).length;
+  const rc = cases.filter(c => c.hasSS||c.hasCath||c.hasNax).length;
+  const ec = cases.filter(c => c.hasElasto).length;
+  const comp = cases.filter(c => c.outcome==='Complicado').length;
+  const avgD = cases.filter(c=>c.duration).reduce((s,c)=>s+Number(c.duration),0)/(cases.filter(c=>c.duration).length||1);
+
+  document.getElementById('stats-sum').innerHTML = `
+    <div class="sc gn"><div class="slabel">Total casos</div><div class="sval">${n}</div></div>
+    <div class="sc bl"><div class="slabel">Este mes</div><div class="sval">${mc}</div></div>
+    <div class="sc pu"><div class="slabel">Con regional</div><div class="sval">${rc}</div><div class="ssub2">${Math.round(rc/n*100)}%</div></div>
+    <div class="sc bl"><div class="slabel">Elastómeras</div><div class="sval">${ec}</div></div>
+    <div class="sc gd"><div class="slabel">Duración media</div><div class="sval">${Math.round(avgD)||'—'}</div><div class="ssub2">min</div></div>
+    <div class="sc rd"><div class="slabel">Complicaciones</div><div class="sval">${((comp/n)*100).toFixed(0)}%</div><div class="ssub2">${comp} casos</div></div>`;
+
+  barFrom('ch-spec', cases, 'specialty');
+  pie('ch-asa', cases);
+  barFlat('ch-atype', cases.flatMap(c => c.anesthesiaType||[]));
+  barFlat('ch-blocks', cases.flatMap(c => [...(c.ssBlocks||[]), ...(c.cathSite||[]), ...(c.naxType?[c.naxType.split('(')[0].trim()]:[])  ]));
+  barFrom('ch-out', cases, 'outcome');
+  const pm = {0:'Ninguno',1:'Leves',2:'Moderados',3:'Severos'};
+  barFlat('ch-ponv', cases.map(c => pm[c.ponv]||'—').filter(x=>x!=='—'));
+}
+
+function barFrom(id, data, field) {
+  const c = {}; data.forEach(x => { const val=x[field]||'N/A'; c[val]=(c[val]||0)+1; });
+  barFlat(id, null, c);
+}
+function barFlat(id, arr, obj) {
+  const c = obj||{};
+  if (arr) arr.forEach(x => { c[x]=(c[x]||0)+1; });
+  const s = Object.entries(c).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const mx = Math.max(...s.map(x=>x[1]),1);
+  document.getElementById(id).innerHTML = s.map(([l,v]) =>
+    `<div class="brow"><div class="blabel" title="${l}">${l}</div><div class="btrack"><div class="bfill" style="width:${(v/mx*100).toFixed(0)}%"></div></div><div class="bval">${v}</div></div>`
+  ).join('') || '<div style="color:var(--text-faint);font-size:0.72rem;text-align:center;padding:1rem">Sin datos</div>';
+}
+function pie(id, data) {
+  const cols = ['#00d4aa','#0094ff','#f4c542','#ff6b6b','#b48aff','#ff914d'];
+  const c = {}; data.forEach(x => { if(x.asa) c['ASA '+x.asa]=(c['ASA '+x.asa]||0)+1; });
+  const entries = Object.entries(c);
+  const tot = entries.reduce((s,[,v])=>s+v,0)||1;
+  let svg = `<svg width="100" height="100" viewBox="0 0 100 100" style="transform:rotate(-90deg)">`;
+  let st = 0;
+  entries.forEach(([k,v],i) => {
+    const sl=v/tot*360; const s=pol(50,50,38,st), e=pol(50,50,38,st+sl);
+    svg += `<path d="M50 50 L${s.x} ${s.y} A38 38 0 ${sl>180?1:0} 1 ${e.x} ${e.y}Z" fill="${cols[i%cols.length]}" opacity="0.85"/>`;
+    st+=sl;
+  });
+  svg += '</svg>';
+  const leg = entries.map(([k,v],i) =>
+    `<div class="li"><div class="ld" style="background:${cols[i%cols.length]}"></div>${k}: ${v} (${Math.round(v/tot*100)}%)</div>`
+  ).join('');
+  document.getElementById(id).innerHTML = `<div class="pie-c">${svg}<div class="pie-l">${leg}</div></div>`;
+}
+function pol(cx,cy,r,a) {
+  const rad=(a-90)*Math.PI/180;
+  return {x:+(cx+r*Math.cos(rad)).toFixed(2), y:+(cy+r*Math.sin(rad)).toFixed(2)};
+}
+
+// ══════════════════════════════════════════
+// HEADER
+// ══════════════════════════════════════════
+function hdr() {
+  load(); const n = cases.length;
+  document.getElementById('hdr-total').textContent = n;
+  const m = new Date().toISOString().slice(0,7);
+  document.getElementById('hdr-month').textContent = cases.filter(c=>c.date?.startsWith(m)).length;
+  document.getElementById('hdr-reg').textContent = cases.filter(c=>c.hasSS||c.hasCath||c.hasNax).length;
+  const comp = n ? ((cases.filter(c=>c.outcome==='Complicado').length/n)*100).toFixed(0) : 0;
+  document.getElementById('hdr-comp').textContent = comp + '%';
+}
+
+// ══════════════════════════════════════════
+// EXPORT / IMPORT
+// ══════════════════════════════════════════
+function exportCSV() {
+  load();
+  if (!cases.length) { toast('Sin casos', true); return; }
+  const h = ['fecha','nombre','id','edad','sexo','peso','talla','asa','procedimiento','especialidad','urgencia','duracion_min','tipo_anestesia','inductor','mantenimiento','modelo_tci_prop','ce_prop_mcgml','opioide','modelo_tci_remi','ce_remi_ngml','tiene_regional','bloqueos_ss','al_bloqueo','vol_al_ml','coadyuvantes','tiene_cateter','sitio_cateter','tiene_elastomera','sangrado_ml','eva_pacu','nvpo','complicaciones_pop','resultado','es_lipo','vol_tumescente_ml','lido_total_mg','lido_mgkg','vol_aspirado_ml','sangre_aspirado_ml','grasa_pura_ml','hb_preop','hb_24h_pop','caida_hb','notas'];
+  const rows = cases.map(c => [
+    c.date, `"${c.name||''}"`, c.pid, c.age, c.sex, c.weight, c.height, c.asa,
+    `"${c.procedure||''}"`, `"${c.specialty||''}"`, c.urgency, c.duration,
+    `"${(c.anesthesiaType||[]).join('; ')}"`, c.inductor, c.maintenance,
+    c.tciPropModel||'', c.tciPropCe||'',
+    c.opioid, c.remiTciModel||'', c.remiTciCe||'',
+    c.hasNax||c.hasSS||c.hasCath?'Sí':'No',
+    `"${(c.ssBlocks||[]).join('; ')}"`, c.ssLA||c.naxLA||'', c.ssVolume||c.naxLADose||'',
+    `"${(c.ssAdj||[]).join('; ')}"`,
+    c.hasCath?'Sí':'No', `"${(c.cathSite||[]).join('; ')}"`,
+    c.hasElasto?'Sí':'No',
+    c.bleeding, c.painScore,
+    ['—','Leves','Moderados','Severos'][c.ponv]||'—',
+    `"${(c.postopComp||[]).join('; ')}"`,
+    c.outcome,
+    c.isContorno?'Sí':'No',
+    c.tumesVol||'', c.tumesLidoTotal||'', c.tumesLidoMgKg||'',
+    c.aspirado||'', c.bloodAsp||'', c.fatAsp||'',
+    c.hbPre||'', c.hb24h||'', c.hbDrop||'',
+    `"${(c.notes||'').replace(/"/g,"'")}"`
+  ].join(','));
+  dl([h.join(','), ...rows].join('\n'), `anestlog_${new Date().toISOString().slice(0,10)}.csv`, 'text/csv');
+  toast('CSV exportado ✓');
+}
+
+function exportJSON() {
+  load();
+  if (!cases.length) { toast('Sin casos', true); return; }
+  dl(JSON.stringify({version:4, exported:new Date().toISOString(), cases}, null, 2),
+    `anestlog_backup_${new Date().toISOString().slice(0,10)}.json`, 'application/json');
+  toast('JSON exportado ✓');
+}
+
+function importBackup(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const r = new FileReader();
+  r.onload = ev => {
+    try {
+      const d = JSON.parse(ev.target.result);
+      const imp = d.cases || (Array.isArray(d) ? d : null);
+      if (!imp) throw new Error();
+      if (!confirm(`¿Restaurar ${imp.length} casos? Esto reemplazará los datos actuales.`)) return;
+      cases = imp; persist(); toast(`✓ ${imp.length} casos restaurados`);
+    } catch { toast('Error al leer el archivo', true); }
+  };
+  r.readAsText(file); e.target.value = '';
+}
+
+function clearAll() {
+  if (!confirm('¿Borrar TODOS los datos?')) return;
+  if (!confirm('¿Confirmas? No se puede deshacer.')) return;
+  cases = []; persist(); toast('Datos eliminados');
+}
+
+function dl(content, name, type) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([content], {type}));
+  a.download = name; a.click();
+}
+
+// ══════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════
+function toast(msg, err=false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (err?' err':'');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+</script>
+
+</body>
+</html>
