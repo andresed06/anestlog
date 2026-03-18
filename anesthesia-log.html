@@ -670,17 +670,27 @@ transition:all 0.15s;touch-action:manipulation;
         <select id="f-ss-side"><option value="">—</option><option>Derecho</option><option>Izquierdo</option><option>Bilateral</option></select>
       </div>
       <div class="fgg"><label>Anestésico local</label>
-        <select id="f-ss-la">
+        <select id="f-ss-la" onchange="calcSS()">
           <option value="">—</option>
-          <option>Bupivacaína 0.25%</option><option>Bupivacaína 0.5%</option>
-          <option>Levobupivacaína 0.25%</option><option>Levobupivacaína 0.5%</option>
-          <option>Ropivacaína 0.2%</option><option>Ropivacaína 0.375%</option>
-          <option>Ropivacaína 0.5%</option><option>Ropivacaína 0.75%</option>
-          <option>Lidocaína 1%</option><option>Lidocaína 2%</option>
-          <option>Mezcla bupi + lido</option>
+          <option value="bupi0.25">Bupivacaína 0.25%</option><option value="bupi0.5">Bupivacaína 0.5%</option>
+          <option value="levobupi0.25">Levobupivacaína 0.25%</option><option value="levobupi0.5">Levobupivacaína 0.5%</option>
+          <option value="ropi0.2">Ropivacaína 0.2%</option><option value="ropi0.375">Ropivacaína 0.375%</option>
+          <option value="ropi0.5">Ropivacaína 0.5%</option><option value="ropi0.75">Ropivacaína 0.75%</option>
+          <option value="lido1">Lidocaína 1%</option><option value="lido2">Lidocaína 2%</option>
+          <option value="mezcla">Mezcla bupi + lido</option>
         </select>
       </div>
-      <div class="fgg"><label>Volumen AL (mL)</label><input type="number" id="f-ss-volume" placeholder="20"></div>
+      <div class="fgg"><label>Volumen AL (mL)</label><input type="number" id="f-ss-volume" placeholder="20" oninput="calcSS()"></div>
+      <div class="fgg"><label>Dosis total AL (mg)</label><input type="number" id="f-ss-dose-total" readonly placeholder="Auto" style="color:#00d4aa"></div>
+      <div class="fgg"><label>Dosis AL (mg/kg)</label><input type="number" id="f-ss-dose-mgkg" readonly placeholder="Auto" style="color:#00d4aa"></div>
+      <div id="ss-calc-box" style="display:none;grid-column:1/-1;background:rgba(0,212,170,0.05);border:1px solid rgba(0,212,170,0.2);border-radius:8px;padding:0.85rem">
+        <div style="font-family:'Syne',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#00d4aa;margin-bottom:0.5rem">◎ Cálculo de Dosis</div>
+        <div id="ss-calc-rows"></div>
+      </div>
+      <div id="ss-alert-box" style="display:none;grid-column:1/-1;background:rgba(255,107,107,0.05);border:1px solid rgba(255,107,107,0.3);border-radius:8px;padding:0.85rem">
+        <div style="font-family:'Syne',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#ff6b6b;margin-bottom:0.5rem">⚠ ALERTA DE DOSIS</div>
+        <div id="ss-alert-rows"></div>
+      </div>
       <div class="fgg full"><label>Coadyuvantes</label>
         <div class="chips" data-group="ss-adj" data-color="on-blue">
           <span class="chip">Dexametasona perineural</span><span class="chip">Dexametasona IV</span>
@@ -717,13 +727,22 @@ transition:all 0.15s;touch-action:manipulation;
         <select id="f-cath-side"><option value="">—</option><option>Derecho</option><option>Izquierdo</option><option>Bilateral</option></select>
       </div>
       <div class="fgg"><label>AL de infusión</label>
-        <select id="f-cath-la">
-          <option value="">—</option><option>Ropivacaína 0.2%</option><option>Ropivacaína 0.1%</option>
-          <option>Bupivacaína 0.125%</option><option>Levobupivacaína 0.125%</option>
+        <select id="f-cath-la" onchange="calcCath()">
+          <option value="">—</option><option value="ropi0.2">Ropivacaína 0.2%</option><option value="ropi0.1">Ropivacaína 0.1%</option>
+          <option value="bupi0.125">Bupivacaína 0.125%</option><option value="levobupi0.125">Levobupivacaína 0.125%</option>
         </select>
       </div>
-      <div class="fgg"><label>Tasa infusión (mL/h)</label><input type="number" id="f-cath-rate" placeholder="5"></div>
+      <div class="fgg"><label>Volumen reservorio (mL)</label><input type="number" id="f-cath-vol" placeholder="250" oninput="calcCath()"></div>
+      <div class="fgg"><label>Tasa infusión (mL/h)</label><input type="number" id="f-cath-rate" placeholder="5" oninput="calcCath()"></div>
       <div class="fgg"><label>Dosis bolo / PCA</label><input type="text" id="f-cath-bolus" placeholder="Ej: 5mL c/60min"></div>
+      <div class="fgg"><label>Dosis AL (mg/h)</label><input type="number" id="f-cath-dose-h" readonly placeholder="Auto" style="color:#00d4aa"></div>
+      <div class="fgg"><label>Dosis AL (mg/24h)</label><input type="number" id="f-cath-dose-24h" readonly placeholder="Auto" style="color:#00d4aa"></div>
+      <div class="fgg"><label>Duración estimada (h)</label><input type="number" id="f-cath-dur-h" readonly placeholder="Auto" style="color:#f4c542"></div>
+      <div class="fgg"><label>Duración estimada (días)</label><input type="number" id="f-cath-dur-d" readonly placeholder="Auto" style="color:#f4c542"></div>
+      <div id="cath-calc-box" style="display:none;grid-column:1/-1;background:rgba(0,212,170,0.05);border:1px solid rgba(0,212,170,0.2);border-radius:8px;padding:0.85rem">
+        <div style="font-family:'Syne',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#00d4aa;margin-bottom:0.5rem">◎ Cálculo Infusión Continua</div>
+        <div id="cath-calc-rows"></div>
+      </div>
       <div class="fgg"><label>Coadyuvantes infusión</label>
         <div class="chips" data-group="cath-adj" data-color="on-blue">
           <span class="chip">Dexmedetomidina</span><span class="chip">Clonidina</span><span class="chip">Ninguno</span>
@@ -1198,6 +1217,98 @@ function calcHb24() {
 }
 
 // ══════════════════════════════════════════
+// AL DOSE CALCULATIONS — SINGLE SHOT & CATHETER
+// ══════════════════════════════════════════
+const AL_DATA = {
+  'bupi0.25':     {name:'Bupivacaína 0.25%',      conc:2.5,  drug:'bupi'},
+  'bupi0.5':      {name:'Bupivacaína 0.5%',        conc:5.0,  drug:'bupi'},
+  'levobupi0.25': {name:'Levobupivacaína 0.25%',   conc:2.5,  drug:'bupi'},
+  'levobupi0.5':  {name:'Levobupivacaína 0.5%',    conc:5.0,  drug:'bupi'},
+  'ropi0.2':      {name:'Ropivacaína 0.2%',        conc:2.0,  drug:'ropi'},
+  'ropi0.375':    {name:'Ropivacaína 0.375%',      conc:3.75, drug:'ropi'},
+  'ropi0.5':      {name:'Ropivacaína 0.5%',        conc:5.0,  drug:'ropi'},
+  'ropi0.75':     {name:'Ropivacaína 0.75%',       conc:7.5,  drug:'ropi'},
+  'lido1':        {name:'Lidocaína 1%',             conc:10.0, drug:'lido'},
+  'lido2':        {name:'Lidocaína 2%',             conc:20.0, drug:'lido'},
+  'ropi0.1':      {name:'Ropivacaína 0.1%',        conc:1.0,  drug:'ropi'},
+  'bupi0.125':    {name:'Bupivacaína 0.125%',      conc:1.25, drug:'bupi'},
+  'levobupi0.125':{name:'Levobupivacaína 0.125%',  conc:1.25, drug:'bupi'},
+};
+const MAX_DOSE = {
+  bupi: {sin_epi:2.5, con_epi:3.0, label:'Bupivacaína / Levobupivacaína'},
+  ropi: {sin_epi:3.0, con_epi:3.5, label:'Ropivacaína'},
+  lido: {sin_epi:4.5, con_epi:7.0, label:'Lidocaína'},
+};
+
+function dRow(label, val, color) {
+  return `<div style="font-size:0.75rem;color:#7a9ab5;padding:0.18rem 0;display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.04)"><span>${label}</span><span style="font-weight:700;color:${color||'#e8f0f8'}">${val}</span></div>`;
+}
+
+function calcSS() {
+  const laVal = document.getElementById('f-ss-la').value;
+  const vol = parseFloat(document.getElementById('f-ss-volume').value) || 0;
+  const peso = parseFloat(document.getElementById('f-weight').value) || 0;
+  const al = AL_DATA[laVal];
+  const calcBox = document.getElementById('ss-calc-box');
+  const alertBox = document.getElementById('ss-alert-box');
+  if (!al || vol <= 0) { calcBox.style.display='none'; alertBox.style.display='none'; return; }
+
+  const doseTotal = (al.conc * vol).toFixed(1);
+  const doseMgKg = peso > 0 ? (parseFloat(doseTotal)/peso).toFixed(2) : null;
+  document.getElementById('f-ss-dose-total').value = doseTotal;
+  if (doseMgKg) document.getElementById('f-ss-dose-mgkg').value = doseMgKg;
+
+  const md = MAX_DOSE[al.drug];
+  let rows = dRow('AL / Concentración', al.name+' ('+al.conc+' mg/mL)', '#e8f0f8');
+  rows += dRow('Volumen utilizado', vol+' mL', '#e8f0f8');
+  rows += dRow('Dosis total', doseTotal+' mg', '#00d4aa');
+  if (doseMgKg) rows += dRow('Dosis en mg/kg', doseMgKg+' mg/kg', '#00d4aa');
+  if (peso > 0) {
+    rows += dRow('Límite máx. sin epinefrina', (md.sin_epi*peso).toFixed(0)+' mg ('+md.sin_epi+' mg/kg)', '#f4c542');
+    rows += dRow('Límite máx. con epinefrina', (md.con_epi*peso).toFixed(0)+' mg ('+md.con_epi+' mg/kg)', '#f4c542');
+  }
+  document.getElementById('ss-calc-rows').innerHTML = rows;
+  calcBox.style.display = 'block';
+
+  if (peso > 0 && parseFloat(doseMgKg) > md.sin_epi) {
+    const overConEpi = parseFloat(doseMgKg) > md.con_epi;
+    alertBox.style.display = 'block';
+    document.getElementById('ss-alert-rows').innerHTML = `<div style="font-size:0.78rem;color:#ff6b6b">${overConEpi
+      ? '⚠ DOSIS SUPERA el límite incluso CON epinefrina ('+md.con_epi+' mg/kg) — Revisar urgente'
+      : '⚠ Dosis supera límite SIN epinefrina ('+md.sin_epi+' mg/kg) — Aceptable solo CON epinefrina'}</div>`;
+  } else { alertBox.style.display='none'; }
+}
+
+function calcCath() {
+  const laVal = document.getElementById('f-cath-la').value;
+  const rate = parseFloat(document.getElementById('f-cath-rate').value) || 0;
+  const vol = parseFloat(document.getElementById('f-cath-vol')?.value) || 0;
+  const peso = parseFloat(document.getElementById('f-weight').value) || 0;
+  const al = AL_DATA[laVal];
+  const calcBox = document.getElementById('cath-calc-box');
+  if (!al || rate <= 0) { calcBox.style.display='none'; return; }
+
+  const doseH = (al.conc * rate).toFixed(1);
+  const dose24 = (parseFloat(doseH)*24).toFixed(0);
+  const doseMgKgH = peso > 0 ? (parseFloat(doseH)/peso).toFixed(3) : null;
+  const durH = vol > 0 ? (vol/rate).toFixed(1) : null;
+  const durD = durH ? (parseFloat(durH)/24).toFixed(1) : null;
+
+  document.getElementById('f-cath-dose-h').value = doseH;
+  document.getElementById('f-cath-dose-24h').value = dose24;
+  if (durH) { document.getElementById('f-cath-dur-h').value = durH; document.getElementById('f-cath-dur-d').value = durD; }
+
+  let rows = dRow('AL / Concentración', al.name+' ('+al.conc+' mg/mL)', '#e8f0f8');
+  rows += dRow('Tasa de infusión', rate+' mL/h', '#e8f0f8');
+  rows += dRow('Dosis por hora', doseH+' mg/h', '#00d4aa');
+  rows += dRow('Dosis diaria (24h)', dose24+' mg/24h', '#00d4aa');
+  if (doseMgKgH) rows += dRow('Dosis en mg/kg/h', doseMgKgH+' mg/kg/h', '#00d4aa');
+  if (durH) rows += dRow('Duración estimada', durH+' horas / '+durD+' días', '#f4c542');
+  document.getElementById('cath-calc-rows').innerHTML = rows;
+  calcBox.style.display = 'block';
+}
+
+// ══════════════════════════════════════════
 // GET VALUE HELPERS
 // ══════════════════════════════════════════
 function v(id) { return document.getElementById(id)?.value || ''; }
@@ -1239,10 +1350,14 @@ function saveCase() {
     naxAttempts: v('f-nax-attempts'), naxNotes: v('f-nax-notes'),
     hasSS: getTgl('tgl-ss'), ssBlocks: getChips('ss-blocks'), ssSide: v('f-ss-side'),
     ssLA: v('f-ss-la'), ssVolume: v('f-ss-volume'),
+    ssDoseTotal: v('f-ss-dose-total'), ssDoseMgKg: v('f-ss-dose-mgkg'),
     ssAdj: getChips('ss-adj'), ssAdjDose: v('f-ss-adj-dose'),
     ssDuration: v('f-ss-duration'), ssNotes: v('f-ss-notes'),
     hasCath: getTgl('tgl-cath'), cathSite: getChips('cath-site'), cathSide: v('f-cath-side'),
-    cathLA: v('f-cath-la'), cathRate: v('f-cath-rate'), cathBolus: v('f-cath-bolus'),
+    cathLA: v('f-cath-la'), cathVol: v('f-cath-vol'), cathRate: v('f-cath-rate'),
+    cathDoseH: v('f-cath-dose-h'), cathDose24: v('f-cath-dose-24h'),
+    cathDurH: v('f-cath-dur-h'), cathDurD: v('f-cath-dur-d'),
+    cathBolus: v('f-cath-bolus'),
     cathAdj: getChips('cath-adj'), cathNotes: v('f-cath-notes'),
     hasElasto: getTgl('tgl-elasto'), elastoType: v('f-elasto-type'), elastoDrug: v('f-elasto-drug'),
     elastoVol: v('f-elasto-vol'), elastoRate: v('f-elasto-rate'),
@@ -1377,11 +1492,14 @@ function showDetail(id) {
   if (c.hasSS) reg += `<div class="dsec" style="color:var(--purple)">BLOQUEO PERIFÉRICO SINGLE SHOT</div><div class="dgrid">
     ${r('Bloqueos',(c.ssBlocks||[]).join(', '))}${r('Lado',c.ssSide)}
     ${r('AL / Volumen',c.ssLA+(c.ssVolume?' — '+c.ssVolume+' mL':''))}
+    ${r('Dosis total',c.ssDoseTotal?c.ssDoseTotal+' mg':'')}${r('Dosis mg/kg',c.ssDoseMgKg?c.ssDoseMgKg+' mg/kg':'')}
     ${r('Coadyuvantes',(c.ssAdj||[]).join(', '))}${r('Dosis coadyuvante',c.ssAdjDose)}
     ${r('Duración esperada',c.ssDuration?c.ssDuration+' h':'')}${rf('Notas',c.ssNotes)}</div>`;
   if (c.hasCath) reg += `<div class="dsec" style="color:var(--purple)">CATÉTER NERVIO PERIFÉRICO</div><div class="dgrid">
     ${r('Sitio',(c.cathSite||[]).join(', '))}${r('Lado',c.cathSide)}
     ${r('AL infusión',c.cathLA)}${r('Tasa',c.cathRate?c.cathRate+' mL/h':'')}
+    ${r('Dosis/hora',c.cathDoseH?c.cathDoseH+' mg/h':'')}${r('Dosis/24h',c.cathDose24?c.cathDose24+' mg':'')}
+    ${r('Duración estimada',c.cathDurH?(c.cathDurH+' h / '+c.cathDurD+' días'):'')}
     ${r('Bolo/PCA',c.cathBolus)}${r('Coadyuvantes',(c.cathAdj||[]).join(', '))}
     ${rf('Notas catéter',c.cathNotes)}</div>`;
   if (c.hasElasto) reg += `<div class="dsec" style="color:var(--accent2)">BOMBA ELASTOMÉRICA</div><div class="dgrid">
