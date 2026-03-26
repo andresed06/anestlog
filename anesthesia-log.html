@@ -292,12 +292,40 @@ transition:all 0.15s;touch-action:manipulation;
     </div>
     <div class="fgg"><label>Posición</label>
       <select id="f-position">
-        <option value="">—</option><option>Supino</option><option>Prono</option><option>Lateral derecho</option>
-        <option>Lateral izquierdo</option><option>Litotomía</option><option>Trendelenburg</option><option>Sentado</option>
+        <option value="">—</option>
+        <option>Supino</option><option>Prono</option>
+        <option>Supino → Prono</option><option>Prono → Supino</option>
+        <option>Lateral derecho</option><option>Lateral izquierdo</option>
+        <option>Litotomía</option><option>Trendelenburg</option><option>Sentado</option>
+      </select>
+    </div>
+    <div class="fgg"><label>Lateralidad del procedimiento</label>
+      <select id="f-lateralidad">
+        <option value="">—</option><option>Derecho</option><option>Izquierdo</option>
+        <option>Bilateral</option><option>No aplica</option>
       </select>
     </div>
     <div class="fgg"><label>Hospital / Centro</label><input type="text" id="f-hospital" placeholder="Nombre del centro"></div>
     <div class="fgg"><label>Cirujano</label><input type="text" id="f-surgeon" placeholder="Nombre"></div>
+  </div>
+
+  <!-- TORNIQUETE — ortopedia -->
+
+  <div class="trow" style="margin-top:0.75rem">
+    <span class="tlabel">¿Se usó torniquete?</span>
+    <div class="tgl" id="tgl-torniquete" data-tgl="1" data-target="sec-torniquete"></div>
+  </div>
+  <div id="sec-torniquete" style="display:none;margin-top:0.5rem">
+    <div class="fg">
+      <div class="fgg"><label>Lateralidad torniquete</label>
+        <select id="f-torn-lado"><option value="">—</option><option>Derecho</option><option>Izquierdo</option><option>Bilateral</option></select>
+      </div>
+      <div class="fgg"><label>Presión torniquete (mmHg)</label><input type="number" id="f-torn-presion" placeholder="250"></div>
+      <div class="fgg"><label>Tiempo total torniquete (min)</label><input type="number" id="f-torn-tiempo" placeholder="60"></div>
+      <div class="fgg"><label>¿Isquemia tolerada?</label>
+        <select id="f-torn-isquemia"><option value="">—</option><option>Sí — sin complicaciones</option><option>Dolor isquémico</option><option>Requirió desinflado temprano</option></select>
+      </div>
+    </div>
   </div>
 
   <div class="sdiv">Tiempos Quirúrgicos</div>
@@ -614,10 +642,11 @@ transition:all 0.15s;touch-action:manipulation;
   <div id="sec-nax" style="display:none">
     <div class="fg">
       <div class="fgg"><label>Tipo neuroaxial</label>
-        <select id="f-nax-type">
+        <select id="f-nax-type" onchange="toggleNaxAguja()">
           <option value="">—</option>
-          <option>Bloqueo subaracnoideo (spinal)</option><option>Epidural</option>
-          <option>Combinado espinal-epidural (CSE)</option>
+          <option value="spinal">Bloqueo subaracnoideo (spinal)</option>
+          <option value="epidural">Epidural</option>
+          <option value="cse">Combinado espinal-epidural (CSE)</option>
         </select>
       </div>
       <div class="fgg"><label>Nivel de punción</label>
@@ -626,12 +655,41 @@ transition:all 0.15s;touch-action:manipulation;
           <option>L3-L4</option><option>L4-L5</option><option>T10-T11</option><option>T12-L1</option>
         </select>
       </div>
+      <!-- Aguja spinal -->
+      <div class="fgg" id="grp-aguja-spinal" style="display:none"><label>Tipo aguja espinal</label>
+        <select id="f-nax-aguja-tipo">
+          <option value="">—</option>
+          <option>Whitacre (punta de lápiz)</option>
+          <option>Quincke (bisel cortante)</option>
+          <option>Sprotte</option>
+        </select>
+      </div>
+      <div class="fgg" id="grp-aguja-spinal-calibre" style="display:none"><label>Calibre aguja espinal</label>
+        <select id="f-nax-aguja-calibre">
+          <option value="">—</option>
+          <option>25G</option><option>26G</option><option>27G</option><option>29G</option>
+        </select>
+      </div>
+      <!-- Aguja epidural -->
+      <div class="fgg" id="grp-aguja-epidural" style="display:none"><label>Tipo aguja epidural</label>
+        <select id="f-nax-aguja-epi-tipo">
+          <option value="">—</option>
+          <option>Tuohy estándar</option><option>Tuohy con catéter</option>
+        </select>
+      </div>
+      <div class="fgg" id="grp-aguja-epidural-calibre" style="display:none"><label>Calibre aguja epidural</label>
+        <select id="f-nax-aguja-epi-calibre">
+          <option value="">—</option>
+          <option>16G</option><option>17G</option><option>18G</option>
+        </select>
+      </div>
       <div class="fgg"><label>Anestésico local</label>
         <select id="f-nax-la">
           <option value="">—</option>
-          <option>Bupivacaína hiperbárica 0.5%</option><option>Bupivacaína isobárica 0.5%</option>
-          <option>Levobupivacaína 0.5%</option><option>Ropivacaína 0.5%</option>
-          <option>Ropivacaína 0.75%</option><option>Lidocaína hiperbárica 5%</option>
+          <option>Levobupivacaína hiperbárica 0.75%</option>
+          <option>Bupivacaína hiperbárica 0.5%</option>
+          <option>Bupivacaína isobárica 0.5%</option>
+          <option>Lidocaína hiperbárica 5%</option>
         </select>
       </div>
       <div class="fgg"><label>Dosis AL (mg)</label><input type="number" id="f-nax-la-dose" placeholder="15"></div>
@@ -765,9 +823,9 @@ transition:all 0.15s;touch-action:manipulation;
 
   </div>
 
-  <!-- CATÉTER -->
+  <!-- CATÉTER — solo colocación -->
 
-  <div class="sdiv">Analgesia Continua — Catéter de Nervio Periférico</div>
+  <div class="sdiv">Catéter de Nervio Periférico — Colocación</div>
   <div class="trow" style="margin-bottom:0.75rem">
     <span class="tlabel">¿Se colocó catéter de nervio periférico?</span>
     <div class="tgl" id="tgl-cath" data-tgl="1" data-target="sec-cath"></div>
@@ -787,101 +845,173 @@ transition:all 0.15s;touch-action:manipulation;
       <div class="fgg"><label>Lado</label>
         <select id="f-cath-side"><option value="">—</option><option>Derecho</option><option>Izquierdo</option><option>Bilateral</option></select>
       </div>
-      <div class="fgg"><label>AL de infusión (stock)</label>
-        <select id="f-cath-la" onchange="calcCath()">
-          <option value="">—</option>
-          <option value="levobupi0.75">Levobupivacaína 0.75% — amp 10 mL</option>
-          <option value="levobupi0.75epi">Levobupivacaína 0.75% + Epi — amp 10 mL</option>
-          <option value="bupi0.5">Bupivacaína 0.5% — amp 10 mL</option>
-          <option value="bupi0.5epi">Bupivacaína 0.5% + Epi — amp 10 mL</option>
-          <option value="lido2">Lidocaína 2% — amp 10 mL</option>
-        </select>
+      <div class="fgg"><label>Avance catéter (cm)</label><input type="number" id="f-cath-avance" step="0.5" placeholder="5"></div>
+      <div class="fgg"><label>Intentos punción</label>
+        <select id="f-cath-intentos"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4+</option></select>
       </div>
-      <div class="fgg"><label>Concentración deseada en infusión (%)</label>
-        <select id="f-cath-conc-meta" onchange="calcCath()">
-          <option value="">—</option>
-          <option value="0.2">0.2% — Ropivacaína estándar</option>
-          <option value="0.1">0.1% — Ropivacaína baja</option>
-          <option value="0.125">0.125% — Bupivacaína estándar</option>
-          <option value="0.0625">0.0625% — Bupivacaína baja</option>
-          <option value="custom">Otra (especificar)</option>
-        </select>
+      <div class="fgg"><label>Fijación</label>
+        <select id="f-cath-fijacion"><option value="">—</option><option>Tegaderm</option><option>Steri-strip</option><option>Sutura</option><option>Otro</option></select>
       </div>
-      <div class="fgg" id="grp-cath-conc-custom" style="display:none">
-        <label>Concentración personalizada (%)</label>
-        <input type="number" id="f-cath-conc-custom" step="0.01" placeholder="0.15" oninput="calcCath()">
-      </div>
-      <div class="fgg"><label>Días de infusión deseados</label>
-        <input type="number" id="f-cath-dias" placeholder="2" min="1" max="7" oninput="calcCath()">
-      </div>
-      <div class="fgg"><label>Volumen reservorio disponible (mL)</label>
-        <select id="f-cath-vol-reservorio" onchange="calcCath()">
-          <option value="">—</option>
-          <option value="100">100 mL (elastómera pequeña)</option>
-          <option value="250">250 mL (elastómera estándar)</option>
-          <option value="500">500 mL (elastómera grande)</option>
-          <option value="custom">Otro volumen</option>
-        </select>
-      </div>
-      <div class="fgg" id="grp-cath-vol-custom" style="display:none">
-        <label>Volumen personalizado (mL)</label>
-        <input type="number" id="f-cath-vol-custom" placeholder="300" oninput="calcCath()">
-      </div>
-
-```
-  <!-- RESULTADOS CATÉTER -->
-  <div class="fgg"><label>Volumen AL puro necesario (mL)</label><input type="number" id="f-cath-vol-al" readonly placeholder="Auto" style="color:#b48aff"></div>
-  <div class="fgg"><label>Volumen diluyente (SSN 0.9%) (mL)</label><input type="number" id="f-cath-vol-dil" readonly placeholder="Auto" style="color:#b48aff"></div>
-  <div class="fgg"><label>Tasa de infusión (mL/h)</label><input type="number" id="f-cath-rate" readonly placeholder="Auto" style="color:#00d4aa"></div>
-  <div class="fgg"><label>Dosis por hora (mg/h)</label><input type="number" id="f-cath-dose-h" readonly placeholder="Auto" style="color:#00d4aa"></div>
-  <div class="fgg"><label>Dosis diaria (mg/24h)</label><input type="number" id="f-cath-dose-24h" readonly placeholder="Auto" style="color:#00d4aa"></div>
-  <div class="fgg"><label>Duración real (horas)</label><input type="number" id="f-cath-dur-h" readonly placeholder="Auto" style="color:#f4c542"></div>
-  <div class="fgg"><label>Duración real (días)</label><input type="number" id="f-cath-dur-d" readonly placeholder="Auto" style="color:#f4c542"></div>
-  <div class="fgg"><label>Dosis en mg/kg/h</label><input type="number" id="f-cath-dose-kgh" readonly placeholder="Auto" style="color:#00d4aa"></div>
-
-  <div id="cath-calc-box" style="display:none;grid-column:1/-1;background:rgba(180,138,255,0.05);border:1px solid rgba(180,138,255,0.2);border-radius:8px;padding:0.85rem">
-    <div style="font-family:'Syne',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#b48aff;margin-bottom:0.5rem">◎ Preparación de Infusión Continua</div>
-    <div id="cath-calc-rows"></div>
-  </div>
-  <div class="fgg"><label>Coadyuvantes infusión</label>
-    <div class="chips" data-group="cath-adj" data-color="on-blue">
-      <span class="chip">Dexmedetomidina</span><span class="chip">Clonidina</span><span class="chip">Ninguno</span>
+      <div class="fgg full"><label>Notas colocación</label><textarea id="f-cath-notes" placeholder="Técnica, parestesias, dificultades, observaciones..."></textarea></div>
     </div>
   </div>
-  <div class="fgg full"><label>Notas catéter</label><textarea id="f-cath-notes" placeholder="Avance (cm), fijación, complicaciones..."></textarea></div>
-</div>
-```
 
-  </div>
+  <!-- BOMBA / INFUSIÓN CONTINUA — unificada -->
 
-  <!-- ELASTÓMERA -->
-
-  <div class="sdiv">Bomba Elastomérica — Analgesia Ambulatoria</div>
+  <div class="sdiv">Bomba / Infusión Continua Postoperatoria</div>
   <div class="trow" style="margin-bottom:0.75rem">
-    <span class="tlabel">¿Se utilizó bomba elastomérica?</span>
+    <span class="tlabel">¿Se utilizó bomba de infusión continua?</span>
     <div class="tgl" id="tgl-elasto" data-tgl="1" data-target="sec-elasto"></div>
   </div>
   <div id="sec-elasto" style="display:none">
     <div class="fg">
+      <!-- VÍA -->
+      <div class="fgg"><label>Vía de administración</label>
+        <select id="f-elasto-via" onchange="toggleElastoVia()">
+          <option value="">—</option>
+          <option value="periferico">Catéter nervio periférico</option>
+          <option value="epidural">Epidural / Peridural</option>
+          <option value="venosa">Venosa IV</option>
+          <option value="subcutanea">Subcutánea</option>
+        </select>
+      </div>
+      <!-- TIPO DE BOMBA -->
       <div class="fgg"><label>Tipo de bomba</label>
         <select id="f-elasto-type">
-          <option value="">—</option><option>Elastomérica 100 mL</option>
-          <option>Elastomérica 250 mL</option><option>Elastomérica 500 mL</option>
-          <option>Bomba electrónica ambulatoria</option>
+          <option value="">—</option>
+          <option>Elastomérica blanda 100 mL</option>
+          <option>Elastomérica blanda 250 mL</option>
+          <option>Elastomérica blanda 400 mL</option>
+          <option>Elastomérica rígida 100 mL</option>
+          <option>Elastomérica rígida 250 mL</option>
+          <option>Elastomérica rígida 400 mL</option>
+          <option>Bomba numérica / electrónica</option>
         </select>
       </div>
-      <div class="fgg"><label>Fármaco</label>
-        <select id="f-elasto-drug">
-          <option value="">—</option><option>Ropivacaína 0.2%</option><option>Ropivacaína 0.1%</option>
-          <option>Bupivacaína 0.125%</option><option>Levobupivacaína 0.125%</option>
-        </select>
-      </div>
-      <div class="fgg"><label>Volumen total (mL)</label><input type="number" id="f-elasto-vol" placeholder="250"></div>
-      <div class="fgg"><label>Tasa de flujo (mL/h)</label><input type="number" id="f-elasto-rate" placeholder="5"></div>
-      <div class="fgg"><label>Duración programada (h)</label><input type="number" id="f-elasto-dur" placeholder="48"></div>
-      <div class="fgg"><label>Sitio de infusión</label><input type="text" id="f-elasto-site" placeholder="Ej: catéter femoral, herida"></div>
-      <div class="fgg full"><label>Notas bomba</label><textarea id="f-elasto-notes" placeholder="Instrucciones al paciente, manejo ambulatorio..."></textarea></div>
     </div>
+
+```
+<!-- BLOQUE AL — para periférico y epidural -->
+<div id="elasto-grp-al" style="display:none;margin-top:0.75rem">
+  <div class="fg">
+    <div class="fgg"><label>AL stock</label>
+      <select id="f-elasto-la" onchange="calcElasto()">
+        <option value="">—</option>
+        <option value="levobupi0.75">Levobupivacaína 0.75% — amp 10 mL</option>
+        <option value="levobupi0.75epi">Levobupivacaína 0.75% + Epi — amp 10 mL</option>
+        <option value="bupi0.5">Bupivacaína 0.5% — amp 10 mL</option>
+        <option value="bupi0.5epi">Bupivacaína 0.5% + Epi — amp 10 mL</option>
+        <option value="lido2">Lidocaína 2% — amp 10 mL</option>
+      </select>
+    </div>
+    <div class="fgg"><label>Concentración deseada (%)</label>
+      <select id="f-elasto-conc-meta" onchange="calcElasto()">
+        <option value="">—</option>
+        <option value="0.2">0.2%</option>
+        <option value="0.125">0.125%</option>
+        <option value="0.1">0.1%</option>
+        <option value="0.0625">0.0625%</option>
+        <option value="custom">Otra</option>
+      </select>
+    </div>
+    <div class="fgg" id="grp-elasto-conc-custom" style="display:none">
+      <label>Concentración personalizada (%)</label>
+      <input type="number" id="f-elasto-conc-custom" step="0.01" placeholder="0.15" oninput="calcElasto()">
+    </div>
+    <div class="fgg"><label>Días de infusión deseados</label>
+      <input type="number" id="f-elasto-dias" placeholder="2" min="1" max="7" oninput="calcElasto()">
+    </div>
+    <div class="fgg"><label>Volumen reservorio (mL)</label>
+      <select id="f-elasto-vol-reservorio" onchange="calcElasto()">
+        <option value="">—</option>
+        <option value="100">100 mL</option>
+        <option value="250">250 mL</option>
+        <option value="400">400 mL</option>
+        <option value="custom">Otro</option>
+      </select>
+    </div>
+    <div class="fgg" id="grp-elasto-vol-custom" style="display:none">
+      <label>Volumen personalizado (mL)</label>
+      <input type="number" id="f-elasto-vol-custom" placeholder="300" oninput="calcElasto()">
+    </div>
+    <!-- RESULTADOS AL -->
+    <div class="fgg"><label>Volumen AL puro (mL)</label><input type="number" id="f-elasto-vol-al" readonly placeholder="Auto" style="color:#b48aff"></div>
+    <div class="fgg"><label>Volumen SSN 0.9% (mL)</label><input type="number" id="f-elasto-vol-dil" readonly placeholder="Auto" style="color:#7a9ab5"></div>
+    <div class="fgg"><label>Tasa de infusión (mL/h)</label><input type="number" id="f-elasto-rate" readonly placeholder="Auto" style="color:#00d4aa"></div>
+    <div class="fgg"><label>Dosis por hora (mg/h)</label><input type="number" id="f-elasto-dose-h" readonly placeholder="Auto" style="color:#00d4aa"></div>
+    <div class="fgg"><label>Duración (horas / días)</label><input type="text" id="f-elasto-dur-txt" readonly placeholder="Auto" style="color:#f4c542"></div>
+    <div id="elasto-calc-box" style="display:none;grid-column:1/-1;background:rgba(180,138,255,0.05);border:1px solid rgba(180,138,255,0.2);border-radius:8px;padding:0.85rem">
+      <div style="font-family:'Syne',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#b48aff;margin-bottom:0.5rem">◎ Preparación Bomba AL</div>
+      <div id="elasto-calc-rows"></div>
+    </div>
+    <div class="fgg full"><label>Coadyuvantes AL</label>
+      <div class="chips" data-group="elasto-adj-al" data-color="on-blue">
+        <span class="chip">Dexmedetomidina</span><span class="chip">Clonidina</span><span class="chip">Ninguno</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BLOQUE MEDICAMENTOS — para venosa y subcutánea -->
+<div id="elasto-grp-meds" style="display:none;margin-top:0.75rem">
+  <div class="fg">
+    <div style="grid-column:1/-1;font-size:0.62rem;color:#7a9ab5;margin-bottom:0.25rem;font-family:'Syne',sans-serif;letter-spacing:0.06em;text-transform:uppercase">Ingresa cualquier 2 valores — el tercero se calcula automáticamente</div>
+    <div class="fgg">
+      <label>Días de infusión</label>
+      <input type="number" id="f-elasto-meds-dias" placeholder="Ej: 3" step="0.5" min="0"
+        oninput="resetElastoMedsIfEmpty('dias'); calcElastoMeds('dias')">
+    </div>
+    <div class="fgg">
+      <label>Tasa de infusión (mL/h)</label>
+      <input type="number" id="f-elasto-meds-tasa" step="0.5" placeholder="0.5 — 7.0" min="0"
+        oninput="resetElastoMedsIfEmpty('tasa'); calcElastoMeds('tasa')">
+    </div>
+    <div class="fgg">
+      <label>Volumen total (mL)</label>
+      <input type="number" id="f-elasto-meds-vol" placeholder="Ej: 400" min="0"
+        oninput="resetElastoMedsIfEmpty('vol'); calcElastoMeds('vol')">
+    </div>
+    <div class="fgg">
+      <label>Duración calculada</label>
+      <input type="text" id="f-elasto-meds-dur" readonly placeholder="Auto" style="color:#f4c542">
+    </div>
+    <div class="fgg full"><label>Medicamentos en la bomba</label>
+      <div class="chips" data-group="elasto-meds" data-color="on-blue" id="elasto-meds-chips">
+        <span class="chip">Tramadol</span><span class="chip">Morfina</span>
+        <span class="chip">Oxicodona</span><span class="chip">Ketamina</span>
+        <span class="chip">Dexmedetomidina</span><span class="chip">Ketorolaco</span>
+        <span class="chip">Dipirona</span><span class="chip">Dexametasona</span>
+        <span class="chip">Ondansetrón</span><span class="chip">Nefopam (Acupan)</span>
+      </div>
+    </div>
+    <!-- DOSIS INDIVIDUALES -->
+    <div class="fgg"><label>Tramadol (mg total)</label><input type="number" id="f-em-tramadol" placeholder="300" oninput="calcElastoMedsAlertas()"></div>
+    <div class="fgg"><label>Ketorolaco (mg total)</label><input type="number" id="f-em-ketorolaco" placeholder="90" oninput="calcElastoMedsAlertas()"></div>
+    <div class="fgg"><label>Dexametasona (mg total)</label><input type="number" id="f-em-dexametasona" placeholder="16" oninput="calcElastoMedsAlertas()"></div>
+    <div class="fgg"><label>Ondansetrón (mg total)</label><input type="number" id="f-em-ondansetron" placeholder="16" oninput="calcElastoMedsAlertas()"></div>
+    <div class="fgg"><label>Dexmedetomidina (mcg total)</label><input type="number" id="f-em-dexmedo" placeholder="20" oninput="calcElastoMedsAlertas()"></div>
+    <div class="fgg"><label>Morfina (mg total)</label><input type="number" id="f-em-morfina" placeholder="" oninput="calcElastoMedsAlertas()"></div>
+    <div class="fgg"><label>Dipirona (mg total)</label><input type="number" id="f-em-dipirona" placeholder=""></div>
+    <div class="fgg"><label>Ketamina (mg total)</label><input type="number" id="f-em-ketamina" placeholder="" oninput="calcElastoMedsAlertas()"></div>
+    <div class="fgg"><label>Nefopam (mg total)</label><input type="number" id="f-em-nefopam" placeholder=""></div>
+    <div class="fgg"><label>Otro medicamento</label><input type="text" id="f-elasto-med-otro" placeholder="Especificar..."></div>
+    <div class="fgg full"><label>Notas / Instrucciones preparación</label>
+      <textarea id="f-elasto-meds-dosis" placeholder="Ej: Disolver en 400 mL SSN 0.9%, verificar compatibilidad visual..."></textarea>
+    </div>
+
+    <!-- PANEL DE ALERTAS -->
+    <div id="elasto-meds-alertas" style="display:none;grid-column:1/-1"></div>
+  </div>
+</div>
+
+<!-- NOTAS COMUNES -->
+<div class="fg" style="margin-top:0.75rem">
+  <div class="fgg full"><label>Notas / Instrucciones para el paciente</label>
+    <textarea id="f-elasto-notes" placeholder="Instrucciones de manejo ambulatorio, cuidados del catéter, signos de alarma..."></textarea>
+  </div>
+</div>
+```
+
   </div>
 </div>
 
@@ -1528,9 +1658,229 @@ function calcCath() {
   document.getElementById('cath-calc-rows').innerHTML = rows;
   calcBox.style.display = 'block';
 }
+
 // ══════════════════════════════════════════
-// GET VALUE HELPERS
+// AGUJA NEUROAXIAL
 // ══════════════════════════════════════════
+function toggleNaxAguja() {
+  const tipo = document.getElementById('f-nax-type').value;
+  const isSpinal = tipo === 'spinal' || tipo === 'cse';
+  const isEpi = tipo === 'epidural' || tipo === 'cse';
+  document.getElementById('grp-aguja-spinal').style.display = isSpinal ? 'flex' : 'none';
+  document.getElementById('grp-aguja-spinal-calibre').style.display = isSpinal ? 'flex' : 'none';
+  document.getElementById('grp-aguja-epidural').style.display = isEpi ? 'flex' : 'none';
+  document.getElementById('grp-aguja-epidural-calibre').style.display = isEpi ? 'flex' : 'none';
+}
+
+// ══════════════════════════════════════════
+// BOMBA IV/SC — CÁLCULO VOLUMEN + ALERTAS
+// ══════════════════════════════════════════
+function resetElastoMedsIfEmpty(campo) {
+  const el = document.getElementById('f-elasto-meds-' + campo);
+  if (!el.value) {
+    // Field was cleared — unlock all three fields so user can re-enter
+    ['dias','tasa','vol'].forEach(f => {
+      const e = document.getElementById('f-elasto-meds-' + f);
+      e.readOnly = false;
+      e.style.color = '#e8f0f8';
+    });
+    document.getElementById('f-elasto-meds-dur').value = '';
+  }
+}
+
+function calcElastoMeds(campoEditado) {
+  const elDias = document.getElementById('f-elasto-meds-dias');
+  const elTasa = document.getElementById('f-elasto-meds-tasa');
+  const elVol  = document.getElementById('f-elasto-meds-vol');
+  const elDur  = document.getElementById('f-elasto-meds-dur');
+
+  const dias = parseFloat(elDias.value);
+  const tasa = parseFloat(elTasa.value);
+  const vol  = parseFloat(elVol.value);
+
+  const hasDias = !isNaN(dias) && dias > 0;
+  const hasTasa = !isNaN(tasa) && tasa > 0;
+  const hasVol  = !isNaN(vol)  && vol  > 0;
+
+  let diasCalc, tasaCalc, volCalc;
+
+  // Calcula el campo que NO fue editado y tiene los otros 2 disponibles
+  if (campoEditado !== 'vol' && hasDias && hasTasa) {
+    volCalc = tasa * dias * 24;
+    elVol.value = volCalc.toFixed(0);
+    elVol.style.color = '#00d4aa';
+    elVol.readOnly = true;
+    elDias.readOnly = false; elTasa.readOnly = false;
+  } else if (campoEditado !== 'tasa' && hasDias && hasVol) {
+    tasaCalc = vol / (dias * 24);
+    elTasa.value = tasaCalc.toFixed(2);
+    elTasa.style.color = '#00d4aa';
+    elTasa.readOnly = true;
+    elDias.readOnly = false; elVol.readOnly = false;
+  } else if (campoEditado !== 'dias' && hasTasa && hasVol) {
+    const horas = vol / tasa;
+    diasCalc = horas / 24;
+    elDias.value = diasCalc.toFixed(1);
+    elDias.style.color = '#00d4aa';
+    elDias.readOnly = true;
+    elTasa.readOnly = false; elVol.readOnly = false;
+  }
+
+  // Recalculate duración display
+  const d = parseFloat(elDias.value);
+  const t = parseFloat(elTasa.value);
+  const v = parseFloat(elVol.value);
+  if (!isNaN(d) && !isNaN(t) && t > 0) {
+    const h = d * 24;
+    elDur.value = h.toFixed(0) + ' h (' + d.toFixed(1) + ' días)';
+  } else if (!isNaN(v) && !isNaN(t) && t > 0) {
+    const h = v / t;
+    elDur.value = h.toFixed(1) + ' h (' + (h/24).toFixed(1) + ' días)';
+  }
+
+  // Color alerts on fields
+  const vFinal = parseFloat(elVol.value);
+  const tFinal = parseFloat(elTasa.value);
+  if (!isNaN(vFinal)) elVol.style.color = vFinal > 450 ? '#ff6b6b' : '#00d4aa';
+  if (!isNaN(tFinal)) elTasa.style.color = (tFinal > 7 || tFinal < 0.5) ? '#ff6b6b' : '#00d4aa';
+
+  calcElastoMedsAlertas();
+}
+
+function calcElastoMedsAlertas() {
+  const peso = parseFloat(document.getElementById('f-weight').value) || 0;
+  const dias = parseFloat(document.getElementById('f-elasto-meds-dias').value) || 1;
+  const comorbid = getChips('comorbid');
+  const irc = comorbid.includes('IRC');
+  const hepato = comorbid.includes('Hepatopatía');
+  const dm = comorbid.includes('DM');
+  const apnea = comorbid.includes('Apnea sueño');
+  const tasa = parseFloat(document.getElementById('f-elasto-meds-tasa').value) || 0;
+  const vol = parseFloat(document.getElementById('f-elasto-meds-vol').value) || 0;
+
+  const tramadol = parseFloat(document.getElementById('f-em-tramadol').value) || 0;
+  const ketorolaco = parseFloat(document.getElementById('f-em-ketorolaco').value) || 0;
+  const dexametasona = parseFloat(document.getElementById('f-em-dexametasona').value) || 0;
+  const ondansetron = parseFloat(document.getElementById('f-em-ondansetron').value) || 0;
+  const dexmedo = parseFloat(document.getElementById('f-em-dexmedo').value) || 0;
+  const morfina = parseFloat(document.getElementById('f-em-morfina').value) || 0;
+  const ketamina = parseFloat(document.getElementById('f-em-ketamina').value) || 0;
+
+  const tramadolDia = dias > 0 ? tramadol / dias : 0;
+  const ketorolacoDia = dias > 0 ? ketorolaco / dias : 0;
+  const ondansetronDia = dias > 0 ? ondansetron / dias : 0;
+  const morfinaDia = dias > 0 ? morfina / dias : 0;
+  const morfinaMgKgDia = peso > 0 ? morfinaDia / peso : 0;
+
+  const alertas = [];
+
+  // ── DOSIS ──
+  if (tramadol > 0) {
+    if (tramadolDia > 400) alertas.push({nivel:'rojo', texto:'⛔ TRAMADOL: '+tramadolDia.toFixed(0)+' mg/día supera el máximo absoluto de 400 mg/día (OMS, ficha técnica)'});
+    else if (tramadolDia > 300) alertas.push({nivel:'amarillo', texto:'⚠ Tramadol: '+tramadolDia.toFixed(0)+' mg/día está cerca del límite máximo (400 mg/día). Monitorizar SNC.'});
+    if (irc) alertas.push({nivel:'amarillo', texto:'⚠ Tramadol en IRC: riesgo de acumulación de metabolito activo O-desmetiltramadol. Considerar reducción de dosis o intervalo extendido.'});
+    if (apnea) alertas.push({nivel:'amarillo', texto:'⚠ Tramadol en apnea del sueño: riesgo aumentado de depresión respiratoria. Monitorización estrecha.'});
+  }
+  if (ketorolaco > 0) {
+    if (ketorolacoDia > 90) alertas.push({nivel:'rojo', texto:'⛔ KETOROLACO: '+ketorolacoDia.toFixed(0)+' mg/día supera el máximo de 90 mg/día IV (FDA). Riesgo renal y GI severo.'});
+    else if (ketorolacoDia > 60) alertas.push({nivel:'amarillo', texto:'⚠ Ketorolaco: '+ketorolacoDia.toFixed(0)+' mg/día — dosis alta. Máximo 90 mg/día por no más de 5 días.'});
+    if (irc) alertas.push({nivel:'rojo', texto:'⛔ Ketorolaco en IRC: contraindicado relativo. Alto riesgo de nefrotoxicidad adicional. Reevaluar.'});
+    if (hepato) alertas.push({nivel:'amarillo', texto:'⚠ Ketorolaco en hepatopatía: usar con precaución. Riesgo de sangrado GI aumentado.'});
+  }
+  if (ondansetron > 0 && ondansetronDia > 24) alertas.push({nivel:'amarillo', texto:'⚠ Ondansetrón: '+ondansetronDia.toFixed(1)+' mg/día — cercano al límite de 32 mg/día (riesgo prolongación QTc, FDA 2011).'});
+  if (dexametasona > 0 && dias >= 3 && dm) alertas.push({nivel:'amarillo', texto:'⚠ Dexametasona continua por '+dias+' días en paciente diabético: monitorizar glicemia. Puede requerir ajuste de insulina.'});
+  if (morfina > 0) {
+    if (morfinaDia > 30) alertas.push({nivel:'amarillo', texto:'⚠ Morfina: '+morfinaDia.toFixed(1)+' mg/día — dosis alta para infusión ambulatoria. Vigilar sedación y respiración.'});
+    if (irc) alertas.push({nivel:'rojo', texto:'⛔ Morfina en IRC: acumulación de morfina-6-glucurónido (metabolito activo). Alto riesgo de depresión respiratoria. Usar alternativa.'});
+    if (apnea) alertas.push({nivel:'rojo', texto:'⛔ Morfina en apnea del sueño: riesgo significativo de depresión respiratoria nocturna.'});
+  }
+  if (ketamina > 0 && ketamina / dias > 200) alertas.push({nivel:'amarillo', texto:'⚠ Ketamina: dosis alta para uso ambulatorio. Vigilar efectos disfóricos y alucinaciones.'});
+  if (vol > 450) alertas.push({nivel:'rojo', texto:'⛔ VOLUMEN: '+vol.toFixed(0)+' mL supera la capacidad máxima de la bomba (450 mL).'});
+  if (tasa > 7) alertas.push({nivel:'rojo', texto:'⛔ TASA: '+tasa+' mL/h supera el máximo de la bomba (7 mL/h).'});
+  if (tasa > 0 && tasa < 0.5) alertas.push({nivel:'amarillo', texto:'⚠ Tasa: '+tasa+' mL/h está por debajo del mínimo de la bomba (0.5 mL/h).'});
+
+  // ── COMPATIBILIDAD DE MEZCLA ──
+  const tieneOndansetron = ondansetron > 0;
+  const tieneDexametasona = dexametasona > 0;
+  const tieneKetorolaco = ketorolaco > 0;
+  const tieneMorfina = morfina > 0;
+  const tieneTramadol = tramadol > 0;
+
+  if (tieneOndansetron && tieneDexametasona) alertas.push({nivel:'amarillo', texto:'⚠ COMPATIBILIDAD: Ondansetrón + Dexametasona — precipitación reportada a concentraciones altas en solución (verificar transparencia de la mezcla antes de administrar). Ref: Trissel\'s Handbook of Injectable Drugs.'});
+  if (tieneMorfina && tieneKetorolaco) alertas.push({nivel:'rojo', texto:'⛔ INCOMPATIBILIDAD: Morfina + Ketorolaco — incompatibilidad física documentada. No mezclar en el mismo reservorio. Ref: Trissel\'s, Micromedex.'});
+  if (tieneOndansetron && tieneTramadol) alertas.push({nivel:'verde', texto:'✓ Tramadol + Ondansetrón — físicamente compatibles en SSN 0.9%.'});
+  if (tieneTramadol && tieneKetorolaco) alertas.push({nivel:'verde', texto:'✓ Tramadol + Ketorolaco — compatibles en SSN 0.9% a concentraciones habituales.'});
+  if (tieneTramadol && tieneDexametasona) alertas.push({nivel:'verde', texto:'✓ Tramadol + Dexametasona — compatibles en SSN 0.9%.'});
+
+  // ── RENDER ALERTAS ──
+  const panel = document.getElementById('elasto-meds-alertas');
+  if (alertas.length === 0) { panel.style.display = 'none'; return; }
+
+  const colores = {
+    rojo: {bg:'rgba(255,107,107,0.08)', border:'rgba(255,107,107,0.35)', text:'#ff6b6b'},
+    amarillo: {bg:'rgba(244,197,66,0.08)', border:'rgba(244,197,66,0.35)', text:'#f4c542'},
+    verde: {bg:'rgba(0,212,170,0.08)', border:'rgba(0,212,170,0.25)', text:'#00d4aa'},
+  };
+
+  panel.style.display = 'block';
+  panel.innerHTML = `<div style="font-family:'Syne',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#7a9ab5;margin-bottom:0.5rem;margin-top:0.85rem">◎ Análisis de Seguridad y Compatibilidad</div>` +
+    alertas.map(a => {
+      const c = colores[a.nivel];
+      return `<div style="background:${c.bg};border:1px solid ${c.border};border-radius:7px;padding:0.65rem 0.85rem;margin-bottom:0.4rem;font-size:0.73rem;color:${c.text};line-height:1.5">${a.texto}</div>`;
+    }).join('');
+}
+function toggleElastoVia() {
+  const via = document.getElementById('f-elasto-via').value;
+  const isAL = via === 'periferico' || via === 'epidural';
+  const isMeds = via === 'venosa' || via === 'subcutanea';
+  document.getElementById('elasto-grp-al').style.display = isAL ? 'block' : 'none';
+  document.getElementById('elasto-grp-meds').style.display = isMeds ? 'block' : 'none';
+  if (isAL) calcElasto();
+}
+
+function calcElasto() {
+  const laVal = document.getElementById('f-elasto-la').value;
+  const concMetaVal = document.getElementById('f-elasto-conc-meta').value;
+  const diasVal = parseFloat(document.getElementById('f-elasto-dias').value) || 0;
+  const volReservVal = document.getElementById('f-elasto-vol-reservorio').value;
+  const peso = parseFloat(document.getElementById('f-weight').value) || 0;
+  const al = AL_STOCK[laVal];
+  const calcBox = document.getElementById('elasto-calc-box');
+  const isCustomConc = concMetaVal === 'custom';
+  const isCustomVol = volReservVal === 'custom';
+  document.getElementById('grp-elasto-conc-custom').style.display = isCustomConc ? 'flex' : 'none';
+  document.getElementById('grp-elasto-vol-custom').style.display = isCustomVol ? 'flex' : 'none';
+  if (!al || !concMetaVal || diasVal <= 0 || !volReservVal) { if (calcBox) calcBox.style.display = 'none'; return; }
+  const concMetaPct = isCustomConc ? (parseFloat(document.getElementById('f-elasto-conc-custom').value) || 0) : parseFloat(concMetaVal);
+  const volReserv = isCustomVol ? (parseFloat(document.getElementById('f-elasto-vol-custom').value) || 0) : parseFloat(volReservVal);
+  if (!concMetaPct || !volReserv) return;
+  const concMetaMgMl = concMetaPct * 10;
+  const volALpuro = (concMetaMgMl * volReserv) / al.conc;
+  const volDil = volReserv - volALpuro;
+  const nAmps = (volALpuro / al.ampVol).toFixed(2);
+  const horasTotales = diasVal * 24;
+  const tasa = volReserv / horasTotales;
+  const doseH = concMetaMgMl * tasa;
+  const doseMgKgH = peso > 0 ? doseH / peso : null;
+  document.getElementById('f-elasto-vol-al').value = volALpuro.toFixed(1);
+  document.getElementById('f-elasto-vol-dil').value = volDil.toFixed(1);
+  document.getElementById('f-elasto-rate').value = tasa.toFixed(1);
+  document.getElementById('f-elasto-dose-h').value = doseH.toFixed(1);
+  document.getElementById('f-elasto-dur-txt').value = horasTotales + ' h / ' + diasVal + ' días';
+  let rows = dRow('AL stock', al.name + ' (' + al.conc + ' mg/mL — amp ' + al.ampVol + ' mL)', '#e8f0f8');
+  rows += dRow('Concentración deseada', concMetaPct + '% = ' + concMetaMgMl + ' mg/mL', '#0094ff');
+  rows += dRow('Volumen reservorio', volReserv + ' mL', '#e8f0f8');
+  rows += dRow('Duración', diasVal + ' días (' + horasTotales + ' h)', '#f4c542');
+  rows += dRow('━━━ PREPARACIÓN ━━━', '', '#b48aff');
+  rows += dRow('Tomar del AL stock', volALpuro.toFixed(1) + ' mL (' + nAmps + ' amp de ' + al.ampVol + ' mL)', '#b48aff');
+  rows += dRow('Agregar SSN 0.9%', volDil.toFixed(1) + ' mL', '#7a9ab5');
+  rows += dRow('━━━ PROGRAMAR ━━━', '', '#00d4aa');
+  rows += dRow('Tasa de infusión', tasa.toFixed(1) + ' mL/h', '#00d4aa');
+  rows += dRow('Dosis por hora', doseH.toFixed(1) + ' mg/h', '#00d4aa');
+  if (doseMgKgH) rows += dRow('Dosis en mg/kg/h', doseMgKgH.toFixed(3) + ' mg/kg/h', '#00d4aa');
+  document.getElementById('elasto-calc-rows').innerHTML = rows;
+  calcBox.style.display = 'block';
+}
 function v(id) { return document.getElementById(id)?.value || ''; }
 
 // ══════════════════════════════════════════
@@ -1548,7 +1898,10 @@ function saveCase() {
     asa: v('f-asa'), mallampati: v('f-mallampati'),
     comorbidities: getChips('comorbid'), comorbiditiesOther: v('f-comorbid-other'),
     procedure: proc, specialty: v('f-specialty'), urgency: v('f-urgency'),
-    position: v('f-position'), duration: v('f-duration'), hospital: v('f-hospital'), surgeon: v('f-surgeon'),
+    position: v('f-position'), lateralidad: v('f-lateralidad'),
+    hospital: v('f-hospital'), surgeon: v('f-surgeon'),
+    hasTorniquete: getTgl('tgl-torniquete'), tornLado: v('f-torn-lado'),
+    tornPresion: v('f-torn-presion'), tornTiempo: v('f-torn-tiempo'), tornIsquemia: v('f-torn-isquemia'),
     tAnestIni: v('f-t-anest-ini'), tCxIni: v('f-t-cx-ini'), tCxFin: v('f-t-cx-fin'), tAnestFin: v('f-t-anest-fin'),
     anesthesiaType: getChips('atype'),
     inductor: v('f-inductor'), inductorDose: v('f-inductor-dose'),
@@ -1565,6 +1918,8 @@ function saveCase() {
     vad: getTgl('tgl-vad'), rsi: getTgl('tgl-rsi'),
     monitoring: getChips('monitoring'), access: getChips('access'),
     hasNax: getTgl('tgl-nax'), naxType: v('f-nax-type'), naxLevel: v('f-nax-level'),
+    naxAgujaSpinalTipo: v('f-nax-aguja-tipo'), naxAgujaSpinalCalib: v('f-nax-aguja-calibre'),
+    naxAgujaEpiTipo: v('f-nax-aguja-epi-tipo'), naxAgujaEpiCalib: v('f-nax-aguja-epi-calibre'),
     naxLA: v('f-nax-la'), naxLADose: v('f-nax-la-dose'),
     naxOpioid: v('f-nax-opioid'), naxOpioidDose: v('f-nax-opioid-dose'),
     naxReached: v('f-nax-reached'), naxDuration: v('f-nax-duration'),
@@ -1575,15 +1930,22 @@ function saveCase() {
     ssAdj: getChips('ss-adj'), ssAdjDose: v('f-ss-adj-dose'),
     ssDuration: v('f-ss-duration'), ssNotes: v('f-ss-notes'),
     hasCath: getTgl('tgl-cath'), cathSite: getChips('cath-site'), cathSide: v('f-cath-side'),
-    cathLA: v('f-cath-la'), cathConcMeta: v('f-cath-conc-meta'), cathDias: v('f-cath-dias'),
-    cathVolAL: v('f-cath-vol-al'), cathVolDil: v('f-cath-vol-dil'),
-    cathRate: v('f-cath-rate'), cathDoseH: v('f-cath-dose-h'), cathDose24: v('f-cath-dose-24h'),
-    cathDurH: v('f-cath-dur-h'), cathDurD: v('f-cath-dur-d'), cathDoseMgKgH: v('f-cath-dose-kgh'),
-    cathBolus: v('f-cath-bolus'),
-    cathAdj: getChips('cath-adj'), cathNotes: v('f-cath-notes'),
-    hasElasto: getTgl('tgl-elasto'), elastoType: v('f-elasto-type'), elastoDrug: v('f-elasto-drug'),
-    elastoVol: v('f-elasto-vol'), elastoRate: v('f-elasto-rate'),
-    elastoDur: v('f-elasto-dur'), elastoSite: v('f-elasto-site'), elastoNotes: v('f-elasto-notes'),
+    cathAvance: v('f-cath-avance'), cathIntentos: v('f-cath-intentos'), cathFijacion: v('f-cath-fijacion'),
+    cathNotes: v('f-cath-notes'),
+    hasElasto: getTgl('tgl-elasto'), elastoVia: v('f-elasto-via'), elastoType: v('f-elasto-type'),
+    elastoLA: v('f-elasto-la'), elastoConcMeta: v('f-elasto-conc-meta'), elastoDias: v('f-elasto-dias'),
+    elastoVolAL: v('f-elasto-vol-al'), elastoVolDil: v('f-elasto-vol-dil'),
+    elastoRate: v('f-elasto-rate'), elastoDoseH: v('f-elasto-dose-h'), elastoDurTxt: v('f-elasto-dur-txt'),
+    elastoAdjAL: getChips('elasto-adj-al'),
+    elastoMeds: getChips('elasto-meds'),
+    elastoMedsDias: v('f-elasto-meds-dias'), elastoMedsTasa: v('f-elasto-meds-tasa'),
+    elastoMedsVol: v('f-elasto-meds-vol'), elastoMedsDur: v('f-elasto-meds-dur'),
+    emTramadol: v('f-em-tramadol'), emKetorolaco: v('f-em-ketorolaco'),
+    emDexametasona: v('f-em-dexametasona'), emOndansetron: v('f-em-ondansetron'),
+    emDexmedo: v('f-em-dexmedo'), emMorfina: v('f-em-morfina'),
+    emDipirona: v('f-em-dipirona'), emKetamina: v('f-em-ketamina'), emNefopam: v('f-em-nefopam'),
+    elastoMedsDosis: v('f-elasto-meds-dosis'), elastoMedOtro: v('f-elasto-med-otro'),
+    elastoNotes: v('f-elasto-notes'),
     bleeding: v('f-bleeding'), diuresis: v('f-diuresis'),
     crystalloids: v('f-crystalloids'), colloids: v('f-colloids'),
     events: getChips('events'), eventsNotes: v('f-events-notes'),
@@ -1707,28 +2069,57 @@ function showDetail(id) {
   let reg = '';
   if (c.hasNax) reg += `<div class="dsec" style="color:#b48aff">NEUROAXIAL</div><div class="dgrid">
     ${r('Tipo',c.naxType)}${r('Nivel',c.naxLevel)}
+    ${c.naxAgujaSpinalTipo?r('Aguja espinal',c.naxAgujaSpinalTipo+(c.naxAgujaSpinalCalib?' — '+c.naxAgujaSpinalCalib:'')):''}
+    ${c.naxAgujaEpiTipo?r('Aguja epidural',c.naxAgujaEpiTipo+(c.naxAgujaEpiCalib?' — '+c.naxAgujaEpiCalib:'')):''}
     ${r('AL / Dosis',c.naxLA+(c.naxLADose?' — '+c.naxLADose+' mg':''))}
     ${r('Opioide intratecal',c.naxOpioid+(c.naxOpioidDose?' — '+c.naxOpioidDose+' mcg':''))}
     ${r('Nivel alcanzado',c.naxReached)}${r('Duración',c.naxDuration?c.naxDuration+' min':'')}
     ${r('Intentos',c.naxAttempts)}${rf('Notas neuroaxial',c.naxNotes)}</div>`;
   if (c.hasSS) reg += `<div class="dsec" style="color:#b48aff">BLOQUEO PERIFÉRICO SINGLE SHOT</div><div class="dgrid">
-    ${r('Bloqueos',(c.ssBlocks||[]).join(', '))}${r('Lado',c.ssSide)}
-    ${r('AL / Volumen',c.ssLA+(c.ssVolume?' — '+c.ssVolume+' mL':''))}
-    ${r('Dosis total',c.ssDoseTotal?c.ssDoseTotal+' mg':'')}${r('Dosis mg/kg',c.ssDoseMgKg?c.ssDoseMgKg+' mg/kg':'')}
-    ${r('Coadyuvantes',(c.ssAdj||[]).join(', '))}${r('Dosis coadyuvante',c.ssAdjDose)}
-    ${r('Duración esperada',c.ssDuration?c.ssDuration+' h':'')}${rf('Notas',c.ssNotes)}</div>`;
-  if (c.hasCath) reg += `<div class="dsec" style="color:#b48aff">CATÉTER NERVIO PERIFÉRICO</div><div class="dgrid">
-    ${r('Sitio',(c.cathSite||[]).join(', '))}${r('Lado',c.cathSide)}
-    ${r('AL infusión',c.cathLA)}${r('Tasa',c.cathRate?c.cathRate+' mL/h':'')}
-    ${r('Dosis/hora',c.cathDoseH?c.cathDoseH+' mg/h':'')}${r('Dosis/24h',c.cathDose24?c.cathDose24+' mg':'')}
-    ${r('Duración estimada',c.cathDurH?(c.cathDurH+' h / '+c.cathDurD+' días'):'')}
-    ${r('Bolo/PCA',c.cathBolus)}${r('Coadyuvantes',(c.cathAdj||[]).join(', '))}
-    ${rf('Notas catéter',c.cathNotes)}</div>`;
-  if (c.hasElasto) reg += `<div class="dsec" style="color:#0094ff">BOMBA ELASTOMÉRICA</div><div class="dgrid">
-    ${r('Tipo',c.elastoType)}${r('Fármaco',c.elastoDrug)}
-    ${r('Volumen',c.elastoVol?c.elastoVol+' mL':'')}${r('Tasa',c.elastoRate?c.elastoRate+' mL/h':'')}
-    ${r('Duración',c.elastoDur?c.elastoDur+' h':'')}${r('Sitio',c.elastoSite)}
-    ${rf('Notas',c.elastoNotes)}</div>`;
+    ${rf('Bloqueos realizados',(c.ssBlocks||[]).join(', '))}
+    ${r('Lado',c.ssSide)}
+    ${r('AL stock',c.ssLA)}
+    ${r('Modo preparación',c.ssModo==='puro'?'AL puro':c.ssModo==='diluido'?'Diluido':c.ssModo==='meta'?'Por concentración deseada':c.ssModo||'—')}
+    ${r('Concentración final',c.ssConcFinal?c.ssConcFinal+'%':'')}
+    ${r('Volumen total',c.ssVolume?c.ssVolume+' mL':'')}
+    ${r('Dosis total AL',c.ssDoseTotal?c.ssDoseTotal+' mg':'')}
+    ${r('Dosis en mg/kg',c.ssDoseMgKg?c.ssDoseMgKg+' mg/kg':'')}
+    ${rf('Coadyuvantes',(c.ssAdj||[]).join(', '))}
+    ${r('Dosis coadyuvante',c.ssAdjDose)}
+    ${r('Duración analgesia esperada',c.ssDuration?c.ssDuration+' h':'')}
+    ${rf('Notas bloqueo',c.ssNotes)}</div>`;
+  if (c.hasCath) reg += `<div class="dsec" style="color:#b48aff">CATÉTER NERVIO PERIFÉRICO — COLOCACIÓN</div><div class="dgrid">
+    ${rf('Sitio catéter',(c.cathSite||[]).join(', '))}
+    ${r('Lado',c.cathSide)}
+    ${r('Avance catéter',c.cathAvance?c.cathAvance+' cm':'')}
+    ${r('Intentos',c.cathIntentos)}
+    ${r('Fijación',c.cathFijacion)}
+    ${rf('Notas colocación',c.cathNotes)}</div>`;
+  if (c.hasElasto) reg += `<div class="dsec" style="color:#0094ff">BOMBA / INFUSIÓN CONTINUA</div><div class="dgrid">
+    ${r('Vía',c.elastoVia==='periferico'?'Catéter nervio periférico':c.elastoVia==='epidural'?'Epidural':c.elastoVia==='venosa'?'Venosa IV':'Subcutánea')}
+    ${r('Tipo de bomba',c.elastoType)}
+    ${c.elastoLA?r('AL stock',c.elastoLA):''}
+    ${c.elastoConcMeta?r('Concentración deseada',c.elastoConcMeta+'%'):''}
+    ${c.elastoDias?r('Días deseados',c.elastoDias+' días'):''}
+    ${c.elastoVolAL?r('Volumen AL puro',c.elastoVolAL+' mL'):''}
+    ${c.elastoVolDil?r('Volumen SSN',c.elastoVolDil+' mL'):''}
+    ${c.elastoRate?r('Tasa',c.elastoRate+' mL/h'):''}
+    ${c.elastoDoseH?r('Dosis/hora',c.elastoDoseH+' mg/h'):''}
+    ${c.elastoDurTxt?r('Duración AL',c.elastoDurTxt):''}
+    ${c.elastoMedsDias?r('Días infusión IV/SC',c.elastoMedsDias+' días'):''}
+    ${c.elastoMedsTasa?r('Tasa IV/SC',c.elastoMedsTasa+' mL/h'):''}
+    ${c.elastoMedsVol?r('Volumen calculado',c.elastoMedsVol+' mL'):''}
+    ${c.emTramadol?r('Tramadol',c.emTramadol+' mg total'):''}
+    ${c.emKetorolaco?r('Ketorolaco',c.emKetorolaco+' mg total'):''}
+    ${c.emDexametasona?r('Dexametasona',c.emDexametasona+' mg total'):''}
+    ${c.emOndansetron?r('Ondansetrón',c.emOndansetron+' mg total'):''}
+    ${c.emDexmedo?r('Dexmedetomidina',c.emDexmedo+' mcg total'):''}
+    ${c.emMorfina?r('Morfina',c.emMorfina+' mg total'):''}
+    ${c.emKetamina?r('Ketamina',c.emKetamina+' mg total'):''}
+    ${c.emDipirona?r('Dipirona',c.emDipirona+' mg total'):''}
+    ${c.emNefopam?r('Nefopam',c.emNefopam+' mg total'):''}
+    ${c.elastoMedOtro?r('Otro',c.elastoMedOtro):''}
+    ${rf('Notas bomba',c.elastoNotes)}</div>`;
 
   let lipo = '';
   if (c.isContorno) lipo = `
@@ -1760,7 +2151,9 @@ function showDetail(id) {
       ${c.hasNax||c.hasSS||c.hasCath?`<span class="badge bp">Regional</span>`:''}
       ${c.hasElasto?`<span class="badge bb">Elastómera</span>`:''}
       ${c.isContorno?`<span class="badge bgo">Lipo</span>`:''}
+      ${c.vad?`<span class="badge br">VAD</span>`:''}
     </div>
+
     <div class="dsec">PACIENTE</div>
     <div class="dgrid">
       ${r('Nombre',c.name)}${r('Fecha',ds)}${r('ID',c.pid)}
@@ -1770,44 +2163,71 @@ function showDetail(id) {
       ${r('Hospital',c.hospital)}${r('Cirujano',c.surgeon)}
       ${rf('Comorbilidades',[...(c.comorbidities||[]),c.comorbiditiesOther].filter(Boolean).join(', '))}
     </div>
-    <div class="dsec">ANESTESIA</div>
+
+    <div class="dsec">TIEMPOS QUIRÚRGICOS</div>
     <div class="dgrid">
-      ${r('Tipo',(c.anesthesiaType||[]).join(', '))}
-      ${r('Inductor',c.inductor+(c.inductorDose?' — '+c.inductorDose:''))}
-      ${r('Relajante',c.nmb+(c.nmbDose?' — '+c.nmbDose:''))}
-      ${r('Mantenimiento',maintStr)}
-      ${r('Opioide',opioidStr)}
-      ${c.dexCe||c.dexDose?r('Dexmedetomidina','Modelo: '+(c.dexModel||'—')+' — Ce: '+(c.dexCe||'—')+' ng/mL — '+(c.dexDose||'—')+' mcg/kg/h'):''}
-      ${r('Multimodal',(c.multimodal||[]).join(', '))}
-      ${r('Vía aérea',c.airway+(c.tube?' / '+c.tube:''))}
-      ${r('Cormack / Intentos',(c.cormack||'—')+' / '+(c.intubation||'—'))}
-      ${r('Monitoreo',(c.monitoring||[]).join(', '))}
-      ${rf('Notas GA',c.gaNotes)}
+      ${r('Inicio Anestesia',c.tAnestIni)}${r('Inicio Cirugía',c.tCxIni)}
+      ${r('Fin Cirugía',c.tCxFin)}${r('Fin Anestesia',c.tAnestFin)}
+      ${r('Duración Cirugía',c.duration?c.duration+' min':'')}
+      ${r('Lateralidad',c.lateralidad)}
+      ${c.hasTorniquete?`<div class="di full"><label>Torniquete</label><p>${c.tornLado||'—'} — ${c.tornPresion?c.tornPresion+' mmHg':''} — ${c.tornTiempo?c.tornTiempo+' min':''} — ${c.tornIsquemia||'—'}</p></div>`:''}
     </div>
+
+    <div class="dsec">ANESTESIA GENERAL</div>
+    <div class="dgrid">
+      ${rf('Tipo',(c.anesthesiaType||[]).join(', '))}
+      ${r('Inductor',c.inductor+(c.inductorDose?' — '+c.inductorDose:''))}
+      ${r('Relajante muscular',c.nmb+(c.nmbDose?' — '+c.nmbDose:''))}
+      ${r('Mantenimiento hipnótico',maintStr)}
+      ${r('Opioide intraop.',opioidStr)}
+      ${c.dexCe||c.dexDose?r('Dexmedetomidina','Modelo: '+(c.dexModel||'—')+' — Ce: '+(c.dexCe||'—')+' ng/mL — '+(c.dexDose||'—')+' mcg/kg/h'):''}
+      ${rf('Analgesia multimodal',(c.multimodal||[]).join(', '))}
+      ${rf('Notas anestesia',c.gaNotes)}
+    </div>
+
+    <div class="dsec">VÍA AÉREA</div>
+    <div class="dgrid">
+      ${r('Dispositivo / Tubo',c.airway+(c.tube?' — '+c.tube:''))}
+      ${r('Cormack-Lehane',c.cormack)}${r('Intentos intubación',c.intubation)}
+      ${r('Ayuno',c.fasting?c.fasting+' horas':'')}
+      ${r('VAD anticipada',c.vad?'Sí':'No')}${r('RSI / Estómago lleno',c.rsi?'Sí':'No')}
+    </div>
+
+    <div class="dsec">MONITOREO Y ACCESOS</div>
+    <div class="dgrid">
+      ${rf('Monitoreo',(c.monitoring||[]).join(', '))}
+      ${rf('Accesos vasculares',(c.access||[]).join(', '))}
+    </div>
+
     ${reg}
     ${lipo}
+
     <div class="dsec">INTRAOPERATORIO</div>
     <div class="dgrid">
-      ${r('Duración',c.duration?c.duration+' min':'')}
-      ${r('Sangrado / Diuresis',(c.bleeding||'—')+' mL / '+(c.diuresis||'—')+' mL')}
+      ${r('Sangrado estimado',c.bleeding?c.bleeding+' mL':'')}
+      ${r('Diuresis',c.diuresis?c.diuresis+' mL':'')}
       ${r('Cristaloides',c.crystalloids?c.crystalloids+' mL':'')}
-      ${r('Coloides',c.colloids)}
+      ${r('Coloides / Hemoderivados',c.colloids)}
       ${rf('Eventos',(c.events||[]).join(', '))}
-      ${rf('Descripción',c.eventsNotes)}
+      ${rf('Descripción / Manejo',c.eventsNotes)}
     </div>
+
     <div class="dsec">POSTOPERATORIO</div>
     <div class="dgrid">
-      ${r('Destino',c.destination)}${r('Tiempo URPA',c.pacuTime?c.pacuTime+' min':'')}
-      ${r('EVA',c.painScore+'/10')}${r('NVPO',['—','Leves','Moderados','Severos'][c.ponv]||'—')}
-      ${r('Analgesia postop',(c.postopAnalg||[]).join(', '))}
-      ${r('Complicaciones postop',(c.postopComp||[]).join(', '))}
-      ${rf('Notas',c.postopNotes)}
+      ${r('Destino',c.destination)}
+      ${r('Tiempo en URPA',c.pacuTime?c.pacuTime+' min':'')}
+      ${r('EVA al egreso',c.painScore!==undefined?c.painScore+'/10':'')}
+      ${r('NVPO',['—','Leves','Moderados','Severos'][c.ponv]||'—')}
+      ${rf('Analgesia postop',(c.postopAnalg||[]).join(', '))}
+      ${rf('Complicaciones postop',(c.postopComp||[]).join(', '))}
+      ${rf('Notas postoperatorias',c.postopNotes)}
     </div>
+
     <div class="dsec">EVALUACIÓN</div>
     <div class="dgrid">
-      <div class="di"><label>Dificultad</label><p>${starsH}</p></div>
-      ${r('Resultado',c.outcome)}
-      ${rf('Notas personales',c.notes?'"'+c.notes+'"':'')}
+      <div class="di"><label>Dificultad técnica</label><p>${starsH}</p></div>
+      ${r('Resultado anestésico',c.outcome)}
+      ${rf('Aprendizajes / Notas personales',c.notes?'"'+c.notes+'"':'')}
     </div>`;
   document.getElementById('modal').classList.add('open');
 }
