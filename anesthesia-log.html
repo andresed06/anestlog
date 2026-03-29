@@ -1457,23 +1457,30 @@ function calcTiempos() {
   const tCF = document.getElementById('f-t-cx-fin').value;
   const tAF = document.getElementById('f-t-anest-fin').value;
   const toMin = t => { if(!t) return null; const [h,m]=t.split(':').map(Number); return h*60+m; };
-  const fmt = m => m===null?'—':`${Math.floor(m/60)}h ${m%60}min (${m} min)`;
+  const fmt = m => m===null ? '—' : `${Math.floor(m/60)}h ${String(m%60).padStart(2,'0')}min (${m} min total)`;
   const mAI=toMin(tAI), mCI=toMin(tCI), mCF=toMin(tCF), mAF=toMin(tAF);
-  const durCx = (mCI!==null&&mCF!==null&&mCF>mCI) ? mCF-mCI : null;
-  const durAnest = (mAI!==null&&mAF!==null&&mAF>mAI) ? mAF-mAI : null;
-  const prepAnest = (mAI!==null&&mCI!==null&&mCI>mAI) ? mCI-mAI : null;
-  const recupQx = (mCF!==null&&mAF!==null&&mAF>mCF) ? mAF-mCF : null;
+  const durCx     = (mCI!==null&&mCF!==null&&mCF>mCI)   ? mCF-mCI   : null;
+  const durAnest  = (mAI!==null&&mAF!==null&&mAF>mAI)   ? mAF-mAI   : null;
+  const prepAnest = (mAI!==null&&mCI!==null&&mCI>mAI)   ? mCI-mAI   : null;
+  const recupQx   = (mCF!==null&&mAF!==null&&mAF>mCF)   ? mAF-mCF   : null;
   if(durCx===null&&durAnest===null) { document.getElementById('tiempos-calc').style.display='none'; return; }
-  // Save duration for stats
-  if(durCx!==null) document.getElementById('f-duration') && (document.getElementById('f-duration').value = durCx);
+  // Save to hidden field for stats
+  if(durCx!==null) { const el=document.getElementById('f-duration'); if(el) el.value=durCx; }
+  // Save formatted times for storage
+  window._tiemposCalc = {
+    durCxMin: durCx, durAnestMin: durAnest,
+    prepAnestMin: prepAnest, recupQxMin: recupQx,
+    durCxFmt: fmt(durCx), durAnestFmt: fmt(durAnest),
+    prepAnestFmt: fmt(prepAnest), recupQxFmt: fmt(recupQx)
+  };
   const rows = [
-    ['Duración Cirugía', fmt(durCx), '#00d4aa'],
-    ['Duración Anestesia total', fmt(durAnest), '#0094ff'],
-    ['Inducción → Incisión', fmt(prepAnest), '#f4c542'],
-    ['Fin cirugía → Fin anestesia', fmt(recupQx), '#b48aff'],
+    ['⏱ Inducción → Incisión',          fmt(prepAnest), '#f4c542'],
+    ['⚕ Duración Cirugía',               fmt(durCx),     '#00d4aa'],
+    ['🔄 Fin cirugía → Fin anestesia',    fmt(recupQx),   '#b48aff'],
+    ['◎ Tiempo total de anestesia',       fmt(durAnest),  '#0094ff'],
   ];
   document.getElementById('tiempos-rows').innerHTML = rows.map(([l,v,c]) =>
-    `<div style="font-size:0.75rem;color:#7a9ab5;padding:0.18rem 0;display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.04)"><span>${l}</span><span style="font-weight:700;color:${c}">${v}</span></div>`
+    `<div style="font-size:0.75rem;color:#7a9ab5;padding:0.22rem 0;display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.04)"><span>${l}</span><span style="font-weight:700;color:${c}">${v}</span></div>`
   ).join('');
   document.getElementById('tiempos-calc').style.display = 'block';
 }
@@ -1903,6 +1910,14 @@ function saveCase() {
     hasTorniquete: getTgl('tgl-torniquete'), tornLado: v('f-torn-lado'),
     tornPresion: v('f-torn-presion'), tornTiempo: v('f-torn-tiempo'), tornIsquemia: v('f-torn-isquemia'),
     tAnestIni: v('f-t-anest-ini'), tCxIni: v('f-t-cx-ini'), tCxFin: v('f-t-cx-fin'), tAnestFin: v('f-t-anest-fin'),
+    durCxMin: window._tiemposCalc?.durCxMin || null,
+    durAnestMin: window._tiemposCalc?.durAnestMin || null,
+    prepAnestMin: window._tiemposCalc?.prepAnestMin || null,
+    recupQxMin: window._tiemposCalc?.recupQxMin || null,
+    durCxFmt: window._tiemposCalc?.durCxFmt || '',
+    durAnestFmt: window._tiemposCalc?.durAnestFmt || '',
+    prepAnestFmt: window._tiemposCalc?.prepAnestFmt || '',
+    recupQxFmt: window._tiemposCalc?.recupQxFmt || '',
     anesthesiaType: getChips('atype'),
     inductor: v('f-inductor'), inductorDose: v('f-inductor-dose'),
     nmb: v('f-nmb'), nmbDose: v('f-nmb-dose'),
@@ -2168,7 +2183,16 @@ function showDetail(id) {
     <div class="dgrid">
       ${r('Inicio Anestesia',c.tAnestIni)}${r('Inicio Cirugía',c.tCxIni)}
       ${r('Fin Cirugía',c.tCxFin)}${r('Fin Anestesia',c.tAnestFin)}
-      ${r('Duración Cirugía',c.duration?c.duration+' min':'')}
+    </div>
+    ${(c.prepAnestFmt||c.durCxFmt||c.recupQxFmt||c.durAnestFmt)?`
+    <div style="background:rgba(0,148,255,0.05);border:1px solid rgba(0,148,255,0.15);border-radius:8px;padding:0.85rem;margin-top:0.5rem">
+      <div style="font-family:'Syne',sans-serif;font-size:0.6rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#0094ff;margin-bottom:0.5rem">⏱ Tiempos Calculados</div>
+      ${c.prepAnestFmt?`<div style="font-size:0.75rem;color:#7a9ab5;padding:0.2rem 0;display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.04)"><span>⏱ Inducción → Incisión</span><span style="font-weight:700;color:#f4c542">${c.prepAnestFmt}</span></div>`:''}
+      ${c.durCxFmt?`<div style="font-size:0.75rem;color:#7a9ab5;padding:0.2rem 0;display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.04)"><span>⚕ Duración Cirugía</span><span style="font-weight:700;color:#00d4aa">${c.durCxFmt}</span></div>`:''}
+      ${c.recupQxFmt?`<div style="font-size:0.75rem;color:#7a9ab5;padding:0.2rem 0;display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.04)"><span>🔄 Fin cirugía → Fin anestesia</span><span style="font-weight:700;color:#b48aff">${c.recupQxFmt}</span></div>`:''}
+      ${c.durAnestFmt?`<div style="font-size:0.75rem;color:#7a9ab5;padding:0.2rem 0;display:flex;justify-content:space-between"><span>◎ Tiempo total de anestesia</span><span style="font-weight:700;color:#0094ff">${c.durAnestFmt}</span></div>`:''}
+    </div>`:''}
+    <div class="dgrid" style="margin-top:0.5rem">
       ${r('Lateralidad',c.lateralidad)}
       ${c.hasTorniquete?`<div class="di full"><label>Torniquete</label><p>${c.tornLado||'—'} — ${c.tornPresion?c.tornPresion+' mmHg':''} — ${c.tornTiempo?c.tornTiempo+' min':''} — ${c.tornIsquemia||'—'}</p></div>`:''}
     </div>
@@ -2399,3 +2423,4 @@ function toast(msg, err=false) {
 
 </body>
 </html>
+
