@@ -895,7 +895,7 @@ transition:all 0.15s;touch-action:manipulation;
 <div id="elasto-grp-al" style="display:none;margin-top:0.75rem">
   <div class="fg">
     <div class="fgg"><label>AL stock</label>
-      <select id="f-elasto-la" onchange="calcElasto()">
+      <select id="f-elasto-la" onchange="calcElasto('la')">
         <option value="">—</option>
         <option value="levobupi0.75">Levobupivacaína 0.75% — amp 10 mL</option>
         <option value="levobupi0.75epi">Levobupivacaína 0.75% + Epi — amp 10 mL</option>
@@ -905,7 +905,7 @@ transition:all 0.15s;touch-action:manipulation;
       </select>
     </div>
     <div class="fgg"><label>Concentración deseada (%)</label>
-      <select id="f-elasto-conc-meta" onchange="calcElasto()">
+      <select id="f-elasto-conc-meta" onchange="calcElasto('conc')">
         <option value="">—</option>
         <option value="0.2">0.2%</option>
         <option value="0.125">0.125%</option>
@@ -916,30 +916,27 @@ transition:all 0.15s;touch-action:manipulation;
     </div>
     <div class="fgg" id="grp-elasto-conc-custom" style="display:none">
       <label>Concentración personalizada (%)</label>
-      <input type="number" id="f-elasto-conc-custom" step="0.01" placeholder="0.15" oninput="calcElasto()">
+      <input type="number" id="f-elasto-conc-custom" step="0.01" placeholder="0.15" oninput="calcElasto('conc')">
     </div>
-    <div class="fgg"><label>Días de infusión deseados</label>
-      <input type="number" id="f-elasto-dias" placeholder="2" min="1" max="7" oninput="calcElasto()">
+    <div style="grid-column:1/-1;font-size:0.62rem;color:#7a9ab5;margin-top:0.25rem;font-family:'Syne',sans-serif;letter-spacing:0.06em;text-transform:uppercase">Ingresa cualquier 2 de los 3 parámetros — el tercero se calcula</div>
+    <div class="fgg">
+      <label>Días de infusión</label>
+      <input type="number" id="f-elasto-dias" placeholder="Ej: 2" step="0.5" min="0" oninput="resetElastoIfEmpty('dias'); calcElasto('dias')">
     </div>
-    <div class="fgg"><label>Volumen reservorio (mL)</label>
-      <select id="f-elasto-vol-reservorio" onchange="calcElasto()">
-        <option value="">—</option>
-        <option value="100">100 mL</option>
-        <option value="250">250 mL</option>
-        <option value="400">400 mL</option>
-        <option value="custom">Otro</option>
-      </select>
+    <div class="fgg">
+      <label>Tasa de infusión (mL/h)</label>
+      <input type="number" id="f-elasto-rate-input" step="0.5" placeholder="Ej: 5" min="0" oninput="resetElastoIfEmpty('rate'); calcElasto('rate')">
     </div>
-    <div class="fgg" id="grp-elasto-vol-custom" style="display:none">
-      <label>Volumen personalizado (mL)</label>
-      <input type="number" id="f-elasto-vol-custom" placeholder="300" oninput="calcElasto()">
+    <div class="fgg">
+      <label>Volumen reservorio (mL)</label>
+      <input type="number" id="f-elasto-vol-input" placeholder="Ej: 250" min="0" oninput="resetElastoIfEmpty('vol'); calcElasto('vol')">
     </div>
     <!-- RESULTADOS AL -->
     <div class="fgg"><label>Volumen AL puro (mL)</label><input type="number" id="f-elasto-vol-al" readonly placeholder="Auto" style="color:#b48aff"></div>
     <div class="fgg"><label>Volumen SSN 0.9% (mL)</label><input type="number" id="f-elasto-vol-dil" readonly placeholder="Auto" style="color:#7a9ab5"></div>
-    <div class="fgg"><label>Tasa de infusión (mL/h)</label><input type="number" id="f-elasto-rate" readonly placeholder="Auto" style="color:#00d4aa"></div>
+    <div class="fgg"><label>Tasa calculada (mL/h)</label><input type="number" id="f-elasto-rate" readonly placeholder="Auto" style="color:#00d4aa"></div>
     <div class="fgg"><label>Dosis por hora (mg/h)</label><input type="number" id="f-elasto-dose-h" readonly placeholder="Auto" style="color:#00d4aa"></div>
-    <div class="fgg"><label>Duración (horas / días)</label><input type="text" id="f-elasto-dur-txt" readonly placeholder="Auto" style="color:#f4c542"></div>
+    <div class="fgg"><label>Duración</label><input type="text" id="f-elasto-dur-txt" readonly placeholder="Auto" style="color:#f4c542"></div>
     <div id="elasto-calc-box" style="display:none;grid-column:1/-1;background:rgba(180,138,255,0.05);border:1px solid rgba(180,138,255,0.2);border-radius:8px;padding:0.85rem">
       <div style="font-family:'Syne',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#b48aff;margin-bottom:0.5rem">◎ Preparación Bomba AL</div>
       <div id="elasto-calc-rows"></div>
@@ -1127,6 +1124,10 @@ transition:all 0.15s;touch-action:manipulation;
 </div>
 
 <div class="factions">
+  <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.65rem;color:#7a9ab5" id="autosave-indicator">
+    <span id="autosave-dot" style="width:7px;height:7px;border-radius:50%;background:#3d5a72;display:inline-block"></span>
+    <span id="autosave-txt">Borrador no guardado</span>
+  </div>
   <button class="btn-s" onclick="clearForm()">Limpiar</button>
   <button class="btn-p" onclick="saveCase()">⊕ Guardar Caso</button>
 </div>
@@ -1218,7 +1219,7 @@ transition:all 0.15s;touch-action:manipulation;
 // ══════════════════════════════════════════
 // STATE
 // ══════════════════════════════════════════
-let cases = [], starVal = 0;
+let cases = [], starVal = 0, editingId = null;
 
 function load() {
   try { cases = JSON.parse(localStorage.getItem('alv4') || '[]'); } catch(e) { cases = []; }
@@ -1232,7 +1233,228 @@ document.addEventListener('DOMContentLoaded', () => {
   initChips();
   initToggles();
   initStars();
+  restoreDraft();
+  initAutosave();
 });
+
+// ══════════════════════════════════════════
+// AUTOSAVE — guarda borrador cada 10 seg
+// ══════════════════════════════════════════
+function initAutosave() {
+  // Save on any input change
+  document.getElementById('view-form').addEventListener('input', () => saveDraft());
+  document.getElementById('view-form').addEventListener('change', () => saveDraft());
+  // Also save every 15 seconds
+  setInterval(saveDraft, 15000);
+}
+
+function saveDraft() {
+  try {
+    // Capture basic identifiers for the draft label
+    const name = document.getElementById('f-name')?.value || '';
+    const proc = document.getElementById('f-procedure')?.value || '';
+    if (!name && !proc) return; // nothing to save
+    const draft = { name, procedure: proc, _draftTime: Date.now() };
+    // Save full form state as text snapshots
+    document.querySelectorAll('#view-form input,#view-form select,#view-form textarea').forEach(el => {
+      if (el.id) draft[el.id] = el.value;
+    });
+    // Save chip states
+    document.querySelectorAll('#view-form .chips').forEach(container => {
+      const group = container.dataset.group;
+      if (group) {
+        draft['_chips_' + group] = Array.from(container.querySelectorAll('.chip.on,.chip.on-purple,.chip.on-blue'))
+          .map(c => c.textContent.trim());
+      }
+    });
+    // Save toggle states
+    document.querySelectorAll('#view-form .tgl').forEach(t => {
+      if (t.id) draft['_tgl_' + t.id] = t.classList.contains('on');
+    });
+    draft._stars = starVal;
+    localStorage.setItem('alv4_draft', JSON.stringify(draft));
+    const dot = document.getElementById('autosave-dot');
+    const txt = document.getElementById('autosave-txt');
+    if (dot && txt) {
+      dot.style.background = '#00d4aa';
+      txt.textContent = 'Borrador guardado ' + new Date().toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
+    }
+  } catch(e) {}
+}
+
+function restoreDraft() {
+  try {
+    const raw = localStorage.getItem('alv4_draft');
+    if (!raw) return;
+    const draft = JSON.parse(raw);
+    if (!draft || (!draft.name && !draft.procedure)) return;
+    const label = draft.procedure || draft.name || 'caso sin nombre';
+    if (!confirm('Hay un borrador guardado de "' + label + '". ¿Deseas restaurarlo?')) {
+      localStorage.removeItem('alv4_draft'); return;
+    }
+    // Restore all input/select/textarea values
+    Object.keys(draft).forEach(key => {
+      if (key.startsWith('_') || key === 'name' || key === 'procedure') return;
+      const el = document.getElementById(key);
+      if (el && (el.tagName === 'INPUT' || el.tagName === 'SELECT' || el.tagName === 'TEXTAREA')) {
+        el.value = draft[key];
+      }
+    });
+    // Restore chip states
+    Object.keys(draft).filter(k => k.startsWith('_chips_')).forEach(key => {
+      const group = key.replace('_chips_', '');
+      const selected = draft[key] || [];
+      document.querySelectorAll(`.chips[data-group="${group}"] .chip`).forEach(chip => {
+        const color = chip.closest('.chips').dataset.color || 'on';
+        chip.className = selected.includes(chip.textContent.trim()) ? 'chip ' + color : 'chip';
+      });
+    });
+    // Restore toggles
+    Object.keys(draft).filter(k => k.startsWith('_tgl_')).forEach(key => {
+      const id = key.replace('_tgl_', '');
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (draft[key]) {
+        el.classList.add('on');
+        const target = el.dataset.target;
+        if (target) { const t = document.getElementById(target); if(t) t.style.display='block'; }
+      }
+    });
+    starVal = draft._stars || 0;
+    document.querySelectorAll('#stars-diff .star').forEach((s,i) => s.classList.toggle('lit', i < starVal));
+    checkContorno();
+    if (draft['f-t-anest-ini'] || draft['f-t-cx-ini']) calcTiempos();
+    toast('Borrador restaurado ✓');
+  } catch(e) { localStorage.removeItem('alv4_draft'); }
+}
+
+function clearDraft() {
+  localStorage.removeItem('alv4_draft');
+  const dot = document.getElementById('autosave-dot');
+  const txt = document.getElementById('autosave-txt');
+  if (dot && txt) { dot.style.background = '#3d5a72'; txt.textContent = 'Borrador no guardado'; }
+}
+
+// ══════════════════════════════════════════
+// EDIT CASE
+// ══════════════════════════════════════════
+function editCase(id) {
+  const c = cases.find(x => x.id === id);
+  if (!c) return;
+  editingId = id;
+  fillForm(c);
+  // Switch to form view
+  document.querySelectorAll('.view').forEach(e => e.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(e => e.classList.remove('active'));
+  document.getElementById('view-form').classList.add('active');
+  document.querySelector('nav button').classList.add('active');
+  // Update button text
+  document.querySelector('.btn-p[onclick="saveCase()"]').textContent = '✎ Actualizar Caso';
+  window.scrollTo(0, 0);
+  toast('Editando caso — toca Actualizar Caso para guardar cambios');
+}
+
+function fillForm(c) {
+  if (!c) return;
+  // Basic fields
+  const setV = (id, val) => { const e = document.getElementById(id); if(e && val !== undefined && val !== null) e.value = val; };
+  setV('f-date', c.date); setV('f-name', c.name); setV('f-pid', c.pid);
+  setV('f-age', c.age); setV('f-sex', c.sex); setV('f-weight', c.weight); setV('f-height', c.height);
+  setV('f-asa', c.asa); setV('f-mallampati', c.mallampati); setV('f-comorbid-other', c.comorbiditiesOther);
+  setV('f-procedure', c.procedure); setV('f-specialty', c.specialty); setV('f-urgency', c.urgency);
+  setV('f-position', c.position); setV('f-lateralidad', c.lateralidad);
+  setV('f-hospital', c.hospital); setV('f-surgeon', c.surgeon);
+  setV('f-t-anest-ini', c.tAnestIni); setV('f-t-cx-ini', c.tCxIni);
+  setV('f-t-cx-fin', c.tCxFin); setV('f-t-anest-fin', c.tAnestFin);
+  setV('f-inductor', c.inductor); setV('f-inductor-dose', c.inductorDose);
+  setV('f-nmb', c.nmb); setV('f-nmb-dose', c.nmbDose);
+  setV('f-maintenance', c.maintenance); setV('f-maint-dose', c.maintDose);
+  setV('f-opioid', c.opioid); setV('f-opioid-dose', c.opioidDose);
+  setV('f-airway', c.airway); setV('f-tube', c.tube); setV('f-cormack', c.cormack);
+  setV('f-intubation', c.intubation); setV('f-fasting', c.fasting);
+  setV('f-nax-type', c.naxType); setV('f-nax-level', c.naxLevel);
+  setV('f-nax-la', c.naxLA); setV('f-nax-la-dose', c.naxLADose);
+  setV('f-nax-opioid', c.naxOpioid); setV('f-nax-opioid-dose', c.naxOpioidDose);
+  setV('f-nax-reached', c.naxReached); setV('f-nax-duration', c.naxDuration);
+  setV('f-nax-attempts', c.naxAttempts); setV('f-nax-notes', c.naxNotes);
+  setV('f-bleeding', c.bleeding); setV('f-diuresis', c.diuresis);
+  setV('f-crystalloids', c.crystalloids); setV('f-colloids', c.colloids);
+  setV('f-events-notes', c.eventsNotes);
+  setV('f-destination', c.destination); setV('f-pacu-time', c.pacuTime);
+  setV('f-ponv', c.ponv);
+  setV('f-pain', c.painScore);
+  const pd = document.getElementById('pain-disp'); if(pd) pd.textContent = c.painScore||'0';
+  setV('f-postop-notes', c.postopNotes);
+  setV('f-outcome', c.outcome); setV('f-notes', c.notes);
+  setV('f-ga-notes', c.gaNotes);
+  // Stars
+  starVal = c.difficulty || 0;
+  document.querySelectorAll('#stars-diff .star').forEach((s,i) => s.classList.toggle('lit', i < starVal));
+  // Chips — restore selected state
+  const restoreChips = (group, arr) => {
+    if (!arr) return;
+    document.querySelectorAll(`.chips[data-group="${group}"] .chip`).forEach(chip => {
+      const color = chip.closest('.chips').dataset.color || 'on';
+      if (arr.includes(chip.textContent.trim())) chip.className = 'chip ' + color;
+      else chip.className = 'chip';
+    });
+  };
+  restoreChips('comorbid', c.comorbidities);
+  restoreChips('atype', c.anesthesiaType);
+  restoreChips('multimodal', c.multimodal);
+  restoreChips('monitoring', c.monitoring);
+  restoreChips('access', c.access);
+  restoreChips('ss-blocks', c.ssBlocks);
+  restoreChips('ss-adj', c.ssAdj);
+  restoreChips('cath-site', c.cathSite);
+  restoreChips('events', c.events);
+  restoreChips('postop-analg', c.postopAnalg);
+  restoreChips('postop-comp', c.postopComp);
+  restoreChips('tumes-areas', c.tumesAreas);
+  restoreChips('elasto-meds', c.elastoMeds);
+  // Contorno
+  if (c.isContorno) {
+    document.getElementById('fc-contorno').style.display = 'block';
+    setV('f-hb-pre', c.hbPre); setV('f-hto-pre', c.htoPre); setV('f-hb-min', c.hbMin);
+    setV('f-tumes-vol', c.tumesVol); setV('f-tumes-lido-conc', c.tumesLidoConc);
+    setV('f-aspirado', c.aspirado);
+    setV('f-hb-24h', c.hb24h); setV('f-hto-24h', c.hto24h); setV('f-hb-48h', c.hb48h);
+    setV('f-did-transfuse', c.didTransfuse); setV('f-hb-notes', c.hbNotes);
+  }
+  // Toggles
+  const setTgl = (id, val, targetId) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (val) { el.classList.add('on'); if(targetId) document.getElementById(targetId).style.display = 'block'; }
+    else { el.classList.remove('on'); if(targetId) document.getElementById(targetId).style.display = 'none'; }
+  };
+  setTgl('tgl-vad', c.vad); setTgl('tgl-rsi', c.rsi);
+  setTgl('tgl-nax', c.hasNax, 'sec-nax');
+  setTgl('tgl-ss', c.hasSS, 'sec-ss');
+  setTgl('tgl-cath', c.hasCath, 'sec-cath');
+  setTgl('tgl-elasto', c.hasElasto, 'sec-elasto');
+  setTgl('tgl-torniquete', c.hasTorniquete, 'sec-torniquete');
+  if (c.hasTorniquete) {
+    setV('f-torn-lado', c.tornLado); setV('f-torn-presion', c.tornPresion);
+    setV('f-torn-tiempo', c.tornTiempo); setV('f-torn-isquemia', c.tornIsquemia);
+  }
+  if (c.hasElasto) {
+    setV('f-elasto-via', c.elastoVia);
+    setV('f-elasto-type', c.elastoType);
+    toggleElastoVia();
+    setV('f-elasto-la', c.elastoLA);
+    setV('f-elasto-conc-meta', c.elastoConcMeta);
+    setV('f-elasto-dias', c.elastoDias);
+    setV('f-em-tramadol', c.emTramadol); setV('f-em-ketorolaco', c.emKetorolaco);
+    setV('f-em-dexametasona', c.emDexametasona); setV('f-em-ondansetron', c.emOndansetron);
+    setV('f-em-dexmedo', c.emDexmedo); setV('f-em-morfina', c.emMorfina);
+    setV('f-elasto-meds-dias', c.elastoMedsDias); setV('f-elasto-meds-tasa', c.elastoMedsTasa);
+    setV('f-elasto-notes', c.elastoNotes);
+  }
+  // Trigger contorno detection
+  checkContorno();
+  if (c.tAnestIni || c.tCxIni) calcTiempos();
+}
 
 // ══════════════════════════════════════════
 // CHIPS — event delegation (iOS compatible)
@@ -1842,47 +2064,92 @@ function toggleElastoVia() {
   const isMeds = via === 'venosa' || via === 'subcutanea';
   document.getElementById('elasto-grp-al').style.display = isAL ? 'block' : 'none';
   document.getElementById('elasto-grp-meds').style.display = isMeds ? 'block' : 'none';
-  if (isAL) calcElasto();
 }
 
-function calcElasto() {
+function resetElastoIfEmpty(campo) {
+  const ids = {dias:'f-elasto-dias', rate:'f-elasto-rate-input', vol:'f-elasto-vol-input'};
+  const el = document.getElementById(ids[campo]);
+  if (!el || el.value !== '') return;
+  // unlock all three editable fields
+  ['dias','rate','vol'].forEach(f => {
+    const e = document.getElementById(ids[f]);
+    if (e) { e.readOnly = false; e.style.color = '#e8f0f8'; }
+  });
+  // clear results
+  ['f-elasto-vol-al','f-elasto-vol-dil','f-elasto-rate','f-elasto-dose-h','f-elasto-dur-txt']
+    .forEach(id => { const e=document.getElementById(id); if(e) e.value=''; });
+  document.getElementById('elasto-calc-box').style.display = 'none';
+}
+
+function calcElasto(campoEditado) {
   const laVal = document.getElementById('f-elasto-la').value;
   const concMetaVal = document.getElementById('f-elasto-conc-meta').value;
-  const diasVal = parseFloat(document.getElementById('f-elasto-dias').value) || 0;
-  const volReservVal = document.getElementById('f-elasto-vol-reservorio').value;
-  const peso = parseFloat(document.getElementById('f-weight').value) || 0;
   const al = AL_STOCK[laVal];
   const calcBox = document.getElementById('elasto-calc-box');
   const isCustomConc = concMetaVal === 'custom';
-  const isCustomVol = volReservVal === 'custom';
   document.getElementById('grp-elasto-conc-custom').style.display = isCustomConc ? 'flex' : 'none';
-  document.getElementById('grp-elasto-vol-custom').style.display = isCustomVol ? 'flex' : 'none';
-  if (!al || !concMetaVal || diasVal <= 0 || !volReservVal) { if (calcBox) calcBox.style.display = 'none'; return; }
-  const concMetaPct = isCustomConc ? (parseFloat(document.getElementById('f-elasto-conc-custom').value) || 0) : parseFloat(concMetaVal);
-  const volReserv = isCustomVol ? (parseFloat(document.getElementById('f-elasto-vol-custom').value) || 0) : parseFloat(volReservVal);
-  if (!concMetaPct || !volReserv) return;
+  if (!al || !concMetaVal) { if (calcBox) calcBox.style.display = 'none'; return; }
+  const concMetaPct = isCustomConc
+    ? (parseFloat(document.getElementById('f-elasto-conc-custom').value) || 0)
+    : parseFloat(concMetaVal);
+  if (!concMetaPct) return;
   const concMetaMgMl = concMetaPct * 10;
-  const volALpuro = (concMetaMgMl * volReserv) / al.conc;
-  const volDil = volReserv - volALpuro;
+  const peso = parseFloat(document.getElementById('f-weight').value) || 0;
+
+  // 3-field smart calc
+  const elDias = document.getElementById('f-elasto-dias');
+  const elRate = document.getElementById('f-elasto-rate-input');
+  const elVol  = document.getElementById('f-elasto-vol-input');
+  const dias = parseFloat(elDias.value);
+  const rate = parseFloat(elRate.value);
+  const vol  = parseFloat(elVol.value);
+  const hasDias = !isNaN(dias) && dias > 0;
+  const hasRate = !isNaN(rate) && rate > 0;
+  const hasVol  = !isNaN(vol)  && vol  > 0;
+
+  let diasCalc, rateCalc, volCalc;
+
+  if (campoEditado !== 'vol' && hasDias && hasRate) {
+    volCalc = rate * dias * 24;
+    elVol.value = volCalc.toFixed(0); elVol.readOnly = true; elVol.style.color = '#00d4aa';
+    elDias.readOnly = false; elRate.readOnly = false;
+  } else if (campoEditado !== 'rate' && hasDias && hasVol) {
+    rateCalc = vol / (dias * 24);
+    elRate.value = rateCalc.toFixed(2); elRate.readOnly = true; elRate.style.color = '#00d4aa';
+    elDias.readOnly = false; elVol.readOnly = false;
+  } else if (campoEditado !== 'dias' && hasRate && hasVol) {
+    diasCalc = vol / (rate * 24);
+    elDias.value = diasCalc.toFixed(1); elDias.readOnly = true; elDias.style.color = '#00d4aa';
+    elRate.readOnly = false; elVol.readOnly = false;
+  } else { return; }
+
+  const dFinal = parseFloat(elDias.value);
+  const rFinal = parseFloat(elRate.value);
+  const vFinal = parseFloat(elVol.value);
+  if (isNaN(dFinal)||isNaN(rFinal)||isNaN(vFinal)) return;
+
+  // C1V1 = C2V2
+  const volALpuro = (concMetaMgMl * vFinal) / al.conc;
+  const volDil = vFinal - volALpuro;
   const nAmps = (volALpuro / al.ampVol).toFixed(2);
-  const horasTotales = diasVal * 24;
-  const tasa = volReserv / horasTotales;
-  const doseH = concMetaMgMl * tasa;
+  const doseH = concMetaMgMl * rFinal;
   const doseMgKgH = peso > 0 ? doseH / peso : null;
+
   document.getElementById('f-elasto-vol-al').value = volALpuro.toFixed(1);
   document.getElementById('f-elasto-vol-dil').value = volDil.toFixed(1);
-  document.getElementById('f-elasto-rate').value = tasa.toFixed(1);
+  document.getElementById('f-elasto-rate').value = rFinal.toFixed(2);
   document.getElementById('f-elasto-dose-h').value = doseH.toFixed(1);
-  document.getElementById('f-elasto-dur-txt').value = horasTotales + ' h / ' + diasVal + ' días';
+  document.getElementById('f-elasto-dur-txt').value = (dFinal*24).toFixed(0) + ' h / ' + dFinal.toFixed(1) + ' días';
+
   let rows = dRow('AL stock', al.name + ' (' + al.conc + ' mg/mL — amp ' + al.ampVol + ' mL)', '#e8f0f8');
   rows += dRow('Concentración deseada', concMetaPct + '% = ' + concMetaMgMl + ' mg/mL', '#0094ff');
-  rows += dRow('Volumen reservorio', volReserv + ' mL', '#e8f0f8');
-  rows += dRow('Duración', diasVal + ' días (' + horasTotales + ' h)', '#f4c542');
+  rows += dRow('Volumen reservorio', vFinal + ' mL', '#e8f0f8');
+  rows += dRow('Duración', dFinal.toFixed(1) + ' días (' + (dFinal*24).toFixed(0) + ' h)', '#f4c542');
   rows += dRow('━━━ PREPARACIÓN ━━━', '', '#b48aff');
   rows += dRow('Tomar del AL stock', volALpuro.toFixed(1) + ' mL (' + nAmps + ' amp de ' + al.ampVol + ' mL)', '#b48aff');
   rows += dRow('Agregar SSN 0.9%', volDil.toFixed(1) + ' mL', '#7a9ab5');
   rows += dRow('━━━ PROGRAMAR ━━━', '', '#00d4aa');
-  rows += dRow('Tasa de infusión', tasa.toFixed(1) + ' mL/h', '#00d4aa');
+  rows += dRow('Tasa de infusión', rFinal.toFixed(2) + ' mL/h', '#00d4aa');
   rows += dRow('Dosis por hora', doseH.toFixed(1) + ' mg/h', '#00d4aa');
   if (doseMgKgH) rows += dRow('Dosis en mg/kg/h', doseMgKgH.toFixed(3) + ' mg/kg/h', '#00d4aa');
   document.getElementById('elasto-calc-rows').innerHTML = rows;
@@ -1981,16 +2248,24 @@ function saveCase() {
     hbDrop: v('f-hb-drop'), hbInterp: v('f-hb-interp'),
     hb48h: v('f-hb-48h'), didTransfuse: v('f-did-transfuse'), hbNotes: v('f-hb-notes')
   };
-  cases.unshift(c);
-  persist();
-  toast('✓ Caso guardado');
-  clearForm();
+  if (editingId !== null) {
+    const idx = cases.findIndex(x => x.id === editingId);
+    if (idx !== -1) { cases[idx] = { ...c, id: editingId }; persist(); toast('✓ Caso actualizado'); }
+    editingId = null;
+    const btn = document.querySelector('.btn-p[onclick="saveCase()"]');
+    if (btn) btn.textContent = '⊕ Guardar Caso';
+  } else {
+    cases.unshift(c); persist(); toast('✓ Caso guardado');
+  }
+  clearDraft(); clearForm();
 }
 
-// ══════════════════════════════════════════
-// CLEAR FORM
-// ══════════════════════════════════════════
+function collectFormData() { return {}; } // alias for autosave draft compatibility
 function clearForm() {
+  editingId = null;
+  const btn = document.querySelector('.btn-p[onclick="saveCase()"]');
+  if (btn) btn.textContent = '⊕ Guardar Caso';
+  clearDraft();
   document.querySelectorAll('#view-form input:not([type=range]):not([type=file]),#view-form select,#view-form textarea')
     .forEach(e => e.value = '');
   document.querySelectorAll('#view-form input[type=range]').forEach(e => e.value = 0);
@@ -2050,6 +2325,7 @@ function renderRecs() {
         <div class="rmeta"><span>👤${c.name||'—'}</span><span>📅${ds}</span><span>🏥${c.specialty||'—'}</span>${c.age?`<span>${c.age}a</span>`:''}</div>
       </div>
       <div class="rbadges">${c.asa?`<span class="asa-badge a${c.asa}">${c.asa}</span>`:''} ${c.outcome?`<span class="badge ${oc}">${c.outcome}</span>`:''} ${reg}${ela}${lipo}
+        <button class="btn-e" style="font-size:0.62rem;padding:0.25rem 0.6rem" onclick="event.stopPropagation();editCase(${c.id})">✎</button>
         <button class="btn-d" onclick="event.stopPropagation();delCase(${c.id})">✕</button>
       </div>
     </div>`;
@@ -2423,4 +2699,3 @@ function toast(msg, err=false) {
 
 </body>
 </html>
-
