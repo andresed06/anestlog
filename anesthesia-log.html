@@ -361,20 +361,46 @@ transition:all 0.15s;touch-action:manipulation;
 
   <div class="sdiv">Tumescencia</div>
   <div class="fg">
-    <div class="fgg"><label>Volumen tumescente total (mL)</label><input type="number" id="f-tumes-vol" placeholder="3000" oninput="calcLipo()"></div>
-    <div class="fgg"><label>Fórmula tumescente</label>
-      <select id="f-tumes-formula">
+    <div class="fgg s2"><label>Fórmula tumescente</label>
+      <select id="f-tumes-formula" onchange="toggleTumesFormula()">
         <option value="">—</option>
         <option value="klein">Klein (Lido 0.05% + Epi 1:1.000.000)</option>
         <option value="diluida">Diluida (Lido 0.025% + Epi 1:2.000.000)</option>
         <option value="supra">Supratumescente</option>
-        <option value="custom">Personalizada</option>
+        <option value="custom_lido">Personalizada con lidocaína</option>
+        <option value="custom_notx">Personalizada sin lidocaína (Epi + TXA)</option>
       </select>
     </div>
-    <div class="fgg"><label>Lidocaína tumescente (mg/mL)</label><input type="number" id="f-tumes-lido-conc" step="0.01" placeholder="0.5" oninput="calcLipo()"></div>
-    <div class="fgg"><label>Epinefrina (mcg/mL)</label><input type="number" id="f-tumes-epi" step="0.1" placeholder="1.0"></div>
-    <div class="fgg"><label>Dosis total lidocaína (mg)</label><input type="number" id="f-tumes-lido-total" readonly placeholder="Auto"></div>
-    <div class="fgg"><label>Dosis lidocaína (mg/kg)</label><input type="number" id="f-tumes-lido-mgkg" readonly placeholder="Auto"></div>
+    <div class="fgg"><label>Volumen tumescente total (mL)</label><input type="number" id="f-tumes-vol" placeholder="3000" oninput="calcLipo()"></div>
+
+```
+<!-- CAMPOS CON LIDOCAÍNA -->
+<div id="grp-tumes-lido" style="display:contents">
+  <div class="fgg"><label>Lidocaína tumescente (mg/mL)</label><input type="number" id="f-tumes-lido-conc" step="0.01" placeholder="0.5" oninput="calcLipo()"></div>
+  <div class="fgg"><label>Dosis total lidocaína (mg)</label><input type="number" id="f-tumes-lido-total" readonly placeholder="Auto"></div>
+  <div class="fgg"><label>Dosis lidocaína (mg/kg)</label><input type="number" id="f-tumes-lido-mgkg" readonly placeholder="Auto"></div>
+</div>
+
+<!-- CAMPOS EPINEFRINA (siempre visible) -->
+<div class="fgg"><label>Ampollas de adrenalina (1mg/amp)</label><input type="number" id="f-tumes-epi-amps" step="1" placeholder="Ej: 6" oninput="calcTumesCustom()"></div>
+<div class="fgg"><label>Concentración adrenalina (mcg/mL)</label><input type="number" id="f-tumes-epi-conc" readonly placeholder="Auto" style="color:#00d4aa"></div>
+<div class="fgg"><label>Dosis total adrenalina (mg)</label><input type="number" id="f-tumes-epi-total" readonly placeholder="Auto" style="color:#00d4aa"></div>
+
+<!-- CAMPOS TXA — solo fórmula sin lidocaína -->
+<div id="grp-tumes-txa" style="display:none;grid-column:1/-1">
+  <div class="fg">
+    <div class="fgg"><label>Ácido tranexámico total (mg)</label><input type="number" id="f-tumes-txa-mg" step="50" placeholder="Ej: 300" oninput="calcTumesCustom()"></div>
+    <div class="fgg"><label>Concentración TXA (mg/mL)</label><input type="number" id="f-tumes-txa-conc" readonly placeholder="Auto" style="color:#00d4aa"></div>
+    <div class="fgg"><label>Dosis TXA (mg/kg)</label><input type="number" id="f-tumes-txa-mgkg" readonly placeholder="Auto" style="color:#00d4aa"></div>
+  </div>
+  <!-- Panel de preparación -->
+  <div id="tumes-custom-box" style="display:none;margin-top:0.75rem;background:rgba(0,212,170,0.05);border:1px solid rgba(0,212,170,0.2);border-radius:8px;padding:0.85rem">
+    <div style="font-family:'Syne',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#00d4aa;margin-bottom:0.5rem">◎ Preparación Solución Tumescente</div>
+    <div id="tumes-custom-rows"></div>
+  </div>
+</div>
+```
+
   </div>
   <div class="fg" style="margin-top:0.75rem">
     <div class="fgg full"><label>Áreas tratadas</label>
@@ -387,17 +413,20 @@ transition:all 0.15s;touch-action:manipulation;
     </div>
   </div>
 
-  <div class="sdiv">Aspirado</div>
+  <div class="sdiv">Aspirado y Volumen Máximo de Seguridad</div>
   <div class="fg">
     <div class="fgg"><label>Volumen aspirado total (mL)</label><input type="number" id="f-aspirado" placeholder="2500" oninput="calcLipo()"></div>
-    <div class="fgg"><label>% sangre en aspirado</label>
-      <select id="f-aspirado-pct" onchange="calcLipo()">
-        <option value="1">~1% (tumescente óptima)</option>
-        <option value="2" selected>~2% (tumescente típica)</option>
-        <option value="4">~4% (húmedo)</option>
-        <option value="8">~8% (seco)</option>
+    <div class="fgg"><label>Tipo de grasa aspirada</label>
+      <select id="f-grasa-tipo" onchange="autoSetPct(); calcLipo()">
+        <option value="adipositica">Adiposítica — grasa pura, amarilla (~1% sangre)</option>
+        <option value="mixta_adip">Mixta adiposítica — predominio graso (~4% sangre)</option>
+        <option value="mixta" selected>Mixta — grasa y sangre similar (~8% sangre)</option>
+        <option value="mixta_hem">Mixta hemática — predominio sanguíneo (~15% sangre)</option>
+        <option value="hematica">Hemática — sangrado significativo (~25% sangre)</option>
       </select>
     </div>
+    <input type="hidden" id="f-aspirado-pct" value="8">
+    <div class="fgg"><label>Peso colgajo dermolipectomía (g)</label><input type="number" id="f-colgajo-peso" placeholder="Opcional" oninput="calcLipo()"></div>
     <div class="fgg"><label>Sangre en aspirado (mL)</label><input type="number" id="f-blood-asp" readonly placeholder="Auto" style="color:#ff6b6b"></div>
     <div class="fgg"><label>Grasa pura extraída (mL)</label><input type="number" id="f-fat-asp" readonly placeholder="Auto" style="color:#f4c542"></div>
   </div>
@@ -406,16 +435,60 @@ transition:all 0.15s;touch-action:manipulation;
 
   <div id="lipo-calc" style="display:none;margin-top:0.85rem">
     <div class="calc-box">
-      <div class="calc-title">◎ Cálculos de Seguridad</div>
+      <div class="calc-title">◎ Cálculos de Seguridad — Pérdida Sanguínea</div>
       <div id="lipo-calc-rows"></div>
+      <!-- NOTA METODOLÓGICA -->
+      <div style="margin-top:0.75rem;background:rgba(244,197,66,0.05);border:1px solid rgba(244,197,66,0.2);border-radius:6px;padding:0.75rem">
+        <div style="font-family:'Syne',sans-serif;font-size:0.6rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#f4c542;margin-bottom:0.4rem">⚠ Nota Metodológica Importante</div>
+        <div style="font-size:0.68rem;color:#7a9ab5;line-height:1.7">
+          El % de sangre en el aspirado representa solo el <strong style="color:#e8f0f8">~2% de la pérdida sanguínea real</strong> en liposucción tumescente. El <strong style="color:#e8f0f8">98% restante</strong> se distribuye en el espacio intersticial (tercer espacio) y no es capturado en el aspirado.<br><br>
+          Los cálculos de esta sección son útiles para <strong style="color:#e8f0f8">clasificación y planificación preoperatoria</strong>, pero la estimación de pérdida sanguínea total real debe basarse en: Hb/Hto preop vs 24h postop, monitoreo hemodinámico intraoperatorio y juicio clínico.<br><br>
+          <span style="color:#3d5a72">Ref: Manzaneda Cipriani R et al. Pérdida permisible de grasa en liposucción. Cir Plast Ibero-Latinoam. 2021;47(1):19-28 · Samdal F et al. Blood loss during liposuction. Scand J Plast Reconstr Surg. 1994;28(1):23-7 · ASPS Patient Safety Advisory on Liposuction. Plast Reconstr Surg. 2009 (Suppl).</span>
+        </div>
+      </div>
     </div>
-    <div class="calc-box" id="lipo-alert-box" style="display:none">
+    <div class="calc-box" style="background:rgba(0,148,255,0.05);border-color:rgba(0,148,255,0.2);margin-top:0.5rem">
+      <div class="calc-title" style="color:#0094ff">◎ Volumen Máximo por Tipo de Grasa</div>
+      <div style="font-size:0.62rem;color:#7a9ab5;margin-bottom:0.5rem">Ref: Manzaneda Cipriani et al. 2021 · Samdal et al. 1994 · ASPS Safety Advisory 2009</div>
+      <div id="lipo-fat-type-rows"></div>
+    </div>
+    <div class="calc-box" style="background:rgba(180,138,255,0.05);border-color:rgba(180,138,255,0.2);margin-top:0.5rem">
+      <div class="calc-title" style="color:#b48aff">◎ Gestión de Líquidos Intraoperatorios</div>
+      <div style="font-size:0.62rem;color:#7a9ab5;margin-bottom:0.5rem">Ref: Rohrich RJ et al. Fluid resuscitation in liposuction. Plast Reconstr Surg. 2006;117(2):431-435</div>
+      <div id="lipo-fluidos-rows"></div>
+    </div>
+    <div class="calc-box danger" id="lipo-alert-box" style="display:none">
       <div class="calc-title danger" id="lipo-alert-title"></div>
       <div id="lipo-alert-rows"></div>
     </div>
   </div>
 
-  <div class="sdiv">Seguimiento Hematológico Postoperatorio</div>
+  <!-- CIRUGÍA COMBINADA -->
+
+  <div class="sdiv">Procedimientos Adicionales Combinados</div>
+  <div class="trow" style="margin-bottom:0.75rem">
+    <span class="tlabel">¿Se realizaron procedimientos adicionales?</span>
+    <div class="tgl" id="tgl-combined" data-tgl="1" data-target="sec-combined"></div>
+  </div>
+  <div id="sec-combined" style="display:none">
+    <div style="font-size:0.68rem;color:#7a9ab5;margin-bottom:0.75rem;line-height:1.6">
+      Selecciona los procedimientos adicionales. El sistema mostrará el rango bibliográfico de sangrado esperado y precargará un valor central — ajústalo con el estimado real del cirujano.
+    </div>
+    <div id="combined-procs-list">
+      <!-- Se agrega dinámicamente -->
+    </div>
+    <button onclick="addCombinedProc()" style="background:rgba(0,148,255,0.1);border:1px solid rgba(0,148,255,0.3);color:#0094ff;padding:0.5rem 1rem;border-radius:6px;font-size:0.72rem;cursor:pointer;margin-top:0.5rem">+ Agregar procedimiento</button>
+
+```
+<!-- RESUMEN TOTAL -->
+<div id="combined-total-box" style="display:none;margin-top:0.85rem;background:rgba(255,107,107,0.05);border:1px solid rgba(255,107,107,0.2);border-radius:8px;padding:0.85rem">
+  <div style="font-family:'Syne',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#ff6b6b;margin-bottom:0.5rem">◎ Sangrado Total Estimado — Cirugía Combinada</div>
+  <div id="combined-total-rows"></div>
+  <div style="font-size:0.6rem;color:#3d5a72;margin-top:0.5rem;line-height:1.6">Ref: ASPS Procedural Statistics · Murphy RX et al., Plast Reconstr Surg 2003 · Handel N et al., Ann Plast Surg 1995 · Series retrospectivas de cirugía mamaria estética</div>
+</div>
+```
+
+  </div>
   <div class="fg">
     <div class="fgg"><label>Hb 24h POP (g/dL)</label><input type="number" id="f-hb-24h" step="0.1" placeholder="11.0" oninput="calcHb24()"></div>
     <div class="fgg"><label>Hto 24h POP (%)</label><input type="number" id="f-hto-24h" step="0.1" placeholder="33.0"></div>
@@ -1095,6 +1168,90 @@ transition:all 0.15s;touch-action:manipulation;
   </div>
 </div>
 
+<!-- PROTOCOLOS DE EMERGENCIA -->
+
+<div class="fc" style="border-color:rgba(255,107,107,0.25)">
+  <div class="fct red">⚠ Protocolos de Emergencia — Referencia Rápida</div>
+
+  <!-- LAST -->
+
+  <div class="sdiv" style="color:#ff6b6b">Toxicidad Sistémica por Anestésico Local (LAST)</div>
+  <div style="font-size:0.62rem;color:#7a9ab5;margin-bottom:0.75rem">Ref: ASRA Practice Advisory on Local Anesthetic Systemic Toxicity 2023 (Neal et al.)</div>
+
+  <div class="fg">
+    <div class="fgg"><label>Peso paciente (kg) — para dosis Intralipid</label>
+      <input type="number" id="f-last-peso" placeholder="Auto desde datos paciente" oninput="calcLAST()">
+    </div>
+  </div>
+
+  <div id="last-protocol" style="margin-top:0.75rem">
+    <div style="background:rgba(255,107,107,0.06);border:1px solid rgba(255,107,107,0.2);border-radius:8px;padding:0.85rem;margin-bottom:0.5rem">
+      <div style="font-family:'Syne',sans-serif;font-size:0.65rem;font-weight:700;color:#ff6b6b;margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:0.08em">① Detener la inyección de AL inmediatamente</div>
+      <div style="font-size:0.72rem;color:#7a9ab5;line-height:1.6">Pedir ayuda · Activar código de emergencia · Asegurar vía aérea (100% O₂) · Posición supina</div>
+    </div>
+    <div style="background:rgba(255,107,107,0.06);border:1px solid rgba(255,107,107,0.2);border-radius:8px;padding:0.85rem;margin-bottom:0.5rem">
+      <div style="font-family:'Syne',sans-serif;font-size:0.65rem;font-weight:700;color:#ff6b6b;margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:0.08em">② Manejo de convulsiones</div>
+      <div style="font-size:0.72rem;color:#7a9ab5;line-height:1.6">Benzodiacepinas IV de primera línea (Midazolam 0.05–0.1 mg/kg IV) · Propofol SOLO si hay soporte cardiovascular · <strong style="color:#ff6b6b">EVITAR Propofol si hipotensión</strong></div>
+    </div>
+    <div style="background:rgba(255,107,107,0.08);border:1px solid rgba(255,107,107,0.3);border-radius:8px;padding:0.85rem;margin-bottom:0.5rem">
+      <div style="font-family:'Syne',sans-serif;font-size:0.65rem;font-weight:700;color:#ff6b6b;margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:0.08em">③ Emulsión Lipídica 20% (Intralipid) — CLAVE</div>
+      <div id="last-dosis-rows" style="font-size:0.72rem;color:#7a9ab5;line-height:1.9">
+        <div>🔹 <strong style="color:#e8f0f8">Bolo inicial:</strong> 1.5 mL/kg IV en 1 min → <span style="color:#ff6b6b">calcule con peso arriba</span></div>
+        <div>🔹 <strong style="color:#e8f0f8">Infusión:</strong> 0.25 mL/kg/min × 30–60 min</div>
+        <div>🔹 <strong style="color:#e8f0f8">Si persiste:</strong> repetir bolo × 1–2 veces cada 5 min</div>
+        <div>🔹 <strong style="color:#e8f0f8">Dosis máxima:</strong> 10 mL/kg en 30 min</div>
+      </div>
+    </div>
+    <div style="background:rgba(255,107,107,0.06);border:1px solid rgba(255,107,107,0.2);border-radius:8px;padding:0.85rem;margin-bottom:0.5rem">
+      <div style="font-family:'Syne',sans-serif;font-size:0.65rem;font-weight:700;color:#ff6b6b;margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:0.08em">④ Si paro cardíaco</div>
+      <div style="font-size:0.72rem;color:#7a9ab5;line-height:1.6">RCP estándar ACLS · <strong style="color:#ff6b6b">Epinefrina dosis REDUCIDA</strong> ≤1 mcg/kg · <strong style="color:#ff6b6b">EVITAR</strong> vasopresina, bloqueadores Ca²⁺, betabloqueadores · Iniciar Intralipid si no se había dado · Considerar bypass cardiopulmonar si disponible</div>
+    </div>
+    <div id="last-calc-box" style="display:none;background:rgba(255,107,107,0.05);border:1px solid rgba(255,107,107,0.25);border-radius:8px;padding:0.85rem">
+      <div style="font-family:'Syne',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#ff6b6b;margin-bottom:0.5rem">💉 Dosis Intralipid 20% Calculadas</div>
+      <div id="last-calc-rows"></div>
+    </div>
+  </div>
+
+  <!-- PARO CARDÍACO PERIOPERATORIO -->
+
+  <div class="sdiv" style="color:#ff6b6b;margin-top:1rem">Paro Cardíaco Perioperatorio — ACLS Adaptado</div>
+  <div style="font-size:0.62rem;color:#7a9ab5;margin-bottom:0.75rem">Ref: AHA/ACLS Guidelines 2020 · Moitra et al., Anesthesiology 2018</div>
+  <div class="fg">
+    <div style="grid-column:1/-1;display:flex;flex-direction:column;gap:0.4rem">
+      <div style="background:rgba(255,107,107,0.06);border:1px solid rgba(255,107,107,0.2);border-radius:8px;padding:0.85rem">
+        <div style="font-family:'Syne',sans-serif;font-size:0.65rem;font-weight:700;color:#ff6b6b;margin-bottom:0.4rem;text-transform:uppercase;letter-spacing:0.08em">RCP de Alta Calidad</div>
+        <div style="font-size:0.72rem;color:#7a9ab5;line-height:1.7">100–120 compresiones/min · Profundidad 5–6 cm · Relación 30:2 sin VA avanzada · Minimizar interrupciones · Ventilación 10 resp/min con VA avanzada</div>
+      </div>
+      <div style="background:rgba(255,107,107,0.06);border:1px solid rgba(255,107,107,0.2);border-radius:8px;padding:0.85rem">
+        <div style="font-family:'Syne',sans-serif;font-size:0.65rem;font-weight:700;color:#ff6b6b;margin-bottom:0.4rem;text-transform:uppercase;letter-spacing:0.08em">Ritmos Desfibrilables (FV / TV sin pulso)</div>
+        <div style="font-size:0.72rem;color:#7a9ab5;line-height:1.7">Desfibrilación inmediata: <strong style="color:#e8f0f8">bifásico 120–200 J</strong> · Epinefrina 1 mg IV c/3–5 min (después del 2° choque) · Amiodarona 300 mg IV (1° dosis) → 150 mg (2° dosis) · Lidocaína alternativa: 1–1.5 mg/kg IV</div>
+      </div>
+      <div style="background:rgba(255,107,107,0.06);border:1px solid rgba(255,107,107,0.2);border-radius:8px;padding:0.85rem">
+        <div style="font-family:'Syne',sans-serif;font-size:0.65rem;font-weight:700;color:#ff6b6b;margin-bottom:0.4rem;text-transform:uppercase;letter-spacing:0.08em">Ritmos No Desfibrilables (AESP / Asistolia)</div>
+        <div style="font-size:0.72rem;color:#7a9ab5;line-height:1.7">Epinefrina 1 mg IV <strong style="color:#e8f0f8">tan pronto como sea posible</strong>, luego c/3–5 min · Buscar y tratar causas reversibles: <strong style="color:#e8f0f8">5H y 5T</strong></div>
+      </div>
+      <div style="background:rgba(244,197,66,0.06);border:1px solid rgba(244,197,66,0.2);border-radius:8px;padding:0.85rem">
+        <div style="font-family:'Syne',sans-serif;font-size:0.65rem;font-weight:700;color:#f4c542;margin-bottom:0.4rem;text-transform:uppercase;letter-spacing:0.08em">Las 5H y las 5T</div>
+        <div style="font-size:0.72rem;color:#7a9ab5;line-height:1.8">
+          <strong style="color:#e8f0f8">5H:</strong> Hipovolemia · Hipoxia · Hidrogenión (acidosis) · Hipo/hiperpotasemia · Hipotermia<br>
+          <strong style="color:#e8f0f8">5T:</strong> Neumotórax a Tensión · Taponamiento cardíaco · Tóxicos (LAST) · Trombosis coronaria · Tromboembolismo pulmonar
+        </div>
+      </div>
+      <div style="background:rgba(255,107,107,0.06);border:1px solid rgba(255,107,107,0.2);border-radius:8px;padding:0.85rem">
+        <div style="font-family:'Syne',sans-serif;font-size:0.65rem;font-weight:700;color:#ff6b6b;margin-bottom:0.4rem;text-transform:uppercase;letter-spacing:0.08em">Dosis de Medicamentos Clave</div>
+        <div style="font-size:0.72rem;color:#7a9ab5;line-height:1.8">
+          <strong style="color:#e8f0f8">Epinefrina:</strong> 1 mg IV c/3–5 min (LAST: ≤1 mcg/kg)<br>
+          <strong style="color:#e8f0f8">Atropina:</strong> 0.5–1 mg IV (bradicardia) hasta 3 mg total<br>
+          <strong style="color:#e8f0f8">Amiodarona:</strong> 300 mg IV bolo → 150 mg × 1<br>
+          <strong style="color:#e8f0f8">Bicarbonato:</strong> 1 mEq/kg IV si pH &lt;7.1 documentado<br>
+          <strong style="color:#e8f0f8">Calcio:</strong> 1g IV si hipocalcemia / hipermagnesemia / BCC<br>
+          <strong style="color:#e8f0f8">Glucagón:</strong> 3–10 mg IV si betabloqueador o BCC
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- EVALUACIÓN -->
 
 <div class="fc">
@@ -1556,17 +1713,161 @@ function checkContorno() {
 }
 
 // ══════════════════════════════════════════
+// CIRUGÍA COMBINADA — SANGRADO ADICIONAL
+// ══════════════════════════════════════════
+var COMBINED_PROCS = {
+  'aumento': {
+    label: 'Mamoplastia de aumento (solo prótesis)',
+    min: 50, max: 150, central: 75,
+    nota: 'Sangrado bajo con buena hemostasia. Aumenta si subpectoral o cápsula gruesa.'
+  },
+  'mastopexia': {
+    label: 'Mastopexia sin prótesis',
+    min: 100, max: 250, central: 150,
+    nota: 'Varía según patrón de cicatriz (periareolar < vertical < T invertida).'
+  },
+  'aumento_mastopexia': {
+    label: 'Aumento + mastopexia simultánea',
+    min: 150, max: 350, central: 200,
+    nota: 'Mayor disección = mayor sangrado. Riesgo de hematoma aumentado vs cada procedimiento solo.'
+  },
+  'explantacion': {
+    label: 'Explantación mamaria simple',
+    min: 50, max: 150, central: 100,
+    nota: 'Sin capsulectomía total. Si capsulectomía total: sumar 100-200 mL adicionales.'
+  },
+  'explantacion_mastopexia': {
+    label: 'Explantación + mastopexia',
+    min: 150, max: 400, central: 250,
+    nota: 'Sangrado significativo por doble campo quirúrgico.'
+  },
+  'reduccion': {
+    label: 'Reducción mamaria',
+    min: 150, max: 400, central: 250,
+    nota: 'Proporcional al volumen resecado. >500g resecados por lado aumenta el rango.'
+  },
+  'revision_cicatriz': {
+    label: 'Revisión cicatriz abdominoplastia previa',
+    min: 100, max: 300, central: 175,
+    nota: 'Extracción de cicatriz anterior sin levantamiento completo del colgajo. Sangrado real subestimado en literatura — basado en series de revisión.'
+  }
+};
+
+var combinedProcCount = 0;
+
+function addCombinedProc() {
+  combinedProcCount++;
+  var id = 'cp-' + combinedProcCount;
+  var options = Object.keys(COMBINED_PROCS).map(function(k) {
+    return '<option value="' + k + '">' + COMBINED_PROCS[k].label + '</option>';
+  }).join('');
+
+  var html = '<div id="' + id + '" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:0.85rem;margin-bottom:0.5rem">' +
+    '<div class="fg">' +
+    '<div class="fgg s2"><label>Procedimiento</label>' +
+    '<select onchange="setCombinedRange(\'' + id + '\')" id="' + id + '-tipo">' +
+    '<option value="">Seleccionar...</option>' + options +
+    '</select></div>' +
+    '<div class="fgg"><label>Rango bibliográfico (mL)</label>' +
+    '<input type="text" id="' + id + '-rango" readonly placeholder="—" style="color:#7a9ab5;font-size:0.72rem"></div>' +
+    '<div class="fgg"><label>Sangrado estimado real (mL)</label>' +
+    '<input type="number" id="' + id + '-valor" placeholder="Ajustar" oninput="calcCombinedTotal()" style="color:#00d4aa"></div>' +
+    '<div class="fgg full"><div id="' + id + '-nota" style="font-size:0.65rem;color:#3d5a72;padding-top:0.25rem;line-height:1.5"></div></div>' +
+    '</div>' +
+    '<button onclick="removeCombinedProc(\'' + id + '\')" style="background:none;border:none;color:#3d5a72;font-size:0.7rem;cursor:pointer;padding:0;margin-top:0.25rem">✕ Eliminar</button>' +
+    '</div>';
+
+  document.getElementById('combined-procs-list').insertAdjacentHTML('beforeend', html);
+}
+
+function setCombinedRange(id) {
+  var tipo = document.getElementById(id + '-tipo').value;
+  var proc = COMBINED_PROCS[tipo];
+  if (!proc) return;
+  document.getElementById(id + '-rango').value = proc.min + ' – ' + proc.max + ' mL';
+  document.getElementById(id + '-valor').value = proc.central;
+  document.getElementById(id + '-nota').textContent = '📋 ' + proc.nota;
+  calcCombinedTotal();
+}
+
+function removeCombinedProc(id) {
+  var el = document.getElementById(id);
+  if (el) el.remove();
+  calcCombinedTotal();
+}
+
+function calcCombinedTotal() {
+  var items = document.querySelectorAll('#combined-procs-list [id$="-valor"]');
+  var procs = document.querySelectorAll('#combined-procs-list [id$="-tipo"]');
+  if (items.length === 0) {
+    document.getElementById('combined-total-box').style.display = 'none';
+    return;
+  }
+  var totalAdicional = 0;
+  var rows = '';
+  items.forEach(function(el, i) {
+    var val = parseFloat(el.value) || 0;
+    var tipoEl = procs[i];
+    var tipoVal = tipoEl ? tipoEl.value : '';
+    var proc = COMBINED_PROCS[tipoVal];
+    var label = proc ? proc.label : 'Procedimiento adicional';
+    var rango = proc ? proc.min + '-' + proc.max + ' mL' : '—';
+    totalAdicional += val;
+    var warn = proc && (val > proc.max || val < proc.min);
+    rows += calcRow(label, val + ' mL (rango: ' + rango + ')', warn ? 'warn' : '');
+  });
+
+  // Get lipo bleeding
+  var lipoSangre = parseFloat(document.getElementById('f-blood-asp').value) || 0;
+  var totalSangrado = lipoSangre + totalAdicional;
+
+  rows += calcRow('━━━', '', '');
+  if (lipoSangre > 0) rows += calcRow('Sangrado liposucción (aspirado)', lipoSangre + ' mL', '');
+  rows += calcRow('Sangrado procedimientos adicionales', totalAdicional + ' mL', '');
+  rows += calcRow('SANGRADO TOTAL ESTIMADO', totalSangrado + ' mL', totalSangrado > 800 ? 'danger' : totalSangrado > 500 ? 'warn' : '');
+
+  // Recalculate Hb post with combined blood loss
+  var peso = parseFloat(document.getElementById('f-weight').value) || 0;
+  var hbPre = parseFloat(document.getElementById('f-hb-pre').value) || 0;
+  if (peso > 0 && hbPre > 0 && totalSangrado > 0) {
+    var vce = Math.round(peso * 65);
+    var hbPost = (hbPre * (1 - totalSangrado / vce)).toFixed(1);
+    var hbMin = parseFloat(document.getElementById('f-hb-min').value) || 8;
+    rows += calcRow('Hb estimada post-cirugía combinada', hbPost + ' g/dL', parseFloat(hbPost) < hbMin ? 'danger' : parseFloat(hbPost) < (hbMin + 1) ? 'warn' : '');
+  }
+
+  document.getElementById('combined-total-rows').innerHTML = rows;
+  document.getElementById('combined-total-box').style.display = 'block';
+}
+
+
+function autoSetPct() {
+  var tipo = document.getElementById('f-grasa-tipo').value;
+  var pctMap = {
+    adipositica: '1',
+    mixta_adip: '4',
+    mixta: '8',
+    mixta_hem: '15',
+    hematica: '25'
+  };
+  var el = document.getElementById('f-aspirado-pct');
+  if (el) el.value = pctMap[tipo] || '8';
+}
+
+// ══════════════════════════════════════════
 // LIPO CALCULATIONS
 // ══════════════════════════════════════════
 function calcLipo() {
   const tumeVol = parseFloat(document.getElementById('f-tumes-vol').value) || 0;
-  const lidoConc = parseFloat(document.getElementById('f-tumes-lido-conc').value) || 0;
+  const lidoConc = parseFloat(document.getElementById('f-tumes-lido-conc')?.value) || 0;
   const aspirado = parseFloat(document.getElementById('f-aspirado').value) || 0;
-  const pct = parseFloat(document.getElementById('f-aspirado-pct').value) || 2;
+  const pct = parseFloat(document.getElementById('f-aspirado-pct').value) || 4;
   const peso = parseFloat(document.getElementById('f-weight').value) || 0;
   const hbPre = parseFloat(document.getElementById('f-hb-pre').value) || 0;
   const htoPre = parseFloat(document.getElementById('f-hto-pre').value) || 0;
   const hbMin = parseFloat(document.getElementById('f-hb-min').value) || 8;
+  const colgajoPeso = parseFloat(document.getElementById('f-colgajo-peso').value) || 0;
+  const tipoGrasa = document.getElementById('f-grasa-tipo')?.value || 'mixta';
 
   // Lido
   if (tumeVol > 0 && lidoConc > 0) {
@@ -1574,9 +1875,11 @@ function calcLipo() {
     const lidoMgKg = peso > 0 ? (lidoTotal / peso).toFixed(1) : '—';
     document.getElementById('f-tumes-lido-total').value = lidoTotal.toFixed(0);
     document.getElementById('f-tumes-lido-mgkg').value = lidoMgKg;
-    document.getElementById('f-tumes-lido-mgkg').style.color =
-      (parseFloat(lidoMgKg) <= 35) ? '#00d4aa' : '#ff6b6b';
+    document.getElementById('f-tumes-lido-mgkg').style.color = (parseFloat(lidoMgKg) <= 35) ? '#00d4aa' : '#ff6b6b';
   }
+
+  // Epinefrina auto-calc from amps
+  calcTumesCustom();
 
   // Aspirado
   const bloodInAsp = aspirado * pct / 100;
@@ -1586,63 +1889,133 @@ function calcLipo() {
     document.getElementById('f-fat-asp').value = fatAsp.toFixed(0);
   }
 
-  // Hb / pérdidas
   calcHb();
 
-  // Summary
   if (tumeVol > 0 || aspirado > 0 || hbPre > 0) {
     document.getElementById('lipo-calc').style.display = 'block';
-    const vce = peso > 0 ? Math.round(peso * (peso < 40 ? 75 : peso < 60 ? 70 : 65)) : 0;
+    const vce = peso > 0 ? Math.round(peso * (peso < 60 ? 65 : 65)) : 0;
     const perdPermHb10 = (hbPre > 10 && vce > 0) ? Math.round(vce * (hbPre - 10) / hbPre) : 0;
-    const perdPermHb8 = (hbPre > 8 && vce > 0) ? Math.round(vce * (hbPre - 8) / hbPre) : 0;
-    const hbPostEst = (hbPre > 0 && vce > 0 && bloodInAsp > 0) ?
-      (hbPre * (1 - bloodInAsp / vce)).toFixed(1) : '—';
-    const htoPostEst = (htoPre > 0 && vce > 0 && bloodInAsp > 0) ?
-      (htoPre * (1 - bloodInAsp / vce)).toFixed(1) : '—';
+    const perdPermHb8  = (hbPre > 8  && vce > 0) ? Math.round(vce * (hbPre - 8)  / hbPre) : 0;
+    const hbPostEst  = (hbPre > 0 && vce > 0 && bloodInAsp > 0) ? (hbPre * (1 - bloodInAsp / vce)).toFixed(1) : '—';
+    const htoPostEst = (htoPre > 0 && vce > 0 && bloodInAsp > 0) ? (htoPre * (1 - bloodInAsp / vce)).toFixed(1) : '—';
+    const lidoTotal  = tumeVol * lidoConc;
+    const lidoMgKg   = peso > 0 ? (lidoTotal / peso).toFixed(1) : 0;
+    const lidoSafe   = parseFloat(lidoMgKg) <= 35;
 
-    const lidoTotal = tumeVol * lidoConc;
-    const lidoMgKg = peso > 0 ? (lidoTotal / peso).toFixed(1) : 0;
-    const lidoSafe = parseFloat(lidoMgKg) <= 35;
-
+    // Blood loss panel
     let rows = '';
-    if (peso > 0) rows += calcRow('VCE estimado', vce + ' mL', '');
-    if (tumeVol > 0 && lidoConc > 0 && peso > 0) {
-      rows += calcRow('Lidocaína total tumescente', lidoTotal.toFixed(0) + ' mg — ' + lidoMgKg + ' mg/kg',
-        lidoSafe ? '' : 'danger');
-    }
+    if (peso > 0) rows += calcRow('VCE estimado (Nadler)', vce + ' mL', '');
+    if (tumeVol > 0 && lidoConc > 0 && peso > 0)
+      rows += calcRow('Lidocaína total tumescente', lidoTotal.toFixed(0) + ' mg — ' + lidoMgKg + ' mg/kg', lidoSafe ? '' : 'danger');
     if (aspirado > 0) {
       rows += calcRow('Aspirado total', aspirado + ' mL', '');
-      rows += calcRow('Sangre estimada en aspirado', bloodInAsp.toFixed(0) + ' mL (' + pct + '%)', 'warn');
+      rows += calcRow('Sangre estimada en aspirado', bloodInAsp.toFixed(0) + ' mL (' + pct + '%) — ' + tipoGrasa.replace('_',' '), 'warn');
       rows += calcRow('Grasa pura extraída', fatAsp.toFixed(0) + ' mL', '');
     }
     if (hbPre > 0 && vce > 0) {
-      rows += calcRow('Pérdida permisible → Hb 10', perdPermHb10 > 0 ? perdPermHb10 + ' mL' : 'N/A (Hb ≤10)', '');
-      rows += calcRow('Pérdida permisible → Hb 8', perdPermHb8 > 0 ? perdPermHb8 + ' mL' : 'N/A (Hb ≤8)', '');
-      rows += calcRow('Hb estimada post-lipo', hbPostEst + ' g/dL', parseFloat(hbPostEst) < hbMin ? 'danger' : '');
-      rows += calcRow('Hto estimado post-lipo', htoPostEst + '%', '');
+      rows += calcRow('Pérdida permisible → Hb 10', perdPermHb10 > 0 ? perdPermHb10 + ' mL' : 'N/A', '');
+      rows += calcRow('Pérdida permisible → Hb 8',  perdPermHb8  > 0 ? perdPermHb8  + ' mL' : 'N/A', '');
+      rows += calcRow('Hb estimada post-liposucción', hbPostEst + ' g/dL', parseFloat(hbPostEst) < hbMin ? 'danger' : '');
+      rows += calcRow('Hto estimado post-liposucción', htoPostEst + '%', '');
+    }
+    // Permissible fat loss by age (Manzaneda formula)
+    const edad = parseFloat(document.getElementById('f-age').value) || 0;
+    if (hbPre > 0 && vce > 0 && edad > 0) {
+      const pspSangre = perdPermHb10;
+      const fatPermisible = Math.round(383.725 + 3.406 * pspSangre - 29.116 * edad);
+      rows += calcRow('Grasa permisible (Manzaneda†)', fatPermisible > 0 ? fatPermisible + ' mL' : '—', '');
     }
     document.getElementById('lipo-calc-rows').innerHTML = rows;
 
-    // Alert if needed
+    // Fat type max volume panel (ASPS + Manzaneda) - shows when aspirado > 0
+    if (peso > 0 || aspirado > 0) {
+      const maxVol5pct = peso > 0 ? Math.round(peso * 0.05 * 1000) : 0;
+      const alturaVal = document.getElementById('f-height').value;
+      const imc = peso > 0 && alturaVal ? (peso / Math.pow(parseFloat(alturaVal)/100, 2)).toFixed(1) : 0;
+      const tipoLabels = {
+        adipositica: 'Adiposítica (~1% sangre)',
+        mixta_adip:  'Mixta adiposítica (~4%)',
+        mixta:       'Mixta (~8%)',
+        mixta_hem:   'Mixta hemática (~15%)',
+        hematica:    'Hemática (~25%)',
+      };
+      // Volumes by fat type: max aspirate where blood fraction × aspirate ≤ perdPermHb8
+      const maxByType = {};
+      const psp = perdPermHb8 > 0 ? perdPermHb8 : null;
+      maxByType.adipositica = psp ? Math.round(psp / 0.01) : '—';
+      maxByType.mixta_adip  = psp ? Math.round(psp / 0.04) : '—';
+      maxByType.mixta       = psp ? Math.round(psp / 0.08) : '—';
+      maxByType.mixta_hem   = psp ? Math.round(psp / 0.15) : '—';
+      maxByType.hematica    = psp ? Math.round(psp / 0.25) : '—';
+
+      let fatRows = psp ? '' : '<div style="font-size:0.72rem;color:#f4c542;padding:0.3rem 0">⚠ Ingresa Hb preop y peso para ver volúmenes máximos personalizados</div>';
+      Object.keys(tipoLabels).forEach(function(k) {
+        var isActual = k === tipoGrasa;
+        var col = isActual ? '#e8f0f8' : '#7a9ab5';
+        var valCol = isActual ? '#00d4aa' : '#7a9ab5';
+        var prefix = isActual ? '▶ ' : '';
+        var valStr = maxByType[k] !== '—' ? maxByType[k].toLocaleString() + ' mL' : '—';
+        fatRows += '<div style="font-size:0.75rem;color:' + col + ';padding:0.2rem 0;display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.04)"><span>' + prefix + tipoLabels[k] + '</span><span style="font-weight:700;color:' + valCol + '">' + valStr + '</span></div>';
+      });
+      if (maxVol5pct > 0) fatRows += calcRow('Límite ASPS (5% peso corporal)', maxVol5pct.toLocaleString() + ' mL', '');
+      if (imc > 0) {
+        var maxByImc = imc <= 25 ? Math.round(peso * 1000 * 0.06) : imc <= 30 ? Math.round(peso * 1000 * 0.05) : Math.round(peso * 1000 * 0.04);
+        fatRows += calcRow('Límite por IMC (' + imc + ' kg/m²)', maxByImc.toLocaleString() + ' mL', '');
+      }
+      if (aspirado > 0 && maxVol5pct > 0) {
+        var pctUsado = ((aspirado / maxVol5pct) * 100).toFixed(0);
+        fatRows += calcRow('Aspirado actual vs límite ASPS', pctUsado + '% del límite', parseInt(pctUsado) > 100 ? 'danger' : parseInt(pctUsado) > 80 ? 'warn' : '');
+      }
+      document.getElementById('lipo-fat-type-rows').innerHTML = fatRows;
+    }
+
+    // Fluid management panel (Rohrich 2006) - shows when aspirado > 0
+    if (aspirado > 0) {
+      // Get duration from tiempos or f-duration field
+      var durMin = window._tiemposCalc && window._tiemposCalc.durCxMin ? window._tiemposCalc.durCxMin : 0;
+      var durHoras = durMin > 0 ? durMin / 60 : 2; // default 2h if not set
+      var mantenimientoIV = peso > 0 ? Math.round(4 * peso * durHoras) : 0;
+      var extraIV = aspirado > 5000 ? Math.round(0.25 * (aspirado - 5000)) : 0;
+      var totalIV = mantenimientoIV + extraIV;
+      var totalFluidos = tumeVol + totalIV;
+      var relacion = aspirado > 0 ? (totalFluidos / aspirado).toFixed(2) : '—';
+      var objetivo = parseFloat(relacion) >= 1.6 && parseFloat(relacion) <= 2.0;
+      var fluidRows = '';
+      if (tumeVol > 0) fluidRows += calcRow('Solución tumescente infiltrada', tumeVol.toLocaleString() + ' mL', '');
+      if (mantenimientoIV > 0) fluidRows += calcRow('Mantenimiento IV estimado (' + durHoras.toFixed(1) + 'h)', mantenimientoIV.toLocaleString() + ' mL', '');
+      if (extraIV > 0) fluidRows += calcRow('Extra IV por aspirado >5L', extraIV.toLocaleString() + ' mL', 'warn');
+      if (tumeVol > 0) {
+        var relColor = objetivo ? '#00d4aa' : '#f4c542';
+        var relLabel = relacion + (objetivo ? ' ✓ (objetivo ~1.8)' : ' ⚠ (objetivo 1.6-2.0)');
+        fluidRows += '<div style="font-size:0.75rem;color:#7a9ab5;padding:0.2rem 0;display:flex;justify-content:space-between"><span>Relación líquidos / aspirado</span><span style="font-weight:700;color:' + relColor + '">' + relLabel + '</span></div>';
+      } else {
+        fluidRows += '<div style="font-size:0.72rem;color:#f4c542;padding:0.3rem 0">⚠ Ingresa volumen tumescente para calcular la relación de líquidos</div>';
+      }
+      if (aspirado > 5000) fluidRows += calcRow('⚠ Liposucción gran volumen (>5L)', 'Monitorización hospitalaria nocturna requerida (ASPS)', 'warn');
+      document.getElementById('lipo-fluidos-rows').innerHTML = fluidRows;
+    }
+
+    // Alerts
     const alertBox = document.getElementById('lipo-alert-box');
     const alerts = [];
-    if (!lidoSafe && lidoConc > 0) alerts.push('⚠ Dosis de lidocaína supera 35 mg/kg — revisar seguridad');
+    if (lidoConc > 0 && parseFloat(lidoMgKg) > 35) alerts.push('⚠ Dosis de lidocaína supera 35 mg/kg — revisar seguridad');
     if (parseFloat(hbPostEst) < hbMin && hbPostEst !== '—') alerts.push('⚠ Hb post-lipo estimada < ' + hbMin + ' g/dL — evaluar transfusión');
     if (perdPermHb10 > 0 && bloodInAsp > perdPermHb10) alerts.push('⚠ Sangre en aspirado supera pérdida permisible para Hb 10');
+    if (aspirado > 5000) alerts.push('⚠ Aspirado >5000 mL: requiere monitorización hospitalaria nocturna (ASPS)');
+    if (colgajoPeso > 0) alerts.push('ℹ Dermolipectomía: peso colgajo ' + colgajoPeso + ' g incluido en planificación');
     if (alerts.length > 0) {
       alertBox.style.display = 'block';
       document.getElementById('lipo-alert-title').textContent = '⚠ ALERTAS DE SEGURIDAD';
       document.getElementById('lipo-alert-rows').innerHTML = alerts.map(a =>
         `<div class="calc-row"><span>${a}</span></div>`).join('');
-    } else {
-      alertBox.style.display = 'none';
-    }
+    } else { alertBox.style.display = 'none'; }
   }
 }
 
+
 function calcRow(label, val, type) {
-  const cls = type === 'danger' ? 'danger' : type === 'warn' ? 'warn' : '';
-  return `<div class="calc-row"><span>${label}</span><span class="calc-val ${cls}">${val}</span></div>`;
+  var cls = type === 'danger' ? 'danger' : type === 'warn' ? 'warn' : '';
+  return '<div class="calc-row"><span>' + label + '</span><span class="calc-val ' + cls + '">' + val + '</span></div>';
 }
 
 function calcHb() {
@@ -1671,8 +2044,109 @@ function calcHb24() {
 }
 
 // ══════════════════════════════════════════
-// TIEMPOS QUIRURGICOS
+// TUMESCENCE FORMULA TOGGLE
 // ══════════════════════════════════════════
+function toggleTumesFormula() {
+  const f = document.getElementById('f-tumes-formula').value;
+  const hasLido = f === 'klein' || f === 'diluida' || f === 'supra' || f === 'custom_lido';
+  const hasTxa = f === 'custom_notx';
+  // Show/hide lido fields
+  const lidoGrp = document.getElementById('grp-tumes-lido');
+  if (lidoGrp) lidoGrp.style.display = hasLido ? 'contents' : 'none';
+  // Show/hide TXA group
+  const txaGrp = document.getElementById('grp-tumes-txa');
+  if (txaGrp) txaGrp.style.display = hasTxa ? 'block' : 'none';
+  calcTumesCustom();
+  calcLipo();
+}
+
+function calcTumesCustom() {
+  const vol = parseFloat(document.getElementById('f-tumes-vol').value) || 0;
+  const epiAmps = parseFloat(document.getElementById('f-tumes-epi-amps').value) || 0;
+  const txaMg = parseFloat(document.getElementById('f-tumes-txa-mg').value) || 0;
+  const peso = parseFloat(document.getElementById('f-weight').value) || 0;
+  const formula = document.getElementById('f-tumes-formula').value;
+
+  // Epinefrina calculations (always)
+  if (vol > 0 && epiAmps > 0) {
+    const epiTotal = epiAmps * 1; // 1 mg per amp
+    const epiConc = (epiTotal * 1000) / vol; // mcg/mL
+    document.getElementById('f-tumes-epi-total').value = epiTotal.toFixed(2);
+    document.getElementById('f-tumes-epi-conc').value = epiConc.toFixed(2);
+  }
+
+  // TXA calculations (custom_notx only)
+  if (formula === 'custom_notx' && vol > 0 && txaMg > 0) {
+    const txaConc = txaMg / vol;
+    const txaMgKg = peso > 0 ? (txaMg / peso).toFixed(2) : '—';
+    document.getElementById('f-tumes-txa-conc').value = txaConc.toFixed(3);
+    document.getElementById('f-tumes-txa-mgkg').value = txaMgKg;
+
+    // Preparation panel
+    const box = document.getElementById('tumes-custom-box');
+    const rows = document.getElementById('tumes-custom-rows');
+    if (box && rows) {
+      const n500 = vol / 500;
+      const n1000 = vol / 1000;
+      const epiAmpsPer500 = epiAmps > 0 ? (epiAmps / n500).toFixed(1) : '—';
+      const txaPer500 = txaMg > 0 ? (txaMg / n500).toFixed(0) : '—';
+      rows.innerHTML = dRow('Volumen total solución', vol + ' mL', '#e8f0f8') +
+        dRow('Adrenalina total', (epiAmps * 1).toFixed(2) + ' mg (' + epiAmps + ' ampollas de 1 mg)', '#00d4aa') +
+        dRow('Concentración adrenalina', document.getElementById('f-tumes-epi-conc').value + ' mcg/mL', '#00d4aa') +
+        dRow('TXA total', txaMg + ' mg', '#b48aff') +
+        dRow('Concentración TXA', (txaMg/vol).toFixed(3) + ' mg/mL', '#b48aff') +
+        (peso > 0 ? dRow('TXA en mg/kg', txaMgKg + ' mg/kg', '#b48aff') : '') +
+        dRow('━━━ EQUIVALENTE POR 500 mL ━━━', '', '#7a9ab5') +
+        dRow('Adrenalina por 500 mL', epiAmpsPer500 + ' ampollas (1 mg c/u)', '#00d4aa') +
+        dRow('TXA por 500 mL', txaPer500 + ' mg (1 mL c/u si 50mg/mL)', '#b48aff');
+      box.style.display = 'block';
+    }
+  }
+}
+
+// ══════════════════════════════════════════
+// LAST PROTOCOL CALCULATOR
+// ══════════════════════════════════════════
+function calcLAST() {
+  // Auto-fill from patient weight if available
+  const pesoMain = parseFloat(document.getElementById('f-weight')?.value) || 0;
+  const pesoLAST = parseFloat(document.getElementById('f-last-peso')?.value) || pesoMain;
+  if (!document.getElementById('f-last-peso').value && pesoMain > 0) {
+    document.getElementById('f-last-peso').value = pesoMain;
+  }
+  const peso = pesoLAST || pesoMain;
+  if (peso <= 0) return;
+
+  const boloMl = (1.5 * peso).toFixed(0);
+  const infMlMin = (0.25 * peso).toFixed(1);
+  const infMl30 = (0.25 * peso * 30).toFixed(0);
+  const maxDosis = (10 * peso).toFixed(0);
+  const boloRepeat = (1.5 * peso).toFixed(0);
+
+  document.getElementById('last-calc-rows').innerHTML =
+    dRow('Peso utilizado', peso + ' kg', '#e8f0f8') +
+    dRow('🔴 Bolo inicial Intralipid 20%', boloMl + ' mL en 1 min IV rápido', '#ff6b6b') +
+    dRow('🔴 Infusión Intralipid 20%', infMlMin + ' mL/min × 30–60 min', '#ff6b6b') +
+    dRow('→ Equivale a', infMl30 + ' mL en 30 min', '#f4c542') +
+    dRow('🔄 Bolo repetido (si persiste)', boloRepeat + ' mL IV × máx 2 veces', '#f4c542') +
+    dRow('⚠ Dosis máxima total', maxDosis + ' mL en 30 min', '#ff6b6b') +
+    dRow('Presentación recomendada', 'Intralipid 20% — frasco 100 mL o 500 mL', '#7a9ab5');
+
+  document.getElementById('last-calc-box').style.display = 'block';
+}
+
+// Auto-populate LAST weight from patient weight
+document.addEventListener('DOMContentLoaded', () => {
+  const weightField = document.getElementById('f-weight');
+  if (weightField) {
+    weightField.addEventListener('input', () => {
+      const lastPesoEl = document.getElementById('f-last-peso');
+      if (lastPesoEl && !lastPesoEl.value) {
+        // Will be populated when LAST section is accessed
+      }
+    });
+  }
+});
 function calcTiempos() {
   const tAI = document.getElementById('f-t-anest-ini').value;
   const tCI = document.getElementById('f-t-cx-ini').value;
@@ -1701,9 +2175,7 @@ function calcTiempos() {
     ['🔄 Fin cirugía → Fin anestesia',    fmt(recupQx),   '#b48aff'],
     ['◎ Tiempo total de anestesia',       fmt(durAnest),  '#0094ff'],
   ];
-  document.getElementById('tiempos-rows').innerHTML = rows.map(([l,v,c]) =>
-    `<div style="font-size:0.75rem;color:#7a9ab5;padding:0.22rem 0;display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.04)"><span>${l}</span><span style="font-weight:700;color:${c}">${v}</span></div>`
-  ).join('');
+  document.getElementById('tiempos-rows').innerHTML = rows.map(function(r){return '<div style="font-size:0.75rem;color:#7a9ab5;padding:0.22rem 0;display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.04)"><span>' + r[0] + '</span><span style="font-weight:700;color:' + r[2] + '">' + r[1] + '</span></div>';}).join('');
   document.getElementById('tiempos-calc').style.display = 'block';
 }
 
@@ -1727,7 +2199,8 @@ const MAX_DOSE = {
 };
 
 function dRow(label, val, color) {
-  return `<div style="font-size:0.75rem;color:#7a9ab5;padding:0.18rem 0;display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.04)"><span>${label}</span><span style="font-weight:700;color:${color||'#e8f0f8'}">${val}</span></div>`;
+  var c = color || '#e8f0f8';
+  return '<div style="font-size:0.75rem;color:#7a9ab5;padding:0.18rem 0;display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.04)"><span>' + label + '</span><span style="font-weight:700;color:' + c + '">' + val + '</span></div>';
 }
 
 // SS MODE TOGGLE
@@ -1817,9 +2290,10 @@ function calcSS() {
   if(md&&peso>0&&doseMgKg&&parseFloat(doseMgKg)>md.sin_epi) {
     const overConEpi = parseFloat(doseMgKg)>md.con_epi;
     alertBox.style.display = 'block';
-    document.getElementById('ss-alert-rows').innerHTML = `<div style="font-size:0.78rem;color:#ff6b6b">${overConEpi
-      ? '⚠ DOSIS SUPERA el límite incluso CON epinefrina ('+md.con_epi+' mg/kg) — Revisar urgente'
-      : '⚠ Dosis supera límite SIN epinefrina ('+md.sin_epi+' mg/kg) — Solo aceptable CON epinefrina'}</div>`;
+    var alertMsg = overConEpi
+      ? '⚠ DOSIS SUPERA el límite incluso CON epinefrina (' + md.con_epi + ' mg/kg) — Revisar urgente'
+      : '⚠ Dosis supera límite SIN epinefrina (' + md.sin_epi + ' mg/kg) — Solo aceptable CON epinefrina';
+    document.getElementById('ss-alert-rows').innerHTML = '<div style="font-size:0.78rem;color:#ff6b6b">' + alertMsg + '</div>';
   } else { if(alertBox) alertBox.style.display='none'; }
 }
 
@@ -2228,7 +2702,11 @@ function saveCase() {
     emDipirona: v('f-em-dipirona'), emKetamina: v('f-em-ketamina'), emNefopam: v('f-em-nefopam'),
     elastoMedsDosis: v('f-elasto-meds-dosis'), elastoMedOtro: v('f-elasto-med-otro'),
     elastoNotes: v('f-elasto-notes'),
-    bleeding: v('f-bleeding'), diuresis: v('f-diuresis'),
+    hasCombined: getTgl('tgl-combined'),
+    combinedTotalSangrado: (function() {
+      var items = document.querySelectorAll('#combined-procs-list [id$="-valor"]');
+      var t = 0; items.forEach(function(e){t += parseFloat(e.value)||0;}); return t;
+    })(), diuresis: v('f-diuresis'),
     crystalloids: v('f-crystalloids'), colloids: v('f-colloids'),
     events: getChips('events'), eventsNotes: v('f-events-notes'),
     destination: v('f-destination'), pacuTime: v('f-pacu-time'),
@@ -2699,3 +3177,4 @@ function toast(msg, err=false) {
 
 </body>
 </html>
+
