@@ -2694,6 +2694,15 @@ Object.assign(QUICK_MAP, {
   bloqueo2:'f-ss2-nombre', la_bloqueo2:'f-ss2-la', conc_bloqueo2:'f-ss2-conc', volumen_bloqueo2:'f-ss2-vol'
 });
 QUICK_CHIPS.farmacos_chips = 'drugs';
+Object.assign(QUICK_MAP, {
+  tumes_formula:'f-tumes-formula', tumes_volumen:'f-tumes-vol', tumes_lido_mgml:'f-tumes-lido-conc', tumes_adrenalina_amp:'f-tumes-epi-amps', tumes_txa_mg:'f-tumes-txa-mg',
+  aspirado:'f-aspirado', tipo_grasa:'f-grasa-tipo', hto_pre:'f-hto-pre',
+  bomba_iv_dias:'f-elasto-meds-dias', bomba_iv_tasa:'f-elasto-meds-tasa', bomba_iv_volumen:'f-elasto-meds-vol',
+  bomba_tramadol_mg:'f-em-tramadol', bomba_ketorolaco_mg:'f-em-ketorolaco', bomba_dexametasona_mg:'f-em-dexametasona', bomba_ondansetron_mg:'f-em-ondansetron',
+  bomba_dexmedetomidina_mcg:'f-em-dexmedo', bomba_morfina_mg:'f-em-morfina', bomba_dipirona_mg:'f-em-dipirona', bomba_ketamina_mg:'f-em-ketamina', bomba_nefopam_mg:'f-em-nefopam',
+  hb_minima:'f-hb-min', diuresis:'f-diuresis', hemoderivados:'f-colloids', transfusion:'f-did-transfuse'
+});
+Object.assign(QUICK_CHIPS, { areas_tumescencia:'tumes-areas' });
 var QUICK_TEMPLATE = 'fecha: AAAA-MM-DD\nnombre: \nid: \nedad: \nsexo: Femenino\npeso: \ntalla: \nasa: 2\nmallampati: \ncomorbilidades: \nprocedimiento: \nespecialidad: \nhospital: \ncirujano: \nlateralidad: \ninicio_anestesia: HH:MM\ninicio_cirugia: HH:MM\nfin_cirugia: HH:MM\nfin_anestesia: HH:MM\ntipo_anestesia: \nmultimodal: \nnotas_anestesia: \ntipo_neuroaxial: spinal\nnivel_puncion: \naguja_espinal: \ncalibre_espinal: \nla_neuroaxial: \ndosis_la_neuroaxial: \nbloqueos: \nlado_bloqueo: \nla_bloqueo: \nnotas_bloqueo: \nsangrado: \ncristaloides: \ndiuresis: ';
 
 function copyQuickTemplate() {
@@ -2750,6 +2759,22 @@ function applyQuickPaste() {
       quickApplyDrugs(val.indexOf(';') >= 0 ? val.split(';') : val.split(','));
       ok++; return;
     }
+    if (key === 'procedimientos_adicionales') {
+      var tgc = document.getElementById('tgl-combined');
+      val.split(';').map(function(x){ return x.trim(); }).filter(Boolean).forEach(function(nm) {
+        var found = null, low = nm.toLowerCase();
+        Object.keys(COMBINED_PROCS).forEach(function(k){ if (k === low || COMBINED_PROCS[k].label.toLowerCase().indexOf(low) >= 0) found = found || k; });
+        if (!found) { miss.push('procedimiento adicional: ' + nm); return; }
+        if (tgc) { tgc.classList.add('on'); var sc = document.getElementById(tgc.dataset.target); if (sc) sc.style.display = 'block'; }
+        addCombinedProc();
+        var cid = 'cp-' + combinedProcCount;
+        document.getElementById(cid + '-tipo').value = found;
+        setCombinedRange(cid);
+        ok++;
+      });
+      try { calcCombinedTotal(); } catch(e) {}
+      return;
+    }
     if (key === 'modo_bloqueo') { try { setSSmodo(val.toLowerCase()); ok++; } catch(e) { miss.push(key); } return; }
     var grp = QUICK_CHIPS[key] || (document.querySelector('.chips[data-group="' + key + '"]') ? key : null);
     if (grp) {
@@ -2778,7 +2803,7 @@ function applyQuickPaste() {
     if (document.getElementById(p2[1]).value !== '') { try { calcElastoMeds(p2[0]); } catch(e) {} }
   });
   [function(){ calcHb(); }, calcTiempos, checkContorno, toggleNaxAguja, toggleElastoVia, calcSS, calcCath,
-   function(){ calcElasto(''); }, calcSS2, saveDraft].forEach(function(fn){ try { fn(); } catch(e) {} });
+   function(){ calcElasto(''); }, calcSS2, toggleTumesFormula, autoSetPct, calcLipo, function(){ calcCombinedTotal(); }, saveDraft].forEach(function(fn){ try { fn(); } catch(e) {} });
   var msg = ok + ' campos aplicados.';
   if (miss.length) msg += ' No reconocidos: ' + miss.join(', ') + '.';
   document.getElementById('quick-msg').textContent = msg;
@@ -3391,3 +3416,4 @@ function toast(msg, err=false) {
 </script>
 </body>
 </html>
+
