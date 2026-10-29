@@ -771,15 +771,17 @@ input[readonly]{background:#18232f;cursor:default;}
         </select>
       </div>
       <div class="fgg"><label>Anestésico local</label>
-        <select id="f-nax-la">
+        <select id="f-nax-la" onchange="calcNaxVol()">
           <option value="">—</option>
           <option>Levobupivacaína hiperbárica 0.75%</option>
           <option>Bupivacaína hiperbárica 0.5%</option>
           <option>Bupivacaína isobárica 0.5%</option>
           <option>Lidocaína hiperbárica 5%</option>
+          <option>Bupivacaína 0.5% diluida a 0.1% (dosis analgésica)</option>
         </select>
       </div>
-      <div class="fgg"><label>Dosis AL (mg)</label><input type="number" id="f-nax-la-dose" placeholder="15"></div>
+      <div class="fgg"><label>Dosis AL (mg)</label><input type="number" id="f-nax-la-dose" placeholder="15" oninput="calcNaxVol()"></div>
+      <div class="fgg"><label>Volumen AL (mL)</label><input type="text" id="f-nax-la-vol" readonly placeholder="Auto" style="color:#00d4aa"></div>
       <div class="fgg"><label>Opioide intratecal</label>
         <select id="f-nax-opioid">
           <option value="">Ninguno</option><option>Morfina preservante-free</option>
@@ -2803,7 +2805,7 @@ function applyQuickPaste() {
     if (document.getElementById(p2[1]).value !== '') { try { calcElastoMeds(p2[0]); } catch(e) {} }
   });
   [function(){ calcHb(); }, calcTiempos, checkContorno, toggleNaxAguja, toggleElastoVia, calcSS, calcCath,
-   function(){ calcElasto(''); }, calcSS2, toggleTumesFormula, autoSetPct, calcLipo, function(){ calcCombinedTotal(); }, saveDraft].forEach(function(fn){ try { fn(); } catch(e) {} });
+   function(){ calcElasto(''); }, calcSS2, calcNaxVol, toggleTumesFormula, autoSetPct, calcLipo, function(){ calcCombinedTotal(); }, saveDraft].forEach(function(fn){ try { fn(); } catch(e) {} });
   var msg = ok + ' campos aplicados.';
   if (miss.length) msg += ' No reconocidos: ' + miss.join(', ') + '.';
   document.getElementById('quick-msg').textContent = msg;
@@ -2852,7 +2854,19 @@ function quickApplyDrugs(parts) {
   try { saveDraft(); } catch(e) {}
 }
 
-var NEWF = ['f-sed-prop-ce','f-sed-dex-dosis','f-sed-otros','f-farmacos','f-ss2-nombre','f-ss2-la','f-ss2-conc','f-ss2-vol','f-ss2-dosis','f-ss-total-dosis'];
+function calcNaxVol() {
+  var la = document.getElementById('f-nax-la').value.toLowerCase();
+  var dose = parseFloat(document.getElementById('f-nax-la-dose').value);
+  var conc = 0; // mg/mL
+  if (la.indexOf('diluida') >= 0) conc = 1;
+  else if (la.indexOf('levobupivacaína hiperbárica 0.75') >= 0) conc = 7.5;
+  else if (la.indexOf('bupivacaína hiperbárica 0.5') >= 0 || la.indexOf('bupivacaína isobárica 0.5') >= 0) conc = 5;
+  else if (la.indexOf('lidocaína hiperbárica 5') >= 0) conc = 50;
+  var out = document.getElementById('f-nax-la-vol');
+  out.value = (conc && !isNaN(dose) && dose > 0) ? (parseFloat((dose / conc).toFixed(2)) + ' mL' + (la.indexOf('diluida') >= 0 ? ' (0.1%)' : '')) : '';
+}
+
+var NEWF = ['f-nax-la-vol','f-sed-prop-ce','f-sed-dex-dosis','f-sed-otros','f-farmacos','f-ss2-nombre','f-ss2-la','f-ss2-conc','f-ss2-vol','f-ss2-dosis','f-ss-total-dosis'];
 function calcSS2() {
   var conc = parseFloat(document.getElementById('f-ss2-conc').value);
   var vol = parseFloat(document.getElementById('f-ss2-vol').value);
