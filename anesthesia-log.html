@@ -636,6 +636,29 @@ input[readonly]{background:#18232f;cursor:default;}
   </div>
 </div>
 
+<!-- SEDACIÓN Y FÁRMACOS -->
+<div class="fc">
+  <div class="fct">◈ Sedación y Fármacos Perioperatorios</div>
+  <div class="fg">
+    <div class="fgg"><label>Sedación: propofol TCI Ce (mcg/mL)</label><input type="number" id="f-sed-prop-ce" step="0.1" placeholder="1.2"></div>
+    <div class="fgg"><label>Sedación: dexmedetomidina (mcg/kg/h)</label><input type="number" id="f-sed-dex-dosis" step="0.1" placeholder="0.3"></div>
+    <div class="fgg full"><label>Otros sedantes</label><input type="text" id="f-sed-otros" placeholder="Midazolam, ketamina..."></div>
+    <div class="fgg full"><label>Fármacos (selecciona o dicta con dosis)</label>
+      <div class="chips" data-group="drugs" data-color="on-blue">
+        <span class="chip">Ácido tranexámico</span><span class="chip">Dexametasona</span><span class="chip">Ondansetrón</span>
+        <span class="chip">Metoclopramida</span><span class="chip">Dipirona</span><span class="chip">Dexketoprofeno</span>
+        <span class="chip">Sulfato de magnesio</span><span class="chip">Paracetamol</span><span class="chip">Nefopam</span>
+        <span class="chip">Ketorolaco</span><span class="chip">Tramadol</span><span class="chip">Cefazolina</span>
+        <span class="chip">Ketamina</span><span class="chip">Midazolam</span>
+      </div>
+    </div>
+    <div class="fgg full"><button type="button" class="btn-e" onclick="quickApplyDrugs(['habitual'])">⚡ Aplicar protocolo habitual</button></div>
+    <div class="fgg full"><label>Fármacos y dosis (uno por línea)</label>
+      <textarea id="f-farmacos" placeholder="Dipirona 2.5 g IV&#10;Nefopam 20 mg IV"></textarea>
+    </div>
+  </div>
+</div>
+
 <!-- VÍA AÉREA -->
 <div class="fc">
   <div class="fct blue">◉ Vía Aérea</div>
@@ -878,6 +901,13 @@ input[readonly]{background:#18232f;cursor:default;}
       </div>
       <div class="fgg"><label>Dosis coadyuvante</label><input type="text" id="f-ss-adj-dose" placeholder="Ej: Dexa 4mg / Dex 0.5mcg/kg"></div>
       <div class="fgg"><label>Duración analgesia esperada (h)</label><input type="number" id="f-ss-duration" placeholder="18"></div>
+      <div class="sdiv" style="grid-column:1/-1">Segundo bloqueo (si aplica)</div>
+      <div class="fgg"><label>Bloqueo 2</label><input type="text" id="f-ss2-nombre" placeholder="Ej: Canal aductor"></div>
+      <div class="fgg"><label>AL bloqueo 2</label><input type="text" id="f-ss2-la" placeholder="Bupivacaína"></div>
+      <div class="fgg"><label>Concentración (%)</label><input type="number" id="f-ss2-conc" step="0.005" placeholder="0.25" oninput="calcSS2()"></div>
+      <div class="fgg"><label>Volumen (mL)</label><input type="number" id="f-ss2-vol" placeholder="20" oninput="calcSS2()"></div>
+      <div class="fgg"><label>Dosis bloqueo 2 (mg)</label><input type="number" id="f-ss2-dosis" readonly placeholder="Auto" style="color:#00d4aa"></div>
+      <div class="fgg"><label>Dosis total bloqueos (mg · mg/kg)</label><input type="text" id="f-ss-total-dosis" readonly placeholder="Auto" style="color:#f4c542"></div>
       <div class="fgg full"><label>Notas bloqueo single shot</label><textarea id="f-ss-notes" placeholder="Técnica, pases, dispersión del AL..."></textarea></div>
     </div>
   </div>
@@ -1567,6 +1597,8 @@ function fillForm(c) {
   restoreChips('comorbid', c.comorbidities);
   restoreChips('atype', c.anesthesiaType);
   restoreChips('multimodal', c.multimodal);
+  restoreChips('drugs', c.drugs);
+  NEWF.forEach(function(id){ setV(id, c.nf ? c.nf[id] : ''); });
   restoreChips('monitoring', c.monitoring);
   restoreChips('access', c.access);
   restoreChips('ss-blocks', c.ssBlocks);
@@ -2294,6 +2326,7 @@ function calcSS() {
   }
   document.getElementById('ss-calc-rows').innerHTML = rows;
   calcBox.style.display = 'block';
+  try { calcSS2(); } catch(e) {}
 
   if(md&&peso>0&&doseMgKg&&parseFloat(doseMgKg)>md.sin_epi) {
     const overConEpi = parseFloat(doseMgKg)>md.con_epi;
@@ -2633,8 +2666,35 @@ var QUICK_MAP = {
   sangrado:'f-bleeding', diuresis:'f-diuresis', cristaloides:'f-crystalloids', coloides:'f-colloids',
   hb:'f-hb', hb_pre:'f-hb'
 };
-var QUICK_CHIPS = { comorbilidades:'comorbid', tipo_anestesia:'atype', monitoreo:'monitoring', acceso:'access', multimodal:'multimodal' };
-var QUICK_TEMPLATE = 'fecha: AAAA-MM-DD\nnombre: \nid: \nedad: \nsexo: Femenino\npeso: \ntalla: \nasa: 2\nprocedimiento: \nespecialidad: \nhospital: \ncirujano: \ninicio_anestesia: HH:MM\ninicio_cirugia: HH:MM\nfin_cirugia: HH:MM\nfin_anestesia: HH:MM\ncomorbilidades: \ntipo_anestesia: \nsangrado: \ncristaloides: \ndiuresis: ';
+var QUICK_CHIPS = { comorbilidades:'comorbid', tipo_anestesia:'atype', monitoreo:'monitoring', acceso:'access', multimodal:'multimodal',
+  bloqueos:'ss-blocks', coadyuvantes_bloqueo:'ss-adj', sitio_cateter:'cath-site', coadyuvantes_cateter:'cath-adj',
+  coadyuvantes_bomba:'elasto-adj-al', medicamentos_bomba:'elasto-meds', eventos:'events', analgesia_posop:'postop-analg', complicaciones_posop:'postop-comp' };
+var QUICK_TGL = { neuroaxial:'tgl-nax', single_shot:'tgl-ss', cateter:'tgl-cath', bomba:'tgl-elasto', torniquete:'tgl-torniquete', combinada:'tgl-combined' };
+Object.assign(QUICK_MAP, {
+  tipo_neuroaxial:'f-nax-type', nivel_puncion:'f-nax-level', aguja_espinal:'f-nax-aguja-tipo', calibre_espinal:'f-nax-aguja-calibre',
+  aguja_epidural:'f-nax-aguja-epi-tipo', calibre_epidural:'f-nax-aguja-epi-calibre', la_neuroaxial:'f-nax-la', dosis_la_neuroaxial:'f-nax-la-dose',
+  opioide_intratecal:'f-nax-opioid', dosis_opioide_intratecal:'f-nax-opioid-dose', nivel_sensitivo:'f-nax-reached',
+  lado_bloqueo:'f-ss-side', la_bloqueo:'f-ss-la', volumen_puro_bloqueo:'f-ss-vol-puro', notas_bloqueo:'f-ss-notes', dosis_coadyuvante_bloqueo:'f-ss-adj-dose',
+  lado_cateter:'f-cath-side', la_cateter:'f-cath-la', conc_cateter:'f-cath-conc-meta', dias_cateter:'f-cath-dias', volumen_cateter:'f-cath-vol-reservorio', notas_cateter:'f-cath-notes',
+  via_bomba:'f-elasto-via', tipo_bomba:'f-elasto-type', la_bomba:'f-elasto-la', conc_bomba:'f-elasto-conc-meta', dias_bomba:'f-elasto-dias', tasa_bomba:'f-elasto-rate-input', volumen_bomba:'f-elasto-vol-input', notas_bomba:'f-elasto-notes',
+  lado_torniquete:'f-torn-lado', presion_torniquete:'f-torn-presion', tiempo_torniquete:'f-torn-tiempo', isquemia:'f-torn-isquemia',
+  notas_anestesia:'f-ga-notes'
+});
+Object.assign(QUICK_MAP, {
+  hb_pre:'f-hb-pre', hto_pre:'f-hto-pre', hb_min:'f-hb-min', hb_24h:'f-hb-24h', hto_24h:'f-hto-24h', hb_48h:'f-hb-48h',
+  inductor:'f-inductor', dosis_inductor:'f-inductor-dose', relajante:'f-nmb', dosis_relajante:'f-nmb-dose',
+  mantenimiento:'f-maintenance', dosis_mantenimiento:'f-maint-dose', opioide:'f-opioid', dosis_opioide:'f-opioid-dose',
+  tci_propofol_modelo:'f-tci-prop-model', tci_propofol_ce:'f-tci-prop-ce', remi_modelo:'f-remi-tci-model', remi_ce:'f-remi-tci-ce', remi_infusion:'f-remi-inf-dose',
+  dexmed_modelo:'f-dex-model', dexmed_ce:'f-dex-ce', dexmed_dosis:'f-dex-dose',
+  via_aerea:'f-airway', tubo:'f-tube', cormack:'f-cormack', intentos_intubacion:'f-intubation', ayuno:'f-fasting',
+  duracion_neuroaxial:'f-nax-duration', intentos_neuroaxial:'f-nax-attempts', notas_neuroaxial:'f-nax-notes',
+  avance_cateter:'f-cath-avance', intentos_cateter:'f-cath-intentos', fijacion_cateter:'f-cath-fijacion',
+  notas_eventos:'f-events-notes', destino:'f-destination', tiempo_recuperacion:'f-pacu-time', nvpo:'f-ponv', dolor:'f-pain', notas_posop:'f-postop-notes', resultado:'f-outcome', notas:'f-notes',
+  sedacion_propofol_ce:'f-sed-prop-ce', sedacion_dexmed:'f-sed-dex-dosis', otros_sedantes:'f-sed-otros',
+  bloqueo2:'f-ss2-nombre', la_bloqueo2:'f-ss2-la', conc_bloqueo2:'f-ss2-conc', volumen_bloqueo2:'f-ss2-vol'
+});
+QUICK_CHIPS.farmacos_chips = 'drugs';
+var QUICK_TEMPLATE = 'fecha: AAAA-MM-DD\nnombre: \nid: \nedad: \nsexo: Femenino\npeso: \ntalla: \nasa: 2\nmallampati: \ncomorbilidades: \nprocedimiento: \nespecialidad: \nhospital: \ncirujano: \nlateralidad: \ninicio_anestesia: HH:MM\ninicio_cirugia: HH:MM\nfin_cirugia: HH:MM\nfin_anestesia: HH:MM\ntipo_anestesia: \nmultimodal: \nnotas_anestesia: \ntipo_neuroaxial: spinal\nnivel_puncion: \naguja_espinal: \ncalibre_espinal: \nla_neuroaxial: \ndosis_la_neuroaxial: \nbloqueos: \nlado_bloqueo: \nla_bloqueo: \nnotas_bloqueo: \nsangrado: \ncristaloides: \ndiuresis: ';
 
 function copyQuickTemplate() {
   var t = QUICK_TEMPLATE;
@@ -2657,6 +2717,14 @@ function quickSetSelect(el, val) {
   return false;
 }
 
+function quickOpenSection(el) {
+  var sec = el.closest('[id^="sec-"]');
+  if (!sec) return;
+  sec.style.display = 'block';
+  var t = document.querySelector('.tgl[data-target="' + sec.id + '"]');
+  if (t) t.classList.add('on');
+}
+
 function applyQuickPaste() {
   var txt = document.getElementById('quick-paste').value;
   var lines = txt.split('\n');
@@ -2667,27 +2735,108 @@ function applyQuickPaste() {
     var key = line.slice(0, i).trim().toLowerCase().replace(/\s+/g, '_');
     var val = line.slice(i + 1).trim();
     if (!val) return;
-    if (QUICK_CHIPS[key]) {
-      var items = val.split(',').map(function(x){ return x.trim().toLowerCase(); });
-      document.querySelectorAll('.chips[data-group="' + QUICK_CHIPS[key] + '"] .chip').forEach(function(chip) {
-        var color = chip.closest('.chips').dataset.color || 'on';
-        if (items.indexOf(chip.textContent.trim().toLowerCase()) >= 0) chip.className = 'chip ' + color;
-      });
+    if (QUICK_TGL[key]) {
+      var tg = document.getElementById(QUICK_TGL[key]);
+      var yes = /^(si|sí|yes|true|1)$/i.test(val);
+      if (tg) {
+        if (yes) tg.classList.add('on'); else tg.classList.remove('on');
+        var sid = tg.dataset.target;
+        if (sid && document.getElementById(sid)) document.getElementById(sid).style.display = yes ? 'block' : 'none';
+        ok++;
+      }
+      return;
+    }
+    if (key === 'farmacos') {
+      quickApplyDrugs(val.indexOf(';') >= 0 ? val.split(';') : val.split(','));
       ok++; return;
+    }
+    if (key === 'modo_bloqueo') { try { setSSmodo(val.toLowerCase()); ok++; } catch(e) { miss.push(key); } return; }
+    var grp = QUICK_CHIPS[key] || (document.querySelector('.chips[data-group="' + key + '"]') ? key : null);
+    if (grp) {
+      var items = val.split(',').map(function(x){ return x.trim().toLowerCase(); });
+      var any = false;
+      document.querySelectorAll('.chips[data-group="' + grp + '"] .chip').forEach(function(chip) {
+        var color = chip.closest('.chips').dataset.color || 'on';
+        if (items.indexOf(chip.textContent.trim().toLowerCase()) >= 0) { chip.className = 'chip ' + color; any = true; }
+      });
+      if (any) { quickOpenSection(document.querySelector('.chips[data-group="' + grp + '"]')); ok++; } else miss.push(key);
+      return;
     }
     var id = QUICK_MAP[key] || (key.indexOf('f-') === 0 ? key : null);
     var el = id ? document.getElementById(id) : null;
     if (!el) { miss.push(key); return; }
-    if (el.tagName === 'SELECT') { if (quickSetSelect(el, val)) ok++; else miss.push(key); }
+    if (el.tagName === 'SELECT') { if (quickSetSelect(el, val)) ok++; else { miss.push(key + '=' + val); return; } }
     else { el.value = val; ok++; }
+    quickOpenSection(el);
   });
-  try { if (typeof calcHb === 'function') calcHb(); } catch(e) {}
-  try { calcTiempos(); } catch(e) {}
-  try { checkContorno(); } catch(e) {}
-  try { saveDraft(); } catch(e) {}
+  _elastoOrder = []; _medsOrder = [];
+  ['dias','rate','vol'].forEach(function(k){
+    var m = {dias:'f-elasto-dias', rate:'f-elasto-rate-input', vol:'f-elasto-vol-input'}[k];
+    if (document.getElementById(m).value !== '') { try { calcElasto(k); } catch(e) {} }
+  });
+  [['dias','f-elasto-meds-dias'],['tasa','f-elasto-meds-tasa'],['vol','f-elasto-meds-vol']].forEach(function(p2){
+    if (document.getElementById(p2[1]).value !== '') { try { calcElastoMeds(p2[0]); } catch(e) {} }
+  });
+  [function(){ calcHb(); }, calcTiempos, checkContorno, toggleNaxAguja, toggleElastoVia, calcSS, calcCath,
+   function(){ calcElasto(''); }, calcSS2, saveDraft].forEach(function(fn){ try { fn(); } catch(e) {} });
   var msg = ok + ' campos aplicados.';
   if (miss.length) msg += ' No reconocidos: ' + miss.join(', ') + '.';
   document.getElementById('quick-msg').textContent = msg;
+}
+
+
+var DRUGS_DEFAULT = [['Ácido tranexámico','1 g IV'],['Dexametasona','8 mg IV'],['Ondansetrón','8 mg IV'],['Metoclopramida','10 mg IV'],
+  ['Dipirona','2.5 g IV'],['Dexketoprofeno','50 mg IV'],['Sulfato de magnesio','2 g IV'],['Paracetamol','1 g IV'],['Nefopam','20 mg IV']];
+var DRUG_ALIAS = { ketesse:'Dexketoprofeno', dexketoprofeno:'Dexketoprofeno', dexketoporfeno:'Dexketoprofeno', acupan:'Nefopam', nefopam:'Nefopam',
+  metamizol:'Dipirona', ondacetron:'Ondansetrón', ondansetron:'Ondansetrón', txa:'Ácido tranexámico', tranexamico:'Ácido tranexámico',
+  magnesio:'Sulfato de magnesio', mgso4:'Sulfato de magnesio' };
+function drugNorm(x) { return x.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+function drugName(part) {
+  var n = drugNorm(part);
+  var best = null;
+  Object.keys(DRUG_ALIAS).forEach(function(k){ if (n.indexOf(k) === 0) best = DRUG_ALIAS[k]; });
+  if (best) return best;
+  var chips = document.querySelectorAll('.chips[data-group="drugs"] .chip');
+  for (var i = 0; i < chips.length; i++) { var cn = drugNorm(chips[i].textContent.trim()); if (n.indexOf(cn) === 0) return chips[i].textContent.trim(); }
+  if (n.indexOf('sulfato de mag') === 0) return 'Sulfato de magnesio';
+  return part.replace(/\s+[\d.,]+\s*(mg|g|mcg|ml|ug).*$/i, '').trim();
+}
+function quickApplyDrugs(parts) {
+  var list = [];
+  var put = function(name, line) {
+    for (var i = 0; i < list.length; i++) if (list[i].name === name) { list[i].line = line; return; }
+    list.push({name:name, line:line});
+  };
+  parts.map(function(x){ return x.trim(); }).filter(Boolean).forEach(function(pt) {
+    var n = drugNorm(pt);
+    if (n.indexOf('habitual') === 0) { DRUGS_DEFAULT.forEach(function(d){ put(d[0], d[0] + ' ' + d[1]); }); return; }
+    if (n.indexOf('sin ') === 0) {
+      var nm = drugName(pt.slice(4));
+      list = list.filter(function(e){ return e.name !== nm; }); return;
+    }
+    var name = drugName(pt);
+    var line = pt;
+    if (/^[\d.,]+\s*(mg|g|mcg)/i.test(pt.replace(name,'').trim()) === false && pt.toLowerCase() === name.toLowerCase()) line = pt;
+    put(name, line);
+  });
+  document.getElementById('f-farmacos').value = list.map(function(e){ return e.line; }).join('\n');
+  document.querySelectorAll('.chips[data-group="drugs"] .chip').forEach(function(chip) {
+    var on = list.some(function(e){ return e.name === chip.textContent.trim(); });
+    chip.className = on ? 'chip ' + (chip.closest('.chips').dataset.color || 'on') : 'chip';
+  });
+  try { saveDraft(); } catch(e) {}
+}
+
+var NEWF = ['f-sed-prop-ce','f-sed-dex-dosis','f-sed-otros','f-farmacos','f-ss2-nombre','f-ss2-la','f-ss2-conc','f-ss2-vol','f-ss2-dosis','f-ss-total-dosis'];
+function calcSS2() {
+  var conc = parseFloat(document.getElementById('f-ss2-conc').value);
+  var vol = parseFloat(document.getElementById('f-ss2-vol').value);
+  var d2 = (!isNaN(conc) && !isNaN(vol)) ? conc * 10 * vol : 0;
+  document.getElementById('f-ss2-dosis').value = d2 ? d2.toFixed(1) : '';
+  var d1 = parseFloat(document.getElementById('f-ss-dose-total').value) || 0;
+  var peso = parseFloat(document.getElementById('f-weight').value) || 0;
+  var t = d1 + d2;
+  document.getElementById('f-ss-total-dosis').value = (d2 && t) ? (t.toFixed(0) + ' mg' + (peso ? ' · ' + (t / peso).toFixed(2) + ' mg/kg' : '')) : '';
 }
 
 function v(id) { return document.getElementById(id)?.value || ''; }
@@ -2730,6 +2879,8 @@ function saveCase() {
     remiInfDose: v('f-remi-inf-dose'),
     dexModel: v('f-dex-model'), dexCe: v('f-dex-ce'), dexDose: v('f-dex-dose'),
     multimodal: getChips('multimodal'), gaNotes: v('f-ga-notes'),
+    drugs: getChips('drugs'),
+    nf: (function(){ var o = {}; NEWF.forEach(function(id){ o[id] = v(id); }); return o; })(),
     airway: v('f-airway'), tube: v('f-tube'), cormack: v('f-cormack'),
     intubation: v('f-intubation'), fasting: v('f-fasting'),
     vad: getTgl('tgl-vad'), rsi: getTgl('tgl-rsi'),
@@ -2918,6 +3069,7 @@ function showDetail(id) {
     ${rf('Coadyuvantes',(c.ssAdj||[]).join(', '))}
     ${r('Dosis coadyuvante',c.ssAdjDose)}
     ${r('Duración analgesia esperada',c.ssDuration?c.ssDuration+' h':'')}
+    ${rf('Segundo bloqueo', (c.nf && c.nf['f-ss2-nombre']) ? (c.nf['f-ss2-nombre'] + ' — ' + (c.nf['f-ss2-la']||'') + ' ' + (c.nf['f-ss2-conc']||'') + '% ' + (c.nf['f-ss2-vol']||'') + ' mL · Total bloqueos: ' + (c.nf['f-ss-total-dosis']||'')) : '')}
     ${rf('Notas bloqueo',c.ssNotes)}</div>`;
   if (c.hasCath) reg += `<div class="dsec" style="color:#b48aff">CATÉTER NERVIO PERIFÉRICO — COLOCACIÓN</div><div class="dgrid">
     ${rf('Sitio catéter',(c.cathSite||[]).join(', '))}
@@ -3023,6 +3175,7 @@ function showDetail(id) {
       ${c.dexCe||c.dexDose?r('Dexmedetomidina','Modelo: '+(c.dexModel||'—')+' — Ce: '+(c.dexCe||'—')+' ng/mL — '+(c.dexDose||'—')+' mcg/kg/h'):''}
       ${rf('Analgesia multimodal',(c.multimodal||[]).join(', '))}
       ${rf('Notas anestesia',c.gaNotes)}
+      ${rf('Sedación / fármacos', (function(){ var n = c.nf || {}; var a = []; if (n['f-sed-prop-ce']) a.push('Propofol TCI Ce ' + n['f-sed-prop-ce'] + ' mcg/mL'); if (n['f-sed-dex-dosis']) a.push('Dexmedetomidina ' + n['f-sed-dex-dosis'] + ' mcg/kg/h'); if (n['f-sed-otros']) a.push(n['f-sed-otros']); if (n['f-farmacos']) a.push(n['f-farmacos'].split('\n').join(' · ')); return a.join(' — '); })())}
     </div>
 
     <div class="dsec">VÍA AÉREA</div>
@@ -3238,4 +3391,3 @@ function toast(msg, err=false) {
 </script>
 </body>
 </html>
-
