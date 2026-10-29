@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -23,27 +22,27 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 
 /* HEADER */
 header{position:sticky;top:0;z-index:100;background:rgba(10,14,20,0.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid #1e2d3d;padding:0 1rem;display:flex;align-items:center;justify-content:space-between;height:56px;gap:1rem;}
-.logo{font-family:‘Syne’,sans-serif;font-weight:800;font-size:1.2rem;letter-spacing:-0.02em;white-space:nowrap;}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;letter-spacing:-0.02em;white-space:nowrap;}
 .logo span{color:#00d4aa;}
 .hstats{display:flex;gap:1rem;font-size:0.65rem;color:#7a9ab5;letter-spacing:0.04em;text-transform:uppercase;}
-.hstat strong{display:block;font-size:0.95rem;color:#e8f0f8;font-family:‘Syne’,sans-serif;}
+.hstat strong{display:block;font-size:0.95rem;color:#e8f0f8;font-family:'Syne',sans-serif;}
 @media(max-width:500px){.hstats{display:none;}}
 
 /* NAV */
 nav{position:sticky;top:56px;z-index:90;background:#111820;border-bottom:1px solid #1e2d3d;display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;}
 nav::-webkit-scrollbar{display:none;}
-nav button{background:none;border:none;color:#7a9ab5;font-family:‘DM Mono’,monospace;font-size:0.7rem;letter-spacing:0.06em;text-transform:uppercase;padding:0 1rem;height:42px;cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap;-webkit-tap-highlight-color:transparent;}
+nav button{background:none;border:none;color:#7a9ab5;font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.06em;text-transform:uppercase;padding:0 1rem;height:42px;cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap;-webkit-tap-highlight-color:transparent;}
 nav button.active{color:#00d4aa;border-bottom-color:#00d4aa;}
 
 /* MAIN */
 main{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:1rem;}
 .view{display:none;}.view.active{display:block;}
-.stitle{font-family:‘DM Serif Display’,serif;font-size:1.6rem;margin-bottom:0.2rem;}
+.stitle{font-family:'DM Serif Display',serif;font-size:1.6rem;margin-bottom:0.2rem;}
 .ssub{font-size:0.72rem;color:#7a9ab5;margin-bottom:1.2rem;}
 
 /* FORM CARDS */
 .fc{background:#111820;border:1px solid #1e2d3d;border-radius:10px;padding:1.2rem;margin-bottom:1rem;}
-.fct{font-family:‘Syne’,sans-serif;font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#00d4aa;margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:1px solid #1e2d3d;}
+.fct{font-family:'Syne',sans-serif;font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#00d4aa;margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:1px solid #1e2d3d;}
 .fct.purple{color:#b48aff;}
 .fct.blue{color:#0094ff;}
 .fct.gold{color:#f4c542;}
@@ -60,14 +59,14 @@ main{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:1rem;}
 /* INPUTS */
 label{font-size:0.62rem;letter-spacing:0.07em;text-transform:uppercase;color:#7a9ab5;font-weight:500;display:block;margin-bottom:0.2rem;}
 input,select,textarea{
-background:#0a0e14;border:1px solid #1e2d3d;border-radius:6px;
-color:#e8f0f8;font-family:‘DM Mono’,monospace;font-size:0.82rem;
-padding:0.5rem 0.7rem;outline:none;width:100%;
--webkit-appearance:none;appearance:none;
-transition:border-color 0.2s;
+  background:#0a0e14;border:1px solid #1e2d3d;border-radius:6px;
+  color:#e8f0f8;font-family:'DM Mono',monospace;font-size:0.82rem;
+  padding:0.5rem 0.7rem;outline:none;width:100%;
+  -webkit-appearance:none;appearance:none;
+  transition:border-color 0.2s;
 }
 input:focus,select:focus,textarea:focus{border-color:#00d4aa;}
-select{background-image:url(“data:image/svg+xml,%3Csvg xmlns=‘http://www.w3.org/2000/svg’ width=‘12’ height=‘8’ viewBox=‘0 0 12 8’%3E%3Cpath d=‘M1 1l5 5 5-5’ stroke=’%237a9ab5’ stroke-width=‘1.5’ fill=‘none’ stroke-linecap=‘round’/%3E%3C/svg%3E”);background-repeat:no-repeat;background-position:right 0.7rem center;padding-right:2rem;}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a9ab5' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 0.7rem center;padding-right:2rem;}
 select option{background:#18232f;color:#e8f0f8;}
 textarea{resize:vertical;min-height:65px;}
 input[type=range]{padding:0;accent-color:#00d4aa;cursor:pointer;background:none;border:none;}
@@ -76,11 +75,11 @@ input[readonly]{background:#18232f;cursor:default;}
 /* CHIPS — KEY FIX: no onclick in HTML, use JS delegation */
 .chips{display:flex;flex-wrap:wrap;gap:0.3rem;margin-top:0.3rem;}
 .chip{
-background:#18232f;border:1px solid #1e2d3d;border-radius:14px;
-padding:0.22rem 0.65rem;font-size:0.68rem;cursor:pointer;
-color:#7a9ab5;user-select:none;-webkit-user-select:none;
--webkit-tap-highlight-color:transparent;
-transition:all 0.15s;touch-action:manipulation;
+  background:#18232f;border:1px solid #1e2d3d;border-radius:14px;
+  padding:0.22rem 0.65rem;font-size:0.68rem;cursor:pointer;
+  color:#7a9ab5;user-select:none;-webkit-user-select:none;
+  -webkit-tap-highlight-color:transparent;
+  transition:all 0.15s;touch-action:manipulation;
 }
 .chip.on{background:rgba(0,212,170,0.12);border-color:#00d4aa;color:#00d4aa;}
 .chip.on-purple{background:rgba(180,138,255,0.12);border-color:#b48aff;color:#b48aff;}
@@ -92,7 +91,7 @@ transition:all 0.15s;touch-action:manipulation;
 .tlabel{font-size:0.78rem;color:#e8f0f8;}
 .tgl{width:36px;height:20px;background:#1e2d3d;border-radius:10px;cursor:pointer;position:relative;transition:background 0.2s;flex-shrink:0;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
 .tgl.on{background:#00d4aa;}
-.tgl::after{content:’’;width:14px;height:14px;background:white;border-radius:50%;position:absolute;top:3px;left:3px;transition:transform 0.2s;}
+.tgl::after{content:'';width:14px;height:14px;background:white;border-radius:50%;position:absolute;top:3px;left:3px;transition:transform 0.2s;}
 .tgl.on::after{transform:translateX(16px);}
 
 /* STARS */
@@ -101,10 +100,10 @@ transition:all 0.15s;touch-action:manipulation;
 .star.lit{color:#f4c542;}
 
 /* BUTTONS */
-.btn-p{background:#00d4aa;color:#0a0e14;border:none;border-radius:7px;font-family:‘Syne’,sans-serif;font-weight:700;font-size:0.82rem;padding:0.75rem 1.6rem;cursor:pointer;text-transform:uppercase;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
-.btn-s{background:transparent;color:#7a9ab5;border:1px solid #1e2d3d;border-radius:7px;font-family:‘Syne’,sans-serif;font-weight:600;font-size:0.78rem;padding:0.65rem 1.3rem;cursor:pointer;text-transform:uppercase;}
-.btn-d{background:transparent;color:#ff6b6b;border:1px solid rgba(255,107,107,0.25);border-radius:6px;font-size:0.68rem;padding:0.35rem 0.75rem;cursor:pointer;font-family:‘DM Mono’,monospace;}
-.btn-e{background:#18232f;border:1px solid #1e2d3d;color:#7a9ab5;border-radius:6px;padding:0.5rem 1rem;font-family:‘DM Mono’,monospace;font-size:0.72rem;cursor:pointer;display:inline-flex;align-items:center;gap:0.3rem;}
+.btn-p{background:#00d4aa;color:#0a0e14;border:none;border-radius:7px;font-family:'Syne',sans-serif;font-weight:700;font-size:0.82rem;padding:0.75rem 1.6rem;cursor:pointer;text-transform:uppercase;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+.btn-s{background:transparent;color:#7a9ab5;border:1px solid #1e2d3d;border-radius:7px;font-family:'Syne',sans-serif;font-weight:600;font-size:0.78rem;padding:0.65rem 1.3rem;cursor:pointer;text-transform:uppercase;}
+.btn-d{background:transparent;color:#ff6b6b;border:1px solid rgba(255,107,107,0.25);border-radius:6px;font-size:0.68rem;padding:0.35rem 0.75rem;cursor:pointer;font-family:'DM Mono',monospace;}
+.btn-e{background:#18232f;border:1px solid #1e2d3d;color:#7a9ab5;border-radius:6px;padding:0.5rem 1rem;font-family:'DM Mono',monospace;font-size:0.72rem;cursor:pointer;display:inline-flex;align-items:center;gap:0.3rem;}
 .factions{display:flex;gap:0.75rem;justify-content:flex-end;margin-top:1rem;padding-top:1rem;border-top:1px solid #1e2d3d;flex-wrap:wrap;}
 
 /* SECTION DIVIDER */
@@ -113,18 +112,18 @@ transition:all 0.15s;touch-action:manipulation;
 /* CALC BOX */
 .calc-box{background:rgba(0,212,170,0.05);border:1px solid rgba(0,212,170,0.2);border-radius:8px;padding:0.85rem;margin-top:0.85rem;}
 .calc-box.danger{background:rgba(255,107,107,0.05);border-color:rgba(255,107,107,0.2);}
-.calc-title{font-family:‘Syne’,sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#00d4aa;margin-bottom:0.5rem;}
+.calc-title{font-family:'Syne',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#00d4aa;margin-bottom:0.5rem;}
 .calc-title.danger{color:#ff6b6b;}
 .calc-row{font-size:0.75rem;color:#7a9ab5;padding:0.2rem 0;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,0.04);}
 .calc-row:last-child{border-bottom:none;}
-.calc-val{font-family:‘Syne’,sans-serif;font-weight:700;color:#00d4aa;}
+.calc-val{font-family:'Syne',sans-serif;font-weight:700;color:#00d4aa;}
 .calc-val.warn{color:#f4c542;}
 .calc-val.danger{color:#ff6b6b;}
 
 /* RECORDS */
 .rc{background:#111820;border:1px solid #1e2d3d;border-radius:9px;padding:1rem 1.2rem;margin-bottom:0.5rem;display:grid;grid-template-columns:40px 1fr auto;gap:0.75rem;align-items:start;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
-.rnum{font-family:‘DM Serif Display’,serif;font-size:1.5rem;color:#3d5a72;line-height:1;}
-.rmain h3{font-family:‘Syne’,sans-serif;font-size:0.85rem;font-weight:700;margin-bottom:0.2rem;}
+.rnum{font-family:'DM Serif Display',serif;font-size:1.5rem;color:#3d5a72;line-height:1;}
+.rmain h3{font-family:'Syne',sans-serif;font-size:0.85rem;font-weight:700;margin-bottom:0.2rem;}
 .rmeta{display:flex;gap:0.6rem;flex-wrap:wrap;font-size:0.68rem;color:#7a9ab5;}
 .rbadges{display:flex;flex-direction:column;align-items:flex-end;gap:0.3rem;}
 .badge{font-size:0.6rem;letter-spacing:0.05em;text-transform:uppercase;padding:0.15rem 0.5rem;border-radius:12px;font-weight:600;}
@@ -133,7 +132,7 @@ transition:all 0.15s;touch-action:manipulation;
 .br{background:rgba(255,107,107,0.1);color:#ff6b6b;border:1px solid rgba(255,107,107,0.2);}
 .bgo{background:rgba(244,197,66,0.1);color:#f4c542;border:1px solid rgba(244,197,66,0.2);}
 .bp{background:rgba(180,138,255,0.1);color:#b48aff;border:1px solid rgba(180,138,255,0.2);}
-.asa-badge{display:inline-flex;width:24px;height:24px;align-items:center;justify-content:center;border-radius:50%;font-family:‘Syne’,sans-serif;font-weight:700;font-size:0.72rem;}
+.asa-badge{display:inline-flex;width:24px;height:24px;align-items:center;justify-content:center;border-radius:50%;font-family:'Syne',sans-serif;font-weight:700;font-size:0.72rem;}
 .a1{background:rgba(0,212,170,0.15);color:#00d4aa;}
 .a2{background:rgba(0,148,255,0.15);color:#0094ff;}
 .a3{background:rgba(244,197,66,0.15);color:#f4c542;}
@@ -142,14 +141,14 @@ transition:all 0.15s;touch-action:manipulation;
 /* STATS */
 .sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:0.75rem;margin-bottom:1.2rem;}
 .sc{background:#111820;border:1px solid #1e2d3d;border-radius:9px;padding:1rem;position:relative;overflow:hidden;}
-.sc::after{content:’’;position:absolute;bottom:0;left:0;right:0;height:2px;}
+.sc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;}
 .sc.gn::after{background:#00d4aa;}
 .sc.bl::after{background:#0094ff;}
 .sc.gd::after{background:#f4c542;}
 .sc.rd::after{background:#ff6b6b;}
 .sc.pu::after{background:#b48aff;}
 .slabel{font-size:0.6rem;letter-spacing:0.08em;text-transform:uppercase;color:#7a9ab5;margin-bottom:0.35rem;}
-.sval{font-family:‘DM Serif Display’,serif;font-size:1.9rem;line-height:1;}
+.sval{font-family:'DM Serif Display',serif;font-size:1.9rem;line-height:1;}
 .ssub2{font-size:0.65rem;color:#3d5a72;margin-top:0.2rem;}
 .cgrid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.2rem;}
 @media(max-width:600px){.cgrid{grid-template-columns:1fr;}}
@@ -170,9 +169,9 @@ transition:all 0.15s;touch-action:manipulation;
 .mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;align-items:flex-end;justify-content:center;padding:0;}
 .mo.open{display:flex;}
 .mbox{background:#111820;border-radius:16px 16px 0 0;padding:1.5rem;width:100%;max-height:88vh;overflow-y:auto;-webkit-overflow-scrolling:touch;}
-.mbox h2{font-family:‘DM Serif Display’,serif;font-size:1.3rem;margin-bottom:1rem;}
+.mbox h2{font-family:'DM Serif Display',serif;font-size:1.3rem;margin-bottom:1rem;}
 .mclose{position:absolute;top:1rem;right:1rem;background:#18232f;border:none;color:#7a9ab5;font-size:1rem;cursor:pointer;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;}
-.dsec{font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:#00d4aa;margin:1rem 0 0.5rem;font-family:‘Syne’,sans-serif;font-weight:700;padding-bottom:0.3rem;border-bottom:1px solid #1e2d3d;}
+.dsec{font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:#00d4aa;margin:1rem 0 0.5rem;font-family:'Syne',sans-serif;font-weight:700;padding-bottom:0.3rem;border-bottom:1px solid #1e2d3d;}
 .dgrid{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;}
 @media(max-width:500px){.dgrid{grid-template-columns:1fr;}}
 .di label{font-size:0.58rem;letter-spacing:0.08em;text-transform:uppercase;color:#3d5a72;display:block;margin-bottom:0.1rem;}
@@ -182,7 +181,7 @@ transition:all 0.15s;touch-action:manipulation;
 /* SEARCH/FILTER */
 .sbar{position:relative;margin-bottom:0.85rem;}
 .sbar input{padding-left:2rem;background:#111820;}
-.sbar::before{content:‘⌕’;position:absolute;left:0.65rem;top:50%;transform:translateY(-50%);color:#3d5a72;pointer-events:none;}
+.sbar::before{content:'⌕';position:absolute;left:0.65rem;top:50%;transform:translateY(-50%);color:#3d5a72;pointer-events:none;}
 .frow{display:flex;gap:0.5rem;margin-bottom:1rem;flex-wrap:wrap;align-items:center;}
 .frow select{width:auto;min-width:120px;font-size:0.72rem;}
 .rcnt{font-size:0.68rem;color:#3d5a72;margin-left:auto;}
@@ -190,20 +189,19 @@ transition:all 0.15s;touch-action:manipulation;
 /* EMPTY */
 .empty{text-align:center;padding:3rem 1rem;color:#3d5a72;}
 .empty-i{font-size:2.5rem;margin-bottom:0.6rem;}
-.empty h3{font-family:‘DM Serif Display’,serif;font-size:1.1rem;color:#7a9ab5;margin-bottom:0.35rem;}
+.empty h3{font-family:'DM Serif Display',serif;font-size:1.1rem;color:#7a9ab5;margin-bottom:0.35rem;}
 
 /* BACKUP */
 .bp2{background:#111820;border:1px solid #1e2d3d;border-radius:9px;padding:1.2rem;margin-bottom:1rem;}
-.bp2 h3{font-family:‘Syne’,sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#e8f0f8;margin-bottom:0.75rem;}
+.bp2 h3{font-family:'Syne',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#e8f0f8;margin-bottom:0.75rem;}
 .binfo{font-size:0.7rem;color:#7a9ab5;line-height:1.7;margin-top:0.5rem;}
 .binfo strong{color:#00d4aa;}
 
 /* TOAST */
-.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(80px);background:#00d4aa;color:#0a0e14;padding:0.7rem 1.4rem;border-radius:20px;font-family:‘Syne’,sans-serif;font-weight:700;font-size:0.78rem;z-index:300;opacity:0;transition:all 0.3s;white-space:nowrap;}
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(80px);background:#00d4aa;color:#0a0e14;padding:0.7rem 1.4rem;border-radius:20px;font-family:'Syne',sans-serif;font-weight:700;font-size:0.78rem;z-index:300;opacity:0;transition:all 0.3s;white-space:nowrap;}
 .toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
 .toast.err{background:#ff6b6b;color:#fff;}
 </style>
-
 </head>
 <body>
 
@@ -227,13 +225,23 @@ transition:all 0.15s;touch-action:manipulation;
 <main>
 
 <!-- ═══════════ FORM ═══════════ -->
-
 <div id="view-form" class="view active">
 <div class="stitle">Registrar Caso</div>
 <div class="ssub">Campos con * obligatorios</div>
 
-<!-- PACIENTE -->
+<!-- REGISTRO RAPIDO -->
+<div class="fc" style="border-color:#00d4aa">
+  <div class="fct" style="color:#00d4aa">⚡ Registro rápido — pegar caso</div>
+  <div style="font-size:0.7rem;color:#7a9ab5;line-height:1.5;margin-bottom:0.6rem">Envíale a Claude la foto del registro o dicta el caso. Pega aquí el bloque que te devuelva y toca Aplicar: llena el formulario. Luego revisa y guarda.</div>
+  <textarea id="quick-paste" rows="5" placeholder="nombre: ...&#10;edad: 45&#10;peso: 70&#10;procedimiento: ..."></textarea>
+  <div style="display:flex;gap:0.5rem;margin-top:0.5rem;flex-wrap:wrap">
+    <button type="button" class="btn-e" onclick="applyQuickPaste()">⚡ Aplicar al formulario</button>
+    <button type="button" class="btn-e" onclick="copyQuickTemplate()">Copiar plantilla</button>
+  </div>
+  <div id="quick-msg" style="font-size:0.7rem;margin-top:0.5rem;color:#00d4aa"></div>
+</div>
 
+<!-- PACIENTE -->
 <div class="fc">
   <div class="fct">⊙ Datos del Paciente</div>
   <div class="fg">
@@ -272,7 +280,6 @@ transition:all 0.15s;touch-action:manipulation;
 </div>
 
 <!-- PROCEDIMIENTO -->
-
 <div class="fc">
   <div class="fct">⚕ Procedimiento Quirúrgico</div>
   <div class="fg">
@@ -310,7 +317,6 @@ transition:all 0.15s;touch-action:manipulation;
   </div>
 
   <!-- TORNIQUETE — ortopedia -->
-
   <div class="trow" style="margin-top:0.75rem">
     <span class="tlabel">¿Se usó torniquete?</span>
     <div class="tgl" id="tgl-torniquete" data-tgl="1" data-target="sec-torniquete"></div>
@@ -342,7 +348,6 @@ transition:all 0.15s;touch-action:manipulation;
 </div>
 
 <!-- CONTORNO CORPORAL — auto-shown -->
-
 <div class="fc" id="fc-contorno" style="display:none;border-color:rgba(244,197,66,0.3)">
   <div class="fct gold">◈ Contorno Corporal — Liposucción / Lipoescultura / Lipoabdominoplastia</div>
 
@@ -373,34 +378,31 @@ transition:all 0.15s;touch-action:manipulation;
     </div>
     <div class="fgg"><label>Volumen tumescente total (mL)</label><input type="number" id="f-tumes-vol" placeholder="3000" oninput="calcLipo()"></div>
 
-```
-<!-- CAMPOS CON LIDOCAÍNA -->
-<div id="grp-tumes-lido" style="display:contents">
-  <div class="fgg"><label>Lidocaína tumescente (mg/mL)</label><input type="number" id="f-tumes-lido-conc" step="0.01" placeholder="0.5" oninput="calcLipo()"></div>
-  <div class="fgg"><label>Dosis total lidocaína (mg)</label><input type="number" id="f-tumes-lido-total" readonly placeholder="Auto"></div>
-  <div class="fgg"><label>Dosis lidocaína (mg/kg)</label><input type="number" id="f-tumes-lido-mgkg" readonly placeholder="Auto"></div>
-</div>
+    <!-- CAMPOS CON LIDOCAÍNA -->
+    <div id="grp-tumes-lido" style="display:contents">
+      <div class="fgg"><label>Lidocaína tumescente (mg/mL)</label><input type="number" id="f-tumes-lido-conc" step="0.01" placeholder="0.5" oninput="calcLipo()"></div>
+      <div class="fgg"><label>Dosis total lidocaína (mg)</label><input type="number" id="f-tumes-lido-total" readonly placeholder="Auto"></div>
+      <div class="fgg"><label>Dosis lidocaína (mg/kg)</label><input type="number" id="f-tumes-lido-mgkg" readonly placeholder="Auto"></div>
+    </div>
 
-<!-- CAMPOS EPINEFRINA (siempre visible) -->
-<div class="fgg"><label>Ampollas de adrenalina (1mg/amp)</label><input type="number" id="f-tumes-epi-amps" step="1" placeholder="Ej: 6" oninput="calcTumesCustom()"></div>
-<div class="fgg"><label>Concentración adrenalina (mcg/mL)</label><input type="number" id="f-tumes-epi-conc" readonly placeholder="Auto" style="color:#00d4aa"></div>
-<div class="fgg"><label>Dosis total adrenalina (mg)</label><input type="number" id="f-tumes-epi-total" readonly placeholder="Auto" style="color:#00d4aa"></div>
+    <!-- CAMPOS EPINEFRINA (siempre visible) -->
+    <div class="fgg"><label>Ampollas de adrenalina (1mg/amp)</label><input type="number" id="f-tumes-epi-amps" step="1" placeholder="Ej: 6" oninput="calcTumesCustom()"></div>
+    <div class="fgg"><label>Concentración adrenalina (mcg/mL)</label><input type="number" id="f-tumes-epi-conc" readonly placeholder="Auto" style="color:#00d4aa"></div>
+    <div class="fgg"><label>Dosis total adrenalina (mg)</label><input type="number" id="f-tumes-epi-total" readonly placeholder="Auto" style="color:#00d4aa"></div>
 
-<!-- CAMPOS TXA — solo fórmula sin lidocaína -->
-<div id="grp-tumes-txa" style="display:none;grid-column:1/-1">
-  <div class="fg">
-    <div class="fgg"><label>Ácido tranexámico total (mg)</label><input type="number" id="f-tumes-txa-mg" step="50" placeholder="Ej: 300" oninput="calcTumesCustom()"></div>
-    <div class="fgg"><label>Concentración TXA (mg/mL)</label><input type="number" id="f-tumes-txa-conc" readonly placeholder="Auto" style="color:#00d4aa"></div>
-    <div class="fgg"><label>Dosis TXA (mg/kg)</label><input type="number" id="f-tumes-txa-mgkg" readonly placeholder="Auto" style="color:#00d4aa"></div>
-  </div>
-  <!-- Panel de preparación -->
-  <div id="tumes-custom-box" style="display:none;margin-top:0.75rem;background:rgba(0,212,170,0.05);border:1px solid rgba(0,212,170,0.2);border-radius:8px;padding:0.85rem">
-    <div style="font-family:'Syne',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#00d4aa;margin-bottom:0.5rem">◎ Preparación Solución Tumescente</div>
-    <div id="tumes-custom-rows"></div>
-  </div>
-</div>
-```
-
+    <!-- CAMPOS TXA — solo fórmula sin lidocaína -->
+    <div id="grp-tumes-txa" style="display:none;grid-column:1/-1">
+      <div class="fg">
+        <div class="fgg"><label>Ácido tranexámico total (mg)</label><input type="number" id="f-tumes-txa-mg" step="50" placeholder="Ej: 300" oninput="calcTumesCustom()"></div>
+        <div class="fgg"><label>Concentración TXA (mg/mL)</label><input type="number" id="f-tumes-txa-conc" readonly placeholder="Auto" style="color:#00d4aa"></div>
+        <div class="fgg"><label>Dosis TXA (mg/kg)</label><input type="number" id="f-tumes-txa-mgkg" readonly placeholder="Auto" style="color:#00d4aa"></div>
+      </div>
+      <!-- Panel de preparación -->
+      <div id="tumes-custom-box" style="display:none;margin-top:0.75rem;background:rgba(0,212,170,0.05);border:1px solid rgba(0,212,170,0.2);border-radius:8px;padding:0.85rem">
+        <div style="font-family:'Syne',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#00d4aa;margin-bottom:0.5rem">◎ Preparación Solución Tumescente</div>
+        <div id="tumes-custom-rows"></div>
+      </div>
+    </div>
   </div>
   <div class="fg" style="margin-top:0.75rem">
     <div class="fgg full"><label>Áreas tratadas</label>
@@ -432,7 +434,6 @@ transition:all 0.15s;touch-action:manipulation;
   </div>
 
   <!-- CALC DISPLAY -->
-
   <div id="lipo-calc" style="display:none;margin-top:0.85rem">
     <div class="calc-box">
       <div class="calc-title">◎ Cálculos de Seguridad — Pérdida Sanguínea</div>
@@ -464,7 +465,6 @@ transition:all 0.15s;touch-action:manipulation;
   </div>
 
   <!-- CIRUGÍA COMBINADA -->
-
   <div class="sdiv">Procedimientos Adicionales Combinados</div>
   <div class="trow" style="margin-bottom:0.75rem">
     <span class="tlabel">¿Se realizaron procedimientos adicionales?</span>
@@ -479,15 +479,12 @@ transition:all 0.15s;touch-action:manipulation;
     </div>
     <button onclick="addCombinedProc()" style="background:rgba(0,148,255,0.1);border:1px solid rgba(0,148,255,0.3);color:#0094ff;padding:0.5rem 1rem;border-radius:6px;font-size:0.72rem;cursor:pointer;margin-top:0.5rem">+ Agregar procedimiento</button>
 
-```
-<!-- RESUMEN TOTAL -->
-<div id="combined-total-box" style="display:none;margin-top:0.85rem;background:rgba(255,107,107,0.05);border:1px solid rgba(255,107,107,0.2);border-radius:8px;padding:0.85rem">
-  <div style="font-family:'Syne',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#ff6b6b;margin-bottom:0.5rem">◎ Sangrado Total Estimado — Cirugía Combinada</div>
-  <div id="combined-total-rows"></div>
-  <div style="font-size:0.6rem;color:#3d5a72;margin-top:0.5rem;line-height:1.6">Ref: ASPS Procedural Statistics · Murphy RX et al., Plast Reconstr Surg 2003 · Handel N et al., Ann Plast Surg 1995 · Series retrospectivas de cirugía mamaria estética</div>
-</div>
-```
-
+    <!-- RESUMEN TOTAL -->
+    <div id="combined-total-box" style="display:none;margin-top:0.85rem;background:rgba(255,107,107,0.05);border:1px solid rgba(255,107,107,0.2);border-radius:8px;padding:0.85rem">
+      <div style="font-family:'Syne',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#ff6b6b;margin-bottom:0.5rem">◎ Sangrado Total Estimado — Cirugía Combinada</div>
+      <div id="combined-total-rows"></div>
+      <div style="font-size:0.6rem;color:#3d5a72;margin-top:0.5rem;line-height:1.6">Ref: ASPS Procedural Statistics · Murphy RX et al., Plast Reconstr Surg 2003 · Handel N et al., Ann Plast Surg 1995 · Series retrospectivas de cirugía mamaria estética</div>
+    </div>
   </div>
   <div class="fg">
     <div class="fgg"><label>Hb 24h POP (g/dL)</label><input type="number" id="f-hb-24h" step="0.1" placeholder="11.0" oninput="calcHb24()"></div>
@@ -506,7 +503,6 @@ transition:all 0.15s;touch-action:manipulation;
 </div>
 
 <!-- ANESTESIA GENERAL / TCI -->
-
 <div class="fc">
   <div class="fct">◈ Técnica Anestésica</div>
   <div class="fg">
@@ -605,7 +601,6 @@ transition:all 0.15s;touch-action:manipulation;
   </div>
 
   <!-- Dexmedetomidina TCI -->
-
   <div class="fg" id="grp-dex" style="display:none">
     <div class="sdiv" style="grid-column:1/-1">Dexmedetomidina</div>
     <div class="fgg"><label>Modelo TCI Dexmedetomidina</label>
@@ -642,7 +637,6 @@ transition:all 0.15s;touch-action:manipulation;
 </div>
 
 <!-- VÍA AÉREA -->
-
 <div class="fc">
   <div class="fct blue">◉ Vía Aérea</div>
   <div class="fg">
@@ -676,7 +670,6 @@ transition:all 0.15s;touch-action:manipulation;
 </div>
 
 <!-- MONITOREO -->
-
 <div class="fc">
   <div class="fct blue">⊕ Monitoreo y Accesos</div>
   <div class="fg">
@@ -701,12 +694,10 @@ transition:all 0.15s;touch-action:manipulation;
 </div>
 
 <!-- ANESTESIA REGIONAL -->
-
 <div class="fc">
   <div class="fct purple">◎ Anestesia / Analgesia Regional — Guiada por Ecografía</div>
 
   <!-- NEUROAXIAL -->
-
   <div class="sdiv">Bloqueo Neuroaxial</div>
   <div class="trow" style="margin-bottom:0.75rem">
     <span class="tlabel">¿Se realizó bloqueo neuroaxial?</span>
@@ -788,7 +779,6 @@ transition:all 0.15s;touch-action:manipulation;
   </div>
 
   <!-- SINGLE SHOT -->
-
   <div class="sdiv">Bloqueo de Nervio Periférico — Single Shot</div>
   <div class="trow" style="margin-bottom:0.75rem">
     <span class="tlabel">¿Se realizó bloqueo periférico single shot?</span>
@@ -827,78 +817,73 @@ transition:all 0.15s;touch-action:manipulation;
         </select>
       </div>
 
-```
-  <div class="sdiv" style="grid-column:1/-1">Modo de preparación</div>
-  <div class="fgg full">
-    <div style="display:flex;gap:0.5rem;margin-bottom:0.5rem">
-      <button type="button" id="ss-modo-puro" onclick="setSSmodo('puro')"
-        style="flex:1;padding:0.5rem;border-radius:6px;border:1px solid #1e2d3d;background:#18232f;color:#7a9ab5;font-family:'DM Mono',monospace;font-size:0.72rem;cursor:pointer;transition:all 0.2s">
-        AL puro
-      </button>
-      <button type="button" id="ss-modo-diluido" onclick="setSSmodo('diluido')"
-        style="flex:1;padding:0.5rem;border-radius:6px;border:1px solid #1e2d3d;background:#18232f;color:#7a9ab5;font-family:'DM Mono',monospace;font-size:0.72rem;cursor:pointer;transition:all 0.2s">
-        Diluido
-      </button>
-      <button type="button" id="ss-modo-meta" onclick="setSSmodo('meta')"
-        style="flex:1;padding:0.5rem;border-radius:6px;border:1px solid #1e2d3d;background:#18232f;color:#7a9ab5;font-family:'DM Mono',monospace;font-size:0.72rem;cursor:pointer;transition:all 0.2s">
-        Por conc. deseada
-      </button>
+      <div class="sdiv" style="grid-column:1/-1">Modo de preparación</div>
+      <div class="fgg full">
+        <div style="display:flex;gap:0.5rem;margin-bottom:0.5rem">
+          <button type="button" id="ss-modo-puro" onclick="setSSmodo('puro')"
+            style="flex:1;padding:0.5rem;border-radius:6px;border:1px solid #1e2d3d;background:#18232f;color:#7a9ab5;font-family:'DM Mono',monospace;font-size:0.72rem;cursor:pointer;transition:all 0.2s">
+            AL puro
+          </button>
+          <button type="button" id="ss-modo-diluido" onclick="setSSmodo('diluido')"
+            style="flex:1;padding:0.5rem;border-radius:6px;border:1px solid #1e2d3d;background:#18232f;color:#7a9ab5;font-family:'DM Mono',monospace;font-size:0.72rem;cursor:pointer;transition:all 0.2s">
+            Diluido
+          </button>
+          <button type="button" id="ss-modo-meta" onclick="setSSmodo('meta')"
+            style="flex:1;padding:0.5rem;border-radius:6px;border:1px solid #1e2d3d;background:#18232f;color:#7a9ab5;font-family:'DM Mono',monospace;font-size:0.72rem;cursor:pointer;transition:all 0.2s">
+            Por conc. deseada
+          </button>
+        </div>
+      </div>
+
+      <!-- PURO -->
+      <div id="ss-grp-puro" class="fgg" style="display:none">
+        <label>Volumen AL puro (mL)</label>
+        <input type="number" id="f-ss-vol-puro" placeholder="20" oninput="calcSS()">
+      </div>
+
+      <!-- DILUIDO -->
+      <div id="ss-grp-diluido" style="display:none;grid-column:1/-1">
+        <div class="fg">
+          <div class="fgg"><label>Volumen AL puro (mL)</label><input type="number" id="f-ss-vol-al" placeholder="10" oninput="calcSS()"></div>
+          <div class="fgg"><label>Volumen diluyente (mL)</label><input type="number" id="f-ss-vol-dil" placeholder="10" oninput="calcSS()"></div>
+        </div>
+      </div>
+
+      <!-- POR META -->
+      <div id="ss-grp-meta" style="display:none;grid-column:1/-1">
+        <div class="fg">
+          <div class="fgg"><label>Concentración deseada (%)</label><input type="number" id="f-ss-conc-meta" step="0.005" placeholder="0.25" oninput="calcSS()"></div>
+          <div class="fgg"><label>Volumen total (mL)</label><input type="number" id="f-ss-vol-total-meta" placeholder="20" oninput="calcSS()"></div>
+        </div>
+      </div>
+
+      <div class="fgg"><label>Concentración final (%)</label><input type="number" id="f-ss-conc-final" readonly placeholder="Auto" style="color:#0094ff"></div>
+      <div class="fgg"><label>Volumen total (mL)</label><input type="number" id="f-ss-volume" readonly placeholder="Auto" style="color:#00d4aa"></div>
+      <div class="fgg"><label>Dosis total AL (mg)</label><input type="number" id="f-ss-dose-total" readonly placeholder="Auto" style="color:#00d4aa"></div>
+      <div class="fgg"><label>Dosis AL (mg/kg)</label><input type="number" id="f-ss-dose-mgkg" readonly placeholder="Auto" style="color:#00d4aa"></div>
+      <div id="ss-calc-box" style="display:none;grid-column:1/-1;background:rgba(0,212,170,0.05);border:1px solid rgba(0,212,170,0.2);border-radius:8px;padding:0.85rem">
+        <div style="font-family:'Syne',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#00d4aa;margin-bottom:0.5rem">◎ Preparación y Dosis</div>
+        <div id="ss-calc-rows"></div>
+      </div>
+      <div id="ss-alert-box" style="display:none;grid-column:1/-1;background:rgba(255,107,107,0.05);border:1px solid rgba(255,107,107,0.3);border-radius:8px;padding:0.85rem">
+        <div style="font-family:'Syne',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#ff6b6b;margin-bottom:0.5rem">⚠ Alerta de dosis</div>
+        <div id="ss-alert-rows"></div>
+      </div>
+      <div class="fgg full"><label>Coadyuvantes</label>
+        <div class="chips" data-group="ss-adj" data-color="on-blue">
+          <span class="chip">Dexametasona perineural</span><span class="chip">Dexametasona IV</span>
+          <span class="chip">Dexmedetomidina perineural</span><span class="chip">Epinefrina</span>
+          <span class="chip">Buprenorfina</span><span class="chip">Clonidina</span><span class="chip">Ninguno</span>
+        </div>
+      </div>
+      <div class="fgg"><label>Dosis coadyuvante</label><input type="text" id="f-ss-adj-dose" placeholder="Ej: Dexa 4mg / Dex 0.5mcg/kg"></div>
+      <div class="fgg"><label>Duración analgesia esperada (h)</label><input type="number" id="f-ss-duration" placeholder="18"></div>
+      <div class="fgg full"><label>Notas bloqueo single shot</label><textarea id="f-ss-notes" placeholder="Técnica, pases, dispersión del AL..."></textarea></div>
     </div>
   </div>
 
-  <!-- PURO -->
-  <div id="ss-grp-puro" class="fgg" style="display:none">
-    <label>Volumen AL puro (mL)</label>
-    <input type="number" id="f-ss-vol-puro" placeholder="20" oninput="calcSS()">
-  </div>
-
-  <!-- DILUIDO -->
-  <div id="ss-grp-diluido" style="display:none;grid-column:1/-1">
-    <div class="fg">
-      <div class="fgg"><label>Volumen AL puro (mL)</label><input type="number" id="f-ss-vol-al" placeholder="10" oninput="calcSS()"></div>
-      <div class="fgg"><label>Volumen diluyente (mL)</label><input type="number" id="f-ss-vol-dil" placeholder="10" oninput="calcSS()"></div>
-    </div>
-  </div>
-
-  <!-- POR META -->
-  <div id="ss-grp-meta" style="display:none;grid-column:1/-1">
-    <div class="fg">
-      <div class="fgg"><label>Concentración deseada (%)</label><input type="number" id="f-ss-conc-meta" step="0.01" placeholder="0.25" oninput="calcSS()"></div>
-      <div class="fgg"><label>Volumen total deseado (mL)</label><input type="number" id="f-ss-vol-total-meta" placeholder="30" oninput="calcSS()"></div>
-    </div>
-  </div>
-
-  <!-- RESULTADOS CALCULADOS -->
-  <div class="fgg"><label>Concentración final (%)</label><input type="number" id="f-ss-conc-final" readonly placeholder="Auto" style="color:#00d4aa"></div>
-  <div class="fgg"><label>Volumen total (mL)</label><input type="number" id="f-ss-volume" readonly placeholder="Auto" style="color:#00d4aa"></div>
-  <div class="fgg"><label>Dosis total AL (mg)</label><input type="number" id="f-ss-dose-total" readonly placeholder="Auto" style="color:#00d4aa"></div>
-  <div class="fgg"><label>Dosis AL (mg/kg)</label><input type="number" id="f-ss-dose-mgkg" readonly placeholder="Auto" style="color:#00d4aa"></div>
-  <div id="ss-calc-box" style="display:none;grid-column:1/-1;background:rgba(0,212,170,0.05);border:1px solid rgba(0,212,170,0.2);border-radius:8px;padding:0.85rem">
-    <div style="font-family:'Syne',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#00d4aa;margin-bottom:0.5rem">◎ Cálculo de Dosis</div>
-    <div id="ss-calc-rows"></div>
-  </div>
-  <div id="ss-alert-box" style="display:none;grid-column:1/-1;background:rgba(255,107,107,0.05);border:1px solid rgba(255,107,107,0.3);border-radius:8px;padding:0.85rem">
-    <div style="font-family:'Syne',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#ff6b6b;margin-bottom:0.5rem">⚠ ALERTA DE DOSIS</div>
-    <div id="ss-alert-rows"></div>
-  </div>
-  <div class="fgg full"><label>Coadyuvantes</label>
-    <div class="chips" data-group="ss-adj" data-color="on-blue">
-      <span class="chip">Dexametasona perineural</span><span class="chip">Dexametasona IV</span>
-      <span class="chip">Dexmedetomidina perineural</span><span class="chip">Epinefrina</span>
-      <span class="chip">Buprenorfina</span><span class="chip">Clonidina</span><span class="chip">Ninguno</span>
-    </div>
-  </div>
-  <div class="fgg"><label>Dosis coadyuvante</label><input type="text" id="f-ss-adj-dose" placeholder="Ej: Dexa 4mg / Dex 0.5mcg/kg"></div>
-  <div class="fgg"><label>Duración analgesia esperada (h)</label><input type="number" id="f-ss-duration" placeholder="18"></div>
-  <div class="fgg full"><label>Notas bloqueo single shot</label><textarea id="f-ss-notes" placeholder="Técnica, pases, dispersión del AL..."></textarea></div>
-</div>
-```
-
-  </div>
-
-  <!-- CATÉTER — solo colocación -->
-
-  <div class="sdiv">Catéter de Nervio Periférico — Colocación</div>
+  <!-- CATÉTER -->
+  <div class="sdiv">Analgesia Continua — Catéter de Nervio Periférico</div>
   <div class="trow" style="margin-bottom:0.75rem">
     <span class="tlabel">¿Se colocó catéter de nervio periférico?</span>
     <div class="tgl" id="tgl-cath" data-tgl="1" data-target="sec-cath"></div>
@@ -918,37 +903,73 @@ transition:all 0.15s;touch-action:manipulation;
       <div class="fgg"><label>Lado</label>
         <select id="f-cath-side"><option value="">—</option><option>Derecho</option><option>Izquierdo</option><option>Bilateral</option></select>
       </div>
-      <div class="fgg"><label>Avance catéter (cm)</label><input type="number" id="f-cath-avance" step="0.5" placeholder="5"></div>
-      <div class="fgg"><label>Intentos punción</label>
-        <select id="f-cath-intentos"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4+</option></select>
+      <div class="fgg"><label>Avance del catéter (cm)</label><input type="number" id="f-cath-avance" placeholder="5"></div>
+      <div class="fgg"><label>Intentos</label><input type="number" id="f-cath-intentos" placeholder="1"></div>
+      <div class="fgg"><label>Fijación</label><input type="text" id="f-cath-fijacion" placeholder="Ej: 10 cm en piel, Tegaderm"></div>
+      <div class="fgg"><label>AL stock</label>
+        <select id="f-cath-la" onchange="calcCath()">
+          <option value="">—</option>
+          <option value="levobupi0.75">Levobupivacaína 0.75% — amp 10 mL</option>
+          <option value="levobupi0.75epi">Levobupivacaína 0.75% + Epi — amp 10 mL</option>
+          <option value="bupi0.5">Bupivacaína 0.5% — amp 10 mL</option>
+          <option value="bupi0.5epi">Bupivacaína 0.5% + Epi — amp 10 mL</option>
+          <option value="lido2">Lidocaína 2% — amp 10 mL</option>
+          <option value="lido1">Lidocaína 1% — amp 10 mL</option>
+        </select>
       </div>
-      <div class="fgg"><label>Fijación</label>
-        <select id="f-cath-fijacion"><option value="">—</option><option>Tegaderm</option><option>Steri-strip</option><option>Sutura</option><option>Otro</option></select>
+      <div class="fgg"><label>Concentración deseada (%)</label>
+        <select id="f-cath-conc-meta" onchange="calcCath()">
+          <option value="">—</option><option value="0.2">0.2%</option><option value="0.125">0.125%</option>
+          <option value="0.1">0.1%</option><option value="0.0625">0.0625%</option><option value="custom">Otra</option>
+        </select>
       </div>
-      <div class="fgg full"><label>Notas colocación</label><textarea id="f-cath-notes" placeholder="Técnica, parestesias, dificultades, observaciones..."></textarea></div>
+      <div class="fgg" id="grp-cath-conc-custom" style="display:none"><label>Concentración (%)</label><input type="number" id="f-cath-conc-custom" step="0.005" placeholder="0.15" oninput="calcCath()"></div>
+      <div class="fgg"><label>Duración deseada (días)</label><input type="number" id="f-cath-dias" step="0.5" placeholder="2" oninput="calcCath()"></div>
+      <div class="fgg"><label>Volumen reservorio (mL)</label>
+        <select id="f-cath-vol-reservorio" onchange="calcCath()">
+          <option value="">—</option><option value="100">100 mL</option><option value="250">250 mL</option>
+          <option value="400">400 mL</option><option value="custom">Otro</option>
+        </select>
+      </div>
+      <div class="fgg" id="grp-cath-vol-custom" style="display:none"><label>Volumen (mL)</label><input type="number" id="f-cath-vol-custom" placeholder="300" oninput="calcCath()"></div>
+      <div class="fgg"><label>Volumen AL puro (mL)</label><input type="number" id="f-cath-vol-al" readonly placeholder="Auto" style="color:#b48aff"></div>
+      <div class="fgg"><label>Volumen SSN (mL)</label><input type="number" id="f-cath-vol-dil" readonly placeholder="Auto" style="color:#7a9ab5"></div>
+      <div class="fgg"><label>Tasa (mL/h)</label><input type="number" id="f-cath-rate" readonly placeholder="Auto" style="color:#00d4aa"></div>
+      <div class="fgg"><label>Dosis (mg/h)</label><input type="number" id="f-cath-dose-h" readonly placeholder="Auto" style="color:#00d4aa"></div>
+      <div class="fgg"><label>Dosis (mg/24h)</label><input type="number" id="f-cath-dose-24h" readonly placeholder="Auto" style="color:#00d4aa"></div>
+      <div class="fgg"><label>Dosis (mg/kg/h)</label><input type="number" id="f-cath-dose-kgh" readonly placeholder="Auto" style="color:#00d4aa"></div>
+      <div class="fgg"><label>Duración (h)</label><input type="number" id="f-cath-dur-h" readonly placeholder="Auto" style="color:#f4c542"></div>
+      <div class="fgg"><label>Duración (días)</label><input type="number" id="f-cath-dur-d" readonly placeholder="Auto" style="color:#f4c542"></div>
+      <div id="cath-calc-box" style="display:none;grid-column:1/-1;background:rgba(0,212,170,0.05);border:1px solid rgba(0,212,170,0.2);border-radius:8px;padding:0.85rem">
+        <div style="font-family:'Syne',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#00d4aa;margin-bottom:0.5rem">◎ Cálculo Infusión Continua</div>
+        <div id="cath-calc-rows"></div>
+      </div>
+      <div class="fgg full"><label>Coadyuvantes infusión</label>
+        <div class="chips" data-group="cath-adj" data-color="on-blue">
+          <span class="chip">Dexmedetomidina</span><span class="chip">Clonidina</span><span class="chip">Ninguno</span>
+        </div>
+      </div>
+      <div class="fgg full"><label>Notas catéter</label><textarea id="f-cath-notes" placeholder="Complicaciones, observaciones..."></textarea></div>
     </div>
   </div>
 
-  <!-- BOMBA / INFUSIÓN CONTINUA — unificada -->
-
-  <div class="sdiv">Bomba / Infusión Continua Postoperatoria</div>
+  <!-- ELASTÓMERA -->
+  <div class="sdiv">Bomba Elastomérica — Analgesia Ambulatoria</div>
   <div class="trow" style="margin-bottom:0.75rem">
-    <span class="tlabel">¿Se utilizó bomba de infusión continua?</span>
+    <span class="tlabel">¿Se utilizó bomba elastomérica?</span>
     <div class="tgl" id="tgl-elasto" data-tgl="1" data-target="sec-elasto"></div>
   </div>
   <div id="sec-elasto" style="display:none">
     <div class="fg">
-      <!-- VÍA -->
-      <div class="fgg"><label>Vía de administración</label>
+      <div class="fgg"><label>Vía de infusión</label>
         <select id="f-elasto-via" onchange="toggleElastoVia()">
           <option value="">—</option>
-          <option value="periferico">Catéter nervio periférico</option>
-          <option value="epidural">Epidural / Peridural</option>
-          <option value="venosa">Venosa IV</option>
+          <option value="periferico">Catéter periférico (nervio)</option>
+          <option value="epidural">Epidural</option>
+          <option value="venosa">Endovenosa</option>
           <option value="subcutanea">Subcutánea</option>
         </select>
       </div>
-      <!-- TIPO DE BOMBA -->
       <div class="fgg"><label>Tipo de bomba</label>
         <select id="f-elasto-type">
           <option value="">—</option>
@@ -963,130 +984,125 @@ transition:all 0.15s;touch-action:manipulation;
       </div>
     </div>
 
-```
-<!-- BLOQUE AL — para periférico y epidural -->
-<div id="elasto-grp-al" style="display:none;margin-top:0.75rem">
-  <div class="fg">
-    <div class="fgg"><label>AL stock</label>
-      <select id="f-elasto-la" onchange="calcElasto('la')">
-        <option value="">—</option>
-        <option value="levobupi0.75">Levobupivacaína 0.75% — amp 10 mL</option>
-        <option value="levobupi0.75epi">Levobupivacaína 0.75% + Epi — amp 10 mL</option>
-        <option value="bupi0.5">Bupivacaína 0.5% — amp 10 mL</option>
-        <option value="bupi0.5epi">Bupivacaína 0.5% + Epi — amp 10 mL</option>
-        <option value="lido2">Lidocaína 2% — amp 10 mL</option>
-      </select>
-    </div>
-    <div class="fgg"><label>Concentración deseada (%)</label>
-      <select id="f-elasto-conc-meta" onchange="calcElasto('conc')">
-        <option value="">—</option>
-        <option value="0.2">0.2%</option>
-        <option value="0.125">0.125%</option>
-        <option value="0.1">0.1%</option>
-        <option value="0.0625">0.0625%</option>
-        <option value="custom">Otra</option>
-      </select>
-    </div>
-    <div class="fgg" id="grp-elasto-conc-custom" style="display:none">
-      <label>Concentración personalizada (%)</label>
-      <input type="number" id="f-elasto-conc-custom" step="0.01" placeholder="0.15" oninput="calcElasto('conc')">
-    </div>
-    <div style="grid-column:1/-1;font-size:0.62rem;color:#7a9ab5;margin-top:0.25rem;font-family:'Syne',sans-serif;letter-spacing:0.06em;text-transform:uppercase">Ingresa cualquier 2 de los 3 parámetros — el tercero se calcula</div>
-    <div class="fgg">
-      <label>Días de infusión</label>
-      <input type="number" id="f-elasto-dias" placeholder="Ej: 2" step="0.5" min="0" oninput="resetElastoIfEmpty('dias'); calcElasto('dias')">
-    </div>
-    <div class="fgg">
-      <label>Tasa de infusión (mL/h)</label>
-      <input type="number" id="f-elasto-rate-input" step="0.5" placeholder="Ej: 5" min="0" oninput="resetElastoIfEmpty('rate'); calcElasto('rate')">
-    </div>
-    <div class="fgg">
-      <label>Volumen reservorio (mL)</label>
-      <input type="number" id="f-elasto-vol-input" placeholder="Ej: 250" min="0" oninput="resetElastoIfEmpty('vol'); calcElasto('vol')">
-    </div>
-    <!-- RESULTADOS AL -->
-    <div class="fgg"><label>Volumen AL puro (mL)</label><input type="number" id="f-elasto-vol-al" readonly placeholder="Auto" style="color:#b48aff"></div>
-    <div class="fgg"><label>Volumen SSN 0.9% (mL)</label><input type="number" id="f-elasto-vol-dil" readonly placeholder="Auto" style="color:#7a9ab5"></div>
-    <div class="fgg"><label>Tasa calculada (mL/h)</label><input type="number" id="f-elasto-rate" readonly placeholder="Auto" style="color:#00d4aa"></div>
-    <div class="fgg"><label>Dosis por hora (mg/h)</label><input type="number" id="f-elasto-dose-h" readonly placeholder="Auto" style="color:#00d4aa"></div>
-    <div class="fgg"><label>Duración</label><input type="text" id="f-elasto-dur-txt" readonly placeholder="Auto" style="color:#f4c542"></div>
-    <div id="elasto-calc-box" style="display:none;grid-column:1/-1;background:rgba(180,138,255,0.05);border:1px solid rgba(180,138,255,0.2);border-radius:8px;padding:0.85rem">
-      <div style="font-family:'Syne',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#b48aff;margin-bottom:0.5rem">◎ Preparación Bomba AL</div>
-      <div id="elasto-calc-rows"></div>
-    </div>
-    <div class="fgg full"><label>Coadyuvantes AL</label>
-      <div class="chips" data-group="elasto-adj-al" data-color="on-blue">
-        <span class="chip">Dexmedetomidina</span><span class="chip">Clonidina</span><span class="chip">Ninguno</span>
+    <!-- BLOQUE AL — para periférico y epidural -->
+    <div id="elasto-grp-al" style="display:none;margin-top:0.75rem">
+      <div class="fg">
+        <div class="fgg"><label>AL stock</label>
+          <select id="f-elasto-la" onchange="calcElasto('la')">
+            <option value="">—</option>
+            <option value="levobupi0.75">Levobupivacaína 0.75% — amp 10 mL</option>
+            <option value="levobupi0.75epi">Levobupivacaína 0.75% + Epi — amp 10 mL</option>
+            <option value="bupi0.5">Bupivacaína 0.5% — amp 10 mL</option>
+            <option value="bupi0.5epi">Bupivacaína 0.5% + Epi — amp 10 mL</option>
+            <option value="lido2">Lidocaína 2% — amp 10 mL</option>
+            <option value="lido1">Lidocaína 1% — amp 10 mL</option>
+          </select>
+        </div>
+          <div class="fgg"><label>Concentración (%)</label>
+          <input type="number" id="f-elasto-conc-meta" step="0.005" min="0" placeholder="Ej: 0.125" oninput="calcElasto('conc')">
+        </div>
+        <div class="fgg"><label>Volumen AL puro (mL)</label>
+          <input type="number" id="f-elasto-vol-al" step="0.1" min="0" placeholder="Auto o digita" oninput="calcElasto('alpuro')">
+        </div>
+        <div style="grid-column:1/-1;display:flex;gap:0.4rem;flex-wrap:wrap;align-items:center">
+          <span style="font-size:0.6rem;color:#7a9ab5;font-family:'Syne',sans-serif;letter-spacing:0.06em;text-transform:uppercase">Atajos:</span>
+          <button type="button" class="chip" onclick="setElastoConc(0.2)">0.2%</button>
+          <button type="button" class="chip" onclick="setElastoConc(0.125)">0.125%</button>
+          <button type="button" class="chip" onclick="setElastoConc(0.1)">0.1%</button>
+          <button type="button" class="chip" onclick="setElastoConc(0.0625)">0.0625%</button>
+          <button type="button" class="chip" onclick="clearElasto()">Limpiar</button>
+        </div>
+        <div style="grid-column:1/-1;font-size:0.62rem;color:#7a9ab5;margin-top:0.25rem;font-family:'Syne',sans-serif;letter-spacing:0.06em;text-transform:uppercase">Todo es editable — el sistema conserva lo último que tocaste y recalcula el resto. Verde = calculado (puedes sobrescribirlo).</div>
+        <div class="fgg">
+          <label>Días de infusión</label>
+          <input type="number" id="f-elasto-dias" placeholder="Ej: 2" step="0.5" min="0" oninput="calcElasto('dias')">
+        </div>
+        <div class="fgg">
+          <label>Tasa de infusión (mL/h)</label>
+          <input type="number" id="f-elasto-rate-input" step="0.1" placeholder="Ej: 5" min="0" oninput="calcElasto('rate')">
+        </div>
+        <div class="fgg">
+          <label>Volumen reservorio (mL)</label>
+          <input type="number" id="f-elasto-vol-input" placeholder="Ej: 250" min="0" oninput="calcElasto('vol')">
+        </div>
+        <div class="fgg"><label>Volumen SSN 0.9% (mL)</label><input type="number" id="f-elasto-vol-dil" readonly placeholder="Auto" style="color:#7a9ab5"></div>
+        <div class="fgg"><label>Dosis por hora (mg/h)</label><input type="number" id="f-elasto-dose-h" readonly placeholder="Auto" style="color:#00d4aa"></div>
+        <div class="fgg"><label>Duración</label><input type="text" id="f-elasto-dur-txt" readonly placeholder="Auto" style="color:#f4c542"></div>
+        <input type="hidden" id="f-elasto-rate">
+        <div id="elasto-calc-box" style="display:none;grid-column:1/-1;background:rgba(180,138,255,0.05);border:1px solid rgba(180,138,255,0.2);border-radius:8px;padding:0.85rem">
+          <div style="font-family:'Syne',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#b48aff;margin-bottom:0.5rem">◎ Preparación Bomba AL</div>
+          <div id="elasto-calc-rows"></div>
+        </div>
+        <div class="fgg full"><label>Coadyuvantes AL</label>
+          <div class="chips" data-group="elasto-adj-al" data-color="on-blue">
+            <span class="chip">Dexmedetomidina</span><span class="chip">Clonidina</span><span class="chip">Ninguno</span>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
-<!-- BLOQUE MEDICAMENTOS — para venosa y subcutánea -->
-<div id="elasto-grp-meds" style="display:none;margin-top:0.75rem">
-  <div class="fg">
-    <div style="grid-column:1/-1;font-size:0.62rem;color:#7a9ab5;margin-bottom:0.25rem;font-family:'Syne',sans-serif;letter-spacing:0.06em;text-transform:uppercase">Ingresa cualquier 2 valores — el tercero se calcula automáticamente</div>
-    <div class="fgg">
-      <label>Días de infusión</label>
-      <input type="number" id="f-elasto-meds-dias" placeholder="Ej: 3" step="0.5" min="0"
-        oninput="resetElastoMedsIfEmpty('dias'); calcElastoMeds('dias')">
-    </div>
-    <div class="fgg">
-      <label>Tasa de infusión (mL/h)</label>
-      <input type="number" id="f-elasto-meds-tasa" step="0.5" placeholder="0.5 — 7.0" min="0"
-        oninput="resetElastoMedsIfEmpty('tasa'); calcElastoMeds('tasa')">
-    </div>
-    <div class="fgg">
-      <label>Volumen total (mL)</label>
-      <input type="number" id="f-elasto-meds-vol" placeholder="Ej: 400" min="0"
-        oninput="resetElastoMedsIfEmpty('vol'); calcElastoMeds('vol')">
-    </div>
-    <div class="fgg">
-      <label>Duración calculada</label>
-      <input type="text" id="f-elasto-meds-dur" readonly placeholder="Auto" style="color:#f4c542">
-    </div>
-    <div class="fgg full"><label>Medicamentos en la bomba</label>
-      <div class="chips" data-group="elasto-meds" data-color="on-blue" id="elasto-meds-chips">
-        <span class="chip">Tramadol</span><span class="chip">Morfina</span>
-        <span class="chip">Oxicodona</span><span class="chip">Ketamina</span>
-        <span class="chip">Dexmedetomidina</span><span class="chip">Ketorolaco</span>
-        <span class="chip">Dipirona</span><span class="chip">Dexametasona</span>
-        <span class="chip">Ondansetrón</span><span class="chip">Nefopam (Acupan)</span>
+    <!-- BLOQUE MEDICAMENTOS — para venosa y subcutánea -->
+    <div id="elasto-grp-meds" style="display:none;margin-top:0.75rem">
+      <div class="fg">
+        <div style="grid-column:1/-1;font-size:0.62rem;color:#7a9ab5;margin-bottom:0.25rem;font-family:'Syne',sans-serif;letter-spacing:0.06em;text-transform:uppercase">Ingresa cualquier 2 valores — el tercero se calcula automáticamente</div>
+        <div class="fgg">
+          <label>Días de infusión</label>
+          <input type="number" id="f-elasto-meds-dias" placeholder="Ej: 3" step="0.5" min="0"
+            oninput="resetElastoMedsIfEmpty('dias'); calcElastoMeds('dias')">
+        </div>
+        <div class="fgg">
+          <label>Tasa de infusión (mL/h)</label>
+          <input type="number" id="f-elasto-meds-tasa" step="0.5" placeholder="0.5 — 7.0" min="0"
+            oninput="resetElastoMedsIfEmpty('tasa'); calcElastoMeds('tasa')">
+        </div>
+        <div class="fgg">
+          <label>Volumen total (mL)</label>
+          <input type="number" id="f-elasto-meds-vol" placeholder="Ej: 400" min="0"
+            oninput="resetElastoMedsIfEmpty('vol'); calcElastoMeds('vol')">
+        </div>
+        <div class="fgg">
+          <label>Duración calculada</label>
+          <input type="text" id="f-elasto-meds-dur" readonly placeholder="Auto" style="color:#f4c542">
+        </div>
+        <div class="fgg full"><label>Medicamentos en la bomba</label>
+          <div class="chips" data-group="elasto-meds" data-color="on-blue" id="elasto-meds-chips">
+            <span class="chip">Tramadol</span><span class="chip">Morfina</span>
+            <span class="chip">Oxicodona</span><span class="chip">Ketamina</span>
+            <span class="chip">Dexmedetomidina</span><span class="chip">Ketorolaco</span>
+            <span class="chip">Dipirona</span><span class="chip">Dexametasona</span>
+            <span class="chip">Ondansetrón</span><span class="chip">Nefopam (Acupan)</span>
+          </div>
+        </div>
+        <!-- DOSIS INDIVIDUALES -->
+        <div class="fgg"><label>Tramadol (mg total)</label><input type="number" id="f-em-tramadol" placeholder="300" oninput="calcElastoMedsAlertas()"></div>
+        <div class="fgg"><label>Ketorolaco (mg total)</label><input type="number" id="f-em-ketorolaco" placeholder="90" oninput="calcElastoMedsAlertas()"></div>
+        <div class="fgg"><label>Dexametasona (mg total)</label><input type="number" id="f-em-dexametasona" placeholder="16" oninput="calcElastoMedsAlertas()"></div>
+        <div class="fgg"><label>Ondansetrón (mg total)</label><input type="number" id="f-em-ondansetron" placeholder="16" oninput="calcElastoMedsAlertas()"></div>
+        <div class="fgg"><label>Dexmedetomidina (mcg total)</label><input type="number" id="f-em-dexmedo" placeholder="20" oninput="calcElastoMedsAlertas()"></div>
+        <div class="fgg"><label>Morfina (mg total)</label><input type="number" id="f-em-morfina" placeholder="" oninput="calcElastoMedsAlertas()"></div>
+        <div class="fgg"><label>Dipirona (mg total)</label><input type="number" id="f-em-dipirona" placeholder=""></div>
+        <div class="fgg"><label>Ketamina (mg total)</label><input type="number" id="f-em-ketamina" placeholder="" oninput="calcElastoMedsAlertas()"></div>
+        <div class="fgg"><label>Nefopam (mg total)</label><input type="number" id="f-em-nefopam" placeholder=""></div>
+        <div class="fgg"><label>Otro medicamento</label><input type="text" id="f-elasto-med-otro" placeholder="Especificar..."></div>
+        <div class="fgg full"><label>Notas / Instrucciones preparación</label>
+          <textarea id="f-elasto-meds-dosis" placeholder="Ej: Disolver en 400 mL SSN 0.9%, verificar compatibilidad visual..."></textarea>
+        </div>
+
+        <!-- PANEL DE ALERTAS -->
+        <div id="elasto-meds-alertas" style="display:none;grid-column:1/-1"></div>
       </div>
     </div>
-    <!-- DOSIS INDIVIDUALES -->
-    <div class="fgg"><label>Tramadol (mg total)</label><input type="number" id="f-em-tramadol" placeholder="300" oninput="calcElastoMedsAlertas()"></div>
-    <div class="fgg"><label>Ketorolaco (mg total)</label><input type="number" id="f-em-ketorolaco" placeholder="90" oninput="calcElastoMedsAlertas()"></div>
-    <div class="fgg"><label>Dexametasona (mg total)</label><input type="number" id="f-em-dexametasona" placeholder="16" oninput="calcElastoMedsAlertas()"></div>
-    <div class="fgg"><label>Ondansetrón (mg total)</label><input type="number" id="f-em-ondansetron" placeholder="16" oninput="calcElastoMedsAlertas()"></div>
-    <div class="fgg"><label>Dexmedetomidina (mcg total)</label><input type="number" id="f-em-dexmedo" placeholder="20" oninput="calcElastoMedsAlertas()"></div>
-    <div class="fgg"><label>Morfina (mg total)</label><input type="number" id="f-em-morfina" placeholder="" oninput="calcElastoMedsAlertas()"></div>
-    <div class="fgg"><label>Dipirona (mg total)</label><input type="number" id="f-em-dipirona" placeholder=""></div>
-    <div class="fgg"><label>Ketamina (mg total)</label><input type="number" id="f-em-ketamina" placeholder="" oninput="calcElastoMedsAlertas()"></div>
-    <div class="fgg"><label>Nefopam (mg total)</label><input type="number" id="f-em-nefopam" placeholder=""></div>
-    <div class="fgg"><label>Otro medicamento</label><input type="text" id="f-elasto-med-otro" placeholder="Especificar..."></div>
-    <div class="fgg full"><label>Notas / Instrucciones preparación</label>
-      <textarea id="f-elasto-meds-dosis" placeholder="Ej: Disolver en 400 mL SSN 0.9%, verificar compatibilidad visual..."></textarea>
+
+    <!-- NOTAS COMUNES -->
+    <div class="fg" style="margin-top:0.75rem">
+      <div class="fgg full"><label>Notas / Instrucciones para el paciente</label>
+        <textarea id="f-elasto-notes" placeholder="Instrucciones de manejo ambulatorio, cuidados del catéter, signos de alarma..."></textarea>
+      </div>
     </div>
-
-    <!-- PANEL DE ALERTAS -->
-    <div id="elasto-meds-alertas" style="display:none;grid-column:1/-1"></div>
-  </div>
-</div>
-
-<!-- NOTAS COMUNES -->
-<div class="fg" style="margin-top:0.75rem">
-  <div class="fgg full"><label>Notas / Instrucciones para el paciente</label>
-    <textarea id="f-elasto-notes" placeholder="Instrucciones de manejo ambulatorio, cuidados del catéter, signos de alarma..."></textarea>
-  </div>
-</div>
-```
-
   </div>
 </div>
 
 <!-- INTRAOPERATORIO -->
-
 <div class="fc">
   <div class="fct gold">◷ Intraoperatorio</div>
   <div class="fg">
@@ -1117,7 +1133,6 @@ transition:all 0.15s;touch-action:manipulation;
 </div>
 
 <!-- POSTOPERATORIO -->
-
 <div class="fc">
   <div class="fct">☽ Postoperatorio</div>
   <div class="fg">
@@ -1169,12 +1184,10 @@ transition:all 0.15s;touch-action:manipulation;
 </div>
 
 <!-- PROTOCOLOS DE EMERGENCIA -->
-
 <div class="fc" style="border-color:rgba(255,107,107,0.25)">
   <div class="fct red">⚠ Protocolos de Emergencia — Referencia Rápida</div>
 
   <!-- LAST -->
-
   <div class="sdiv" style="color:#ff6b6b">Toxicidad Sistémica por Anestésico Local (LAST)</div>
   <div style="font-size:0.62rem;color:#7a9ab5;margin-bottom:0.75rem">Ref: ASRA Practice Advisory on Local Anesthetic Systemic Toxicity 2023 (Neal et al.)</div>
 
@@ -1213,7 +1226,6 @@ transition:all 0.15s;touch-action:manipulation;
   </div>
 
   <!-- PARO CARDÍACO PERIOPERATORIO -->
-
   <div class="sdiv" style="color:#ff6b6b;margin-top:1rem">Paro Cardíaco Perioperatorio — ACLS Adaptado</div>
   <div style="font-size:0.62rem;color:#7a9ab5;margin-bottom:0.75rem">Ref: AHA/ACLS Guidelines 2020 · Moitra et al., Anesthesiology 2018</div>
   <div class="fg">
@@ -1253,7 +1265,6 @@ transition:all 0.15s;touch-action:manipulation;
 </div>
 
 <!-- EVALUACIÓN -->
-
 <div class="fc">
   <div class="fct">★ Evaluación del Caso</div>
   <div class="fg">
@@ -1291,7 +1302,6 @@ transition:all 0.15s;touch-action:manipulation;
 </div>
 
 <!-- ═══════════ RECORDS ═══════════ -->
-
 <div id="view-records" class="view">
   <div class="stitle">Mis Registros</div>
   <div class="ssub">Historial de casos anestésicos</div>
@@ -1316,7 +1326,6 @@ transition:all 0.15s;touch-action:manipulation;
 </div>
 
 <!-- ═══════════ STATS ═══════════ -->
-
 <div id="view-stats" class="view">
   <div class="stitle">Estadísticas</div>
   <div class="ssub">Análisis de tu práctica</div>
@@ -1332,7 +1341,6 @@ transition:all 0.15s;touch-action:manipulation;
 </div>
 
 <!-- ═══════════ BACKUP ═══════════ -->
-
 <div id="view-backup" class="view">
   <div class="stitle">Backup & Acceso</div>
   <div class="ssub">Protege tus datos</div>
@@ -2378,56 +2386,16 @@ function toggleNaxAguja() {
 // ══════════════════════════════════════════
 // BOMBA IV/SC — CÁLCULO VOLUMEN + ALERTAS
 // ══════════════════════════════════════════
-function resetElastoMedsIfEmpty(campo) {
-  const el = document.getElementById('f-elasto-meds-' + campo);
-  if (!el.value) {
-    // Field was cleared — unlock all three fields so user can re-enter
-    ['dias','tasa','vol'].forEach(f => {
-      const e = document.getElementById('f-elasto-meds-' + f);
-      e.readOnly = false;
-      e.style.color = '#e8f0f8';
-    });
-    document.getElementById('f-elasto-meds-dur').value = '';
-  }
-}
+var _medsOrder = [];
+function resetElastoMedsIfEmpty(campo) {}
 
 function calcElastoMeds(campoEditado) {
-  const elDias = document.getElementById('f-elasto-meds-dias');
-  const elTasa = document.getElementById('f-elasto-meds-tasa');
-  const elVol  = document.getElementById('f-elasto-meds-vol');
-  const elDur  = document.getElementById('f-elasto-meds-dur');
-
-  const dias = parseFloat(elDias.value);
-  const tasa = parseFloat(elTasa.value);
-  const vol  = parseFloat(elVol.value);
-
-  const hasDias = !isNaN(dias) && dias > 0;
-  const hasTasa = !isNaN(tasa) && tasa > 0;
-  const hasVol  = !isNaN(vol)  && vol  > 0;
-
-  let diasCalc, tasaCalc, volCalc;
-
-  // Calcula el campo que NO fue editado y tiene los otros 2 disponibles
-  if (campoEditado !== 'vol' && hasDias && hasTasa) {
-    volCalc = tasa * dias * 24;
-    elVol.value = volCalc.toFixed(0);
-    elVol.style.color = '#00d4aa';
-    elVol.readOnly = true;
-    elDias.readOnly = false; elTasa.readOnly = false;
-  } else if (campoEditado !== 'tasa' && hasDias && hasVol) {
-    tasaCalc = vol / (dias * 24);
-    elTasa.value = tasaCalc.toFixed(2);
-    elTasa.style.color = '#00d4aa';
-    elTasa.readOnly = true;
-    elDias.readOnly = false; elVol.readOnly = false;
-  } else if (campoEditado !== 'dias' && hasTasa && hasVol) {
-    const horas = vol / tasa;
-    diasCalc = horas / 24;
-    elDias.value = diasCalc.toFixed(1);
-    elDias.style.color = '#00d4aa';
-    elDias.readOnly = true;
-    elTasa.readOnly = false; elVol.readOnly = false;
-  }
+  var elDias = document.getElementById('f-elasto-meds-dias');
+  var elTasa = document.getElementById('f-elasto-meds-tasa');
+  var elVol  = document.getElementById('f-elasto-meds-vol');
+  var elDur  = document.getElementById('f-elasto-meds-dur');
+  var map = {dias:'dias', tasa:'rate', vol:'vol'};
+  triadCalc('meds', {dias:'f-elasto-meds-dias', rate:'f-elasto-meds-tasa', vol:'f-elasto-meds-vol'}, _medsOrder, map[campoEditado]);
 
   // Recalculate duración display
   const d = parseFloat(elDias.value);
@@ -2540,95 +2508,188 @@ function toggleElastoVia() {
   document.getElementById('elasto-grp-meds').style.display = isMeds ? 'block' : 'none';
 }
 
-function resetElastoIfEmpty(campo) {
-  const ids = {dias:'f-elasto-dias', rate:'f-elasto-rate-input', vol:'f-elasto-vol-input'};
-  const el = document.getElementById(ids[campo]);
-  if (!el || el.value !== '') return;
-  // unlock all three editable fields
-  ['dias','rate','vol'].forEach(f => {
-    const e = document.getElementById(ids[f]);
-    if (e) { e.readOnly = false; e.style.color = '#e8f0f8'; }
+
+// ── Motor interactivo: ningún campo se bloquea ──
+// Triada tiempo: dias / rate / vol  (vol = rate × dias × 24). Se conservan los 2 últimos editados.
+function triadCalc(prefix, ids, order, campo) {
+  var keys = ['dias','rate','vol'];
+  var el = {}; keys.forEach(function(k){ el[k] = document.getElementById(ids[k]); });
+  if (keys.indexOf(campo) >= 0) {
+    var i = order.indexOf(campo); if (i >= 0) order.splice(i,1);
+    if (el[campo].value !== '') order.push(campo);
+    while (order.length > 2) order.shift();
+  }
+  // campos calculados que el usuario vació vuelven a ser libres
+  var val = function(k){ var n = parseFloat(el[k].value); return (!isNaN(n) && n > 0) ? n : null; };
+  if (order.length === 2 && val(order[0]) !== null && val(order[1]) !== null) {
+    var target = keys.filter(function(k){ return order.indexOf(k) < 0; })[0];
+    var d = val('dias'), r = val('rate'), vv = val('vol'), out;
+    if (target === 'vol') { out = r * d * 24; el.vol.value = Math.round(out); }
+    else if (target === 'rate') { out = vv / (d * 24); el.rate.value = out.toFixed(2); }
+    else { out = vv / (r * 24); el.dias.value = out.toFixed(1); }
+    keys.forEach(function(k){ el[k].style.color = (k === target) ? '#00d4aa' : '#e8f0f8'; });
+  } else {
+    keys.forEach(function(k){ el[k].style.color = '#e8f0f8'; });
+  }
+}
+
+var _elastoOrder = [];
+function setElastoConc(pct) {
+  document.getElementById('f-elasto-conc-meta').value = pct;
+  calcElasto('conc');
+}
+function clearElasto() {
+  ['f-elasto-conc-meta','f-elasto-vol-al','f-elasto-dias','f-elasto-rate-input','f-elasto-vol-input',
+   'f-elasto-vol-dil','f-elasto-dose-h','f-elasto-dur-txt','f-elasto-rate'].forEach(function(id){
+    var e = document.getElementById(id); if (e) { e.value = ''; e.style.color = ''; }
   });
-  // clear results
-  ['f-elasto-vol-al','f-elasto-vol-dil','f-elasto-rate','f-elasto-dose-h','f-elasto-dur-txt']
-    .forEach(id => { const e=document.getElementById(id); if(e) e.value=''; });
+  _elastoOrder = [];
   document.getElementById('elasto-calc-box').style.display = 'none';
 }
 
-function calcElasto(campoEditado) {
-  const laVal = document.getElementById('f-elasto-la').value;
-  const concMetaVal = document.getElementById('f-elasto-conc-meta').value;
-  const al = AL_STOCK[laVal];
-  const calcBox = document.getElementById('elasto-calc-box');
-  const isCustomConc = concMetaVal === 'custom';
-  document.getElementById('grp-elasto-conc-custom').style.display = isCustomConc ? 'flex' : 'none';
-  if (!al || !concMetaVal) { if (calcBox) calcBox.style.display = 'none'; return; }
-  const concMetaPct = isCustomConc
-    ? (parseFloat(document.getElementById('f-elasto-conc-custom').value) || 0)
-    : parseFloat(concMetaVal);
-  if (!concMetaPct) return;
-  const concMetaMgMl = concMetaPct * 10;
-  const peso = parseFloat(document.getElementById('f-weight').value) || 0;
+function calcElasto(campo) {
+  var laVal = document.getElementById('f-elasto-la').value;
+  var al = AL_STOCK[laVal];
+  var elConc = document.getElementById('f-elasto-conc-meta');
+  var elAL = document.getElementById('f-elasto-vol-al');
+  var elDil = document.getElementById('f-elasto-vol-dil');
+  var elRate = document.getElementById('f-elasto-rate-input');
+  var elVol = document.getElementById('f-elasto-vol-input');
+  var elDias = document.getElementById('f-elasto-dias');
+  var calcBox = document.getElementById('elasto-calc-box');
+  var peso = parseFloat(document.getElementById('f-weight').value) || 0;
 
-  // 3-field smart calc
-  const elDias = document.getElementById('f-elasto-dias');
-  const elRate = document.getElementById('f-elasto-rate-input');
-  const elVol  = document.getElementById('f-elasto-vol-input');
-  const dias = parseFloat(elDias.value);
-  const rate = parseFloat(elRate.value);
-  const vol  = parseFloat(elVol.value);
-  const hasDias = !isNaN(dias) && dias > 0;
-  const hasRate = !isNaN(rate) && rate > 0;
-  const hasVol  = !isNaN(vol)  && vol  > 0;
+  var ids = {dias:'f-elasto-dias', rate:'f-elasto-rate-input', vol:'f-elasto-vol-input'};
+  if (campo === 'dias' || campo === 'rate' || campo === 'vol') triadCalc('elasto', ids, _elastoOrder, campo);
 
-  let diasCalc, rateCalc, volCalc;
+  var vol = parseFloat(elVol.value);
+  var rate = parseFloat(elRate.value);
+  var dias = parseFloat(elDias.value);
+  var hasVol = !isNaN(vol) && vol > 0;
 
-  if (campoEditado !== 'vol' && hasDias && hasRate) {
-    volCalc = rate * dias * 24;
-    elVol.value = volCalc.toFixed(0); elVol.readOnly = true; elVol.style.color = '#00d4aa';
-    elDias.readOnly = false; elRate.readOnly = false;
-  } else if (campoEditado !== 'rate' && hasDias && hasVol) {
-    rateCalc = vol / (dias * 24);
-    elRate.value = rateCalc.toFixed(2); elRate.readOnly = true; elRate.style.color = '#00d4aa';
-    elDias.readOnly = false; elVol.readOnly = false;
-  } else if (campoEditado !== 'dias' && hasRate && hasVol) {
-    diasCalc = vol / (rate * 24);
-    elDias.value = diasCalc.toFixed(1); elDias.readOnly = true; elDias.style.color = '#00d4aa';
-    elRate.readOnly = false; elVol.readOnly = false;
-  } else { return; }
+  // Concentración <-> AL puro (C1V1 = C2V2); se conserva lo último editado
+  var conc = parseFloat(elConc.value);   // en %
+  var alp = parseFloat(elAL.value);      // mL AL puro
+  if (al && hasVol) {
+    if (campo === 'alpuro' && !isNaN(alp) && alp >= 0) {
+      conc = (alp * al.conc) / vol / 10;   // mg/mL -> %
+      elConc.value = parseFloat(conc.toFixed(4));
+      elConc.style.color = '#00d4aa'; elAL.style.color = '#e8f0f8';
+    } else if (!isNaN(conc) && conc > 0) {
+      alp = (conc * 10 * vol) / al.conc;
+      elAL.value = alp.toFixed(1);
+      elAL.style.color = '#b48aff'; elConc.style.color = '#e8f0f8';
+    }
+  }
+  conc = parseFloat(elConc.value);
+  alp = parseFloat(elAL.value);
 
-  const dFinal = parseFloat(elDias.value);
-  const rFinal = parseFloat(elRate.value);
-  const vFinal = parseFloat(elVol.value);
-  if (isNaN(dFinal)||isNaN(rFinal)||isNaN(vFinal)) return;
+  // Salidas
+  if (!isNaN(rate) && rate > 0 && !isNaN(conc) && conc > 0) {
+    document.getElementById('f-elasto-dose-h').value = (conc * 10 * rate).toFixed(1);
+  } else { document.getElementById('f-elasto-dose-h').value = ''; }
+  document.getElementById('f-elasto-rate').value = isNaN(rate) ? '' : rate;
+  if (!isNaN(dias) && dias > 0) document.getElementById('f-elasto-dur-txt').value = (dias*24).toFixed(0) + ' h / ' + dias.toFixed(1) + ' días';
+  else document.getElementById('f-elasto-dur-txt').value = '';
 
-  // C1V1 = C2V2
-  const volALpuro = (concMetaMgMl * vFinal) / al.conc;
-  const volDil = vFinal - volALpuro;
-  const nAmps = (volALpuro / al.ampVol).toFixed(2);
-  const doseH = concMetaMgMl * rFinal;
-  const doseMgKgH = peso > 0 ? doseH / peso : null;
-
-  document.getElementById('f-elasto-vol-al').value = volALpuro.toFixed(1);
-  document.getElementById('f-elasto-vol-dil').value = volDil.toFixed(1);
-  document.getElementById('f-elasto-rate').value = rFinal.toFixed(2);
-  document.getElementById('f-elasto-dose-h').value = doseH.toFixed(1);
-  document.getElementById('f-elasto-dur-txt').value = (dFinal*24).toFixed(0) + ' h / ' + dFinal.toFixed(1) + ' días';
-
-  let rows = dRow('AL stock', al.name + ' (' + al.conc + ' mg/mL — amp ' + al.ampVol + ' mL)', '#e8f0f8');
-  rows += dRow('Concentración deseada', concMetaPct + '% = ' + concMetaMgMl + ' mg/mL', '#0094ff');
-  rows += dRow('Volumen reservorio', vFinal + ' mL', '#e8f0f8');
-  rows += dRow('Duración', dFinal.toFixed(1) + ' días (' + (dFinal*24).toFixed(0) + ' h)', '#f4c542');
+  if (!al || !hasVol || isNaN(alp) || isNaN(conc) || conc <= 0) {
+    elDil.value = '';
+    if (calcBox) calcBox.style.display = 'none';
+    return;
+  }
+  var volDil = vol - alp;
+  elDil.value = volDil.toFixed(1);
+  var concMg = conc * 10;
+  var nAmps = (alp / al.ampVol).toFixed(2);
+  var doseH = (!isNaN(rate) && rate > 0) ? concMg * rate : null;
+  var rows = dRow('AL stock', al.name + ' (' + al.conc + ' mg/mL — amp ' + al.ampVol + ' mL)', '#e8f0f8');
+  rows += dRow('Concentración final', parseFloat(conc.toFixed(4)) + '% = ' + parseFloat(concMg.toFixed(3)) + ' mg/mL', '#0094ff');
+  rows += dRow('Volumen reservorio', vol + ' mL', '#e8f0f8');
+  if (!isNaN(dias) && dias > 0) rows += dRow('Duración', dias.toFixed(1) + ' días (' + (dias*24).toFixed(0) + ' h)', '#f4c542');
   rows += dRow('━━━ PREPARACIÓN ━━━', '', '#b48aff');
-  rows += dRow('Tomar del AL stock', volALpuro.toFixed(1) + ' mL (' + nAmps + ' amp de ' + al.ampVol + ' mL)', '#b48aff');
-  rows += dRow('Agregar SSN 0.9%', volDil.toFixed(1) + ' mL', '#7a9ab5');
-  rows += dRow('━━━ PROGRAMAR ━━━', '', '#00d4aa');
-  rows += dRow('Tasa de infusión', rFinal.toFixed(2) + ' mL/h', '#00d4aa');
-  rows += dRow('Dosis por hora', doseH.toFixed(1) + ' mg/h', '#00d4aa');
-  if (doseMgKgH) rows += dRow('Dosis en mg/kg/h', doseMgKgH.toFixed(3) + ' mg/kg/h', '#00d4aa');
+  rows += dRow('Tomar del AL stock', alp.toFixed(1) + ' mL (' + nAmps + ' amp de ' + al.ampVol + ' mL)', '#b48aff');
+  if (volDil >= 0) rows += dRow('Agregar SSN 0.9%', volDil.toFixed(1) + ' mL', '#7a9ab5');
+  else rows += dRow('⚠ Imposible', 'El AL puro excede el volumen del reservorio', '#ff6b6b');
+  if (doseH !== null) {
+    rows += dRow('━━━ PROGRAMAR ━━━', '', '#00d4aa');
+    rows += dRow('Tasa de infusión', rate.toFixed(2) + ' mL/h', '#00d4aa');
+    rows += dRow('Dosis por hora', doseH.toFixed(1) + ' mg/h', '#00d4aa');
+    if (peso > 0) rows += dRow('Dosis en mg/kg/h', (doseH/peso).toFixed(3) + ' mg/kg/h', '#00d4aa');
+    if (vol > 450) rows += dRow('⚠ Volumen', 'Excede 450 mL (máx. de la bomba)', '#ff6b6b');
+    if (rate > 7 || rate < 0.5) rows += dRow('⚠ Tasa', 'Fuera del rango 0.5–7 mL/h de la bomba', '#ff6b6b');
+  }
   document.getElementById('elasto-calc-rows').innerHTML = rows;
   calcBox.style.display = 'block';
 }
+
+// ══════════════════════════════════════════
+// REGISTRO RÁPIDO — pegar caso (clave: valor)
+// ══════════════════════════════════════════
+var QUICK_MAP = {
+  fecha:'f-date', nombre:'f-name', id:'f-pid', edad:'f-age', sexo:'f-sex', peso:'f-weight', talla:'f-height',
+  asa:'f-asa', mallampati:'f-mallampati', procedimiento:'f-procedure', especialidad:'f-specialty',
+  urgencia:'f-urgency', posicion:'f-position', lateralidad:'f-lateralidad', hospital:'f-hospital', cirujano:'f-surgeon',
+  inicio_anestesia:'f-t-anest-ini', inicio_cirugia:'f-t-cx-ini', fin_cirugia:'f-t-cx-fin', fin_anestesia:'f-t-anest-fin',
+  sangrado:'f-bleeding', diuresis:'f-diuresis', cristaloides:'f-crystalloids', coloides:'f-colloids',
+  hb:'f-hb', hb_pre:'f-hb'
+};
+var QUICK_CHIPS = { comorbilidades:'comorbid', tipo_anestesia:'atype', monitoreo:'monitoring', acceso:'access', multimodal:'multimodal' };
+var QUICK_TEMPLATE = 'fecha: AAAA-MM-DD\nnombre: \nid: \nedad: \nsexo: Femenino\npeso: \ntalla: \nasa: 2\nprocedimiento: \nespecialidad: \nhospital: \ncirujano: \ninicio_anestesia: HH:MM\ninicio_cirugia: HH:MM\nfin_cirugia: HH:MM\nfin_anestesia: HH:MM\ncomorbilidades: \ntipo_anestesia: \nsangrado: \ncristaloides: \ndiuresis: ';
+
+function copyQuickTemplate() {
+  var t = QUICK_TEMPLATE;
+  var ta = document.getElementById('quick-paste');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(t).then(function(){ document.getElementById('quick-msg').textContent = 'Plantilla copiada'; }, function(){ ta.value = t; });
+  } else { ta.value = t; }
+}
+
+function quickSetSelect(el, val) {
+  var low = val.toLowerCase();
+  for (var i = 0; i < el.options.length; i++) {
+    var o = el.options[i];
+    if (o.value.toLowerCase() === low || o.text.toLowerCase() === low) { el.value = o.value; return true; }
+  }
+  for (var j = 0; j < el.options.length; j++) {
+    var o2 = el.options[j];
+    if (o2.value && (o2.text.toLowerCase().indexOf(low) >= 0)) { el.value = o2.value; return true; }
+  }
+  return false;
+}
+
+function applyQuickPaste() {
+  var txt = document.getElementById('quick-paste').value;
+  var lines = txt.split('\n');
+  var ok = 0, miss = [];
+  lines.forEach(function(line) {
+    var i = line.indexOf(':');
+    if (i < 1) return;
+    var key = line.slice(0, i).trim().toLowerCase().replace(/\s+/g, '_');
+    var val = line.slice(i + 1).trim();
+    if (!val) return;
+    if (QUICK_CHIPS[key]) {
+      var items = val.split(',').map(function(x){ return x.trim().toLowerCase(); });
+      document.querySelectorAll('.chips[data-group="' + QUICK_CHIPS[key] + '"] .chip').forEach(function(chip) {
+        var color = chip.closest('.chips').dataset.color || 'on';
+        if (items.indexOf(chip.textContent.trim().toLowerCase()) >= 0) chip.className = 'chip ' + color;
+      });
+      ok++; return;
+    }
+    var id = QUICK_MAP[key] || (key.indexOf('f-') === 0 ? key : null);
+    var el = id ? document.getElementById(id) : null;
+    if (!el) { miss.push(key); return; }
+    if (el.tagName === 'SELECT') { if (quickSetSelect(el, val)) ok++; else miss.push(key); }
+    else { el.value = val; ok++; }
+  });
+  try { if (typeof calcHb === 'function') calcHb(); } catch(e) {}
+  try { calcTiempos(); } catch(e) {}
+  try { checkContorno(); } catch(e) {}
+  try { saveDraft(); } catch(e) {}
+  var msg = ok + ' campos aplicados.';
+  if (miss.length) msg += ' No reconocidos: ' + miss.join(', ') + '.';
+  document.getElementById('quick-msg').textContent = msg;
+}
+
 function v(id) { return document.getElementById(id)?.value || ''; }
 
 // ══════════════════════════════════════════
@@ -2702,6 +2763,7 @@ function saveCase() {
     emDipirona: v('f-em-dipirona'), emKetamina: v('f-em-ketamina'), emNefopam: v('f-em-nefopam'),
     elastoMedsDosis: v('f-elasto-meds-dosis'), elastoMedOtro: v('f-elasto-med-otro'),
     elastoNotes: v('f-elasto-notes'),
+    bleeding: v('f-bleeding'),
     hasCombined: getTgl('tgl-combined'),
     combinedTotalSangrado: (function() {
       var items = document.querySelectorAll('#combined-procs-list [id$="-valor"]');
@@ -3174,7 +3236,6 @@ function toast(msg, err=false) {
   setTimeout(() => t.classList.remove('show'), 3000);
 }
 </script>
-
 </body>
 </html>
 
