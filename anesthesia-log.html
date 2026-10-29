@@ -2768,6 +2768,9 @@ function applyQuickPaste() {
         Object.keys(COMBINED_PROCS).forEach(function(k){ if (k === low || COMBINED_PROCS[k].label.toLowerCase().indexOf(low) >= 0) found = found || k; });
         if (!found) { miss.push('procedimiento adicional: ' + nm); return; }
         if (tgc) { tgc.classList.add('on'); var sc = document.getElementById(tgc.dataset.target); if (sc) sc.style.display = 'block'; }
+        var dup = false;
+        document.querySelectorAll('#combined-procs-list [id$="-tipo"]').forEach(function(e){ if (e.value === found) dup = true; });
+        if (dup) return;
         addCombinedProc();
         var cid = 'cp-' + combinedProcCount;
         document.getElementById(cid + '-tipo').value = found;
@@ -3450,3 +3453,4 @@ function toast(msg, err=false) {
 </script>
 </body>
 </html>
+
