@@ -1138,7 +1138,7 @@ input[readonly]{background:#18232f;cursor:default;}
 <div class="fc">
   <div class="fct gold">◷ Intraoperatorio</div>
   <div class="fg">
-    <div class="fgg"><label>Sangrado estimado (mL)</label><input type="number" id="f-bleeding" placeholder="100"></div>
+    <div class="fgg"><label>Sangrado estimado (mL) <span style="color:#3d5a72;font-size:0.6rem">· se calcula solo en contorno</span></label><input type="number" id="f-bleeding" placeholder="100"></div>
     <div class="fgg"><label>Diuresis (mL)</label><input type="number" id="f-diuresis" placeholder="200"></div>
     <div class="fgg"><label>Cristaloides (mL)</label><input type="number" id="f-crystalloids" placeholder="1000"></div>
     <div class="fgg"><label>Coloides / Hemoderivados</label><input type="text" id="f-colloids" placeholder="2 CH, 1 PFC"></div>
@@ -2866,6 +2866,26 @@ function calcNaxVol() {
   out.value = (conc && !isNaN(dose) && dose > 0) ? (parseFloat((dose / conc).toFixed(2)) + ' mL' + (la.indexOf('diluida') >= 0 ? ' (0.1%)' : '')) : '';
 }
 
+// Sangrado total estimado (aspirado + procedimientos adicionales) -> campo de sangrado
+function autoBleeding() {
+  var el = document.getElementById('f-bleeding');
+  if (!el) return;
+  var asp = parseFloat(document.getElementById('f-blood-asp').value) || 0;
+  var add = 0;
+  document.querySelectorAll('#combined-procs-list [id$="-valor"]').forEach(function(e){ add += parseFloat(e.value) || 0; });
+  var tot = asp + add;
+  if (tot <= 0) return;
+  if (el.value === '' || el.dataset.auto === '1') { el.value = Math.round(tot); el.dataset.auto = '1'; el.style.color = '#00d4aa'; }
+}
+(function(){
+  var _cl = calcLipo; calcLipo = function(){ var r = _cl.apply(this, arguments); try { autoBleeding(); } catch(e) {} return r; };
+  var _cc = calcCombinedTotal; calcCombinedTotal = function(){ var r = _cc.apply(this, arguments); try { autoBleeding(); } catch(e) {} return r; };
+  document.addEventListener('DOMContentLoaded', function(){
+    var b = document.getElementById('f-bleeding');
+    if (b) b.addEventListener('input', function(){ b.dataset.auto = ''; b.style.color = ''; });
+  });
+})();
+
 var NEWF = ['f-nax-la-vol','f-sed-prop-ce','f-sed-dex-dosis','f-sed-otros','f-farmacos','f-ss2-nombre','f-ss2-la','f-ss2-conc','f-ss2-vol','f-ss2-dosis','f-ss-total-dosis'];
 function calcSS2() {
   var conc = parseFloat(document.getElementById('f-ss2-conc').value);
@@ -2953,7 +2973,7 @@ function saveCase() {
     emDipirona: v('f-em-dipirona'), emKetamina: v('f-em-ketamina'), emNefopam: v('f-em-nefopam'),
     elastoMedsDosis: v('f-elasto-meds-dosis'), elastoMedOtro: v('f-elasto-med-otro'),
     elastoNotes: v('f-elasto-notes'),
-    bleeding: v('f-bleeding'),
+    bleeding: v('f-bleeding'), bleedingAuto: (document.getElementById('f-bleeding') && document.getElementById('f-bleeding').dataset.auto === '1'),
     hasCombined: getTgl('tgl-combined'),
     combinedTotalSangrado: (function() {
       var items = document.querySelectorAll('#combined-procs-list [id$="-valor"]');
@@ -3236,7 +3256,7 @@ function showDetail(id) {
 
     <div class="dsec">INTRAOPERATORIO</div>
     <div class="dgrid">
-      ${r('Sangrado estimado',c.bleeding?c.bleeding+' mL':'')}
+      ${r('Sangrado estimado',c.bleeding?c.bleeding+' mL'+(c.bleedingAuto?' (calculado)':''):'')}
       ${r('Diuresis',c.diuresis?c.diuresis+' mL':'')}
       ${r('Cristaloides',c.crystalloids?c.crystalloids+' mL':'')}
       ${r('Coloides / Hemoderivados',c.colloids)}
@@ -3430,4 +3450,3 @@ function toast(msg, err=false) {
 </script>
 </body>
 </html>
-
